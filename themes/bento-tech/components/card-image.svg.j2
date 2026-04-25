@@ -1,0 +1,32 @@
+{# card-image: 图片占位 + 标题 + 描述
+   data:
+     src     string?  图片路径（绝对/相对 工作区）；如果没有，渲染占位框
+     alt     string?  图片描述
+     title   string?  上方小标题
+     caption string?  图下方说明
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+
+{%- if d.title -%}
+<text x="0" y="20" class="eyebrow">{{ d.title }}</text>
+{%- endif -%}
+
+{%- set img_y = 40 if d.title else 0 -%}
+{%- set img_h = (H - img_y - (60 if d.caption else 20)) -%}
+
+{%- if d.src -%}
+<image href="{{ d.src }}" x="0" y="{{ img_y }}" width="{{ W }}" height="{{ img_h }}" preserveAspectRatio="xMidYMid slice"/>
+{%- else -%}
+{# 占位：渐变背景 + 中央 alt 文本 + 边框 #}
+<rect x="0" y="{{ img_y }}" width="{{ W }}" height="{{ img_h }}" rx="12"
+      fill="{{ theme.colors.accent_primary }}" fill-opacity="0.10"
+      stroke="{{ theme.colors.accent_primary }}" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="8,6"/>
+<text x="{{ W / 2 }}" y="{{ img_y + img_h / 2 - 10 }}" text-anchor="middle" font-size="48" fill="url(#accent-grad)" font-weight="600">▣</text>
+<text x="{{ W / 2 }}" y="{{ img_y + img_h / 2 + 30 }}" text-anchor="middle" class="small">{{ d.alt | default('image placeholder') }}</text>
+{%- endif -%}
+
+{%- if d.caption -%}
+<text x="0" y="{{ H - 16 }}" class="small" fill="{{ theme.colors.text_secondary }}">{{ d.caption }}</text>
+{%- endif -%}

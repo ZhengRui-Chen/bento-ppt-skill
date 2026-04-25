@@ -1,0 +1,69 @@
+{# card-stat: 单一数据卡，大数字 + 单位 + 标签 + 可选趋势/说明
+   位置策略：从顶部 eyebrow 起绝对累加
+   字号自适应：W < 240 用 64；< 380 用 88；否则用主题 stat_huge
+   unit 溢出：unit 推不下右侧就换到 value 下方左对齐
+   装饰条：放在内容下方至少 24px，且不超过 H - 16；放不下就不画
+   data:
+     label     string   数字含义说明（顶部小字）
+     value     string   主数字（如 "127" "98%" "3.2x"）
+     unit      string?  **只放单位**（"亿元" "万" "%" "/秒"）。时间/型号/附加文字请用 sub_value
+     sub_value string?  附加信息（如 "10:00" 时刻 / "v1.2" 型号），紧跟 value 下方左对齐
+     change    string?  变化（"+34% YoY"）
+     change_dir 'up'|'down'|'flat'?  趋势方向（影响颜色）
+     desc      string?  辅助说明（底部）
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set huge = 64 if W < 240 else (88 if W < 380 else theme.type_scale.stat_huge) -%}
+{%- set unit_size = (huge * 0.28) | int -%}
+{%- set v_str = d.value | default('') | string -%}
+{%- set ns = namespace(vw=0) -%}
+{%- for ch in v_str -%}
+{%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns.vw = ns.vw + huge -%}
+{%- else -%}{%- set ns.vw = ns.vw + (huge * 0.55) | int -%}{%- endif -%}
+{%- endfor -%}
+
+{%- set y = namespace(p=0) -%}
+
+{%- if d.label -%}
+{%- set y.p = y.p + theme.type_scale.eyebrow + 4 -%}
+<text x="0" y="{{ y.p }}" class="eyebrow">{{ d.label }}</text>
+{%- endif -%}
+
+{%- set y.p = y.p + 28 + huge -%}
+<text x="0" y="{{ y.p }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800">{{ v_str }}</text>
+
+{%- if d.unit -%}
+{%- set unit_w_est = ((d.unit | length) * (unit_size * 0.6)) | int -%}
+{%- if ns.vw + 8 + unit_w_est <= W -%}
+<text x="{{ ns.vw + 8 }}" y="{{ y.p }}" font-size="{{ unit_size }}" fill="{{ theme.colors.text_secondary }}" font-weight="500">{{ d.unit }}</text>
+{%- else -%}
+{%- set y.p = y.p + unit_size + 4 -%}
+<text x="0" y="{{ y.p }}" font-size="{{ unit_size }}" fill="{{ theme.colors.text_secondary }}" font-weight="500">{{ d.unit }}</text>
+{%- endif -%}
+{%- endif -%}
+
+{%- if d.sub_value -%}
+{%- set sub_size = (huge * 0.24) | int -%}
+{%- set y.p = y.p + sub_size + 8 -%}
+<text x="0" y="{{ y.p }}" font-size="{{ sub_size }}" fill="{{ theme.colors.text_secondary }}" font-weight="500">{{ d.sub_value }}</text>
+{%- endif -%}
+
+{%- if d.change -%}
+{%- set ch_color = theme.colors.accent_success if d.change_dir == 'up' else (theme.colors.accent_warning if d.change_dir == 'down' else theme.colors.text_secondary) -%}
+{%- set arrow = '↑' if d.change_dir == 'up' else ('↓' if d.change_dir == 'down' else '·') -%}
+{%- set ch_size = 18 if W < 380 else 22 -%}
+{%- set y.p = y.p + ch_size + 16 -%}
+<text x="0" y="{{ y.p }}" font-size="{{ ch_size }}" fill="{{ ch_color }}" font-weight="600">{{ arrow }} {{ d.change }}</text>
+{%- endif -%}
+
+{# 装饰条 + desc：内容下方至少 24px；放不下就不画
+   desc 用 text_secondary（不用 muted）保证渐变背景上的可读性 #}
+{%- set deco_y = y.p + 24 if (y.p + 24) > (H - 64) else (H - 64) -%}
+{%- if deco_y < H - 12 -%}
+<rect x="0" y="{{ deco_y }}" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
+{%- if d.desc and deco_y + 30 < H -%}
+<text x="0" y="{{ deco_y + 32 }}" font-size="{{ theme.type_scale.small }}" fill="{{ theme.colors.text_secondary }}">{{ d.desc }}</text>
+{%- endif -%}
+{%- endif -%}

@@ -1,0 +1,29 @@
+{# 通用 layout 模板：数据驱动，根据 theme.layouts[page.layout].slots 自动布局所有卡片。
+   layout 类型不需要单独写 .svg.j2 模板（slots 元数据在 manifest.json 里就够了）。
+   如果某种 layout 需要额外装饰（分隔线、序号等），在 themes/<theme>/layouts/<layout-name>.svg.j2
+   里写专属模板，render.py 会优先用专属模板覆盖此通用模板。#}
+{%- set slot_defs = theme.layouts[page.layout].slots -%}
+{%- for card in cards -%}
+{%- set slot = slot_defs[card.slot] -%}
+{%- if slot -%}
+{%- set inner_w = slot.w - theme.spacing.card_padding * 2 -%}
+{%- set inner_h = slot.h - theme.spacing.card_padding * 2 -%}
+<g transform="translate({{ slot.x }}, {{ slot.y }})">
+  <rect x="0" y="0" width="{{ slot.w }}" height="{{ slot.h }}"
+        rx="{{ theme.spacing.card_radius }}"
+        fill="{{ theme.colors.card_fill }}" fill-opacity="{{ theme.colors.card_fill_opacity }}"
+        stroke="{{ theme.colors.card_stroke }}" stroke-opacity="{{ theme.colors.card_stroke_opacity }}"
+        stroke-width="{{ theme.spacing.card_stroke_width }}"/>
+  <svg x="{{ theme.spacing.card_padding }}" y="{{ theme.spacing.card_padding }}"
+       width="{{ inner_w }}" height="{{ inner_h }}"
+       viewBox="0 0 {{ inner_w }} {{ inner_h }}">
+    {{ card.svg | safe }}
+  </svg>
+</g>
+{%- else -%}
+<g transform="translate(40, 40)">
+  <rect x="0" y="0" width="400" height="40" fill="#ff4444"/>
+  <text x="20" y="28" fill="#fff" font-size="14">slot '{{ card.slot }}' not in layout '{{ page.layout }}'</text>
+</g>
+{%- endif -%}
+{%- endfor -%}

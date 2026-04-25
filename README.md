@@ -1,0 +1,133 @@
+# bento-ppt-skill
+
+A Claude Code skill that turns a topic or document into a 16:9 SVG slide deck in **Bento Grid** style — with HTML preview and editable PowerPoint export.
+
+灵感来自 sandun [《应该是目前最强的 PPT Agent，附上完整思路分享》](https://linux.do/t/topic/1782304)。把作者的"四步流水线 + Bento Grid 卡片布局 + 整页 SVG"方法论工程化成一个可复用的 Claude Code skill。
+
+![cover](examples/dify-intro/shots/01-cover.png)
+![data page](examples/dify-intro/shots/05-pre-launch.png)
+![mixed grid](examples/dify-intro/shots/07-week-one.png)
+
+## Features
+
+- **7 阶段流水线**：needs（反问） → research → outline（金字塔原理） → planning → fetch → design → review → export
+- **6 种 Bento 布局** + **6 种卡片组件**：single-focus / two-col-symmetric / two-col-asymmetric / three-col / major-minor / hero-top / mixed-grid 任选
+- **底层 SVG**（viewBox `0 0 1280 720`），通过 `asvg:svgBlip` OOXML 注入到 pptx，PowerPoint 2019+/Office 365 文字可编辑、矢量未栅格化
+- **HTML 翻页预览**：左右键 / 缩略图栏 / 全屏，在浏览器里直接放映
+- **图片 provider 协议**：可插拔的 `url_download` / `nanobanana` / `unsplash`，AI 自己决定用搜还是生
+- **风格包系统**：`themes/<name>/` 自包含，复制 + 改 manifest 就能扩新风格
+- **中文版式 lint**：默认拦截英文标点（公众号/严苛场景可开"中英不空格"）
+
+## Install
+
+```bash
+git clone https://github.com/YingYveltal/bento-ppt-skill.git ~/.claude/skills/ppt-agent
+pip3 install jinja2 python-pptx lxml
+```
+
+可选（看你机器上有没有）：
+
+```bash
+# 截图依赖：自动探测 Chrome / Chromium / Edge / Brave，找不到再装
+# 不依赖 playwright
+```
+
+## Use
+
+**新开** Claude Code 窗口（让 description 自动加载），直接说自然语言：
+
+```
+帮我做一份 6-8 页的 X 主题 PPT
+```
+
+```
+把 ./report.md 转成发布会 deck
+```
+
+Claude 会自动加载 ppt-agent skill，反问受众/调性/页数，然后跑完 7 阶段流程。产物在 `~/ppt-decks/<date>-<slug>/`：
+
+- `slides/*.svg` — 每页 SVG 矢量
+- `deck.html` — 浏览器翻页预览
+- `deck.pptx` — PowerPoint 可编辑
+- （可选）`deck.pdf`
+
+## Manual CLI
+
+```bash
+SKILL=~/.claude/skills/ppt-agent
+
+python3 $SKILL/scripts/ppt.py new "<topic>"
+python3 $SKILL/scripts/ppt.py fetch <ws>      # 可选，下载/生成 card-image
+python3 $SKILL/scripts/ppt.py scaffold <ws>    # SVG 渲染
+python3 $SKILL/scripts/ppt.py shoot <ws>       # 截图 + deck.html
+python3 $SKILL/scripts/ppt.py export <ws> --format pptx
+```
+
+## Sample
+
+`examples/dify-intro/` 是端到端样本：
+
+- 8 页 deck，覆盖全部 6 种 Bento 布局
+- 含 layout.json（输入）、slides/SVG（产物）、shots/PNG（截图）、deck.pptx
+- 直接 `open examples/dify-intro/deck.html` 看翻页效果
+
+## 添加新风格
+
+```bash
+cp -r themes/bento-tech themes/<your-style>
+# 改 manifest.json 的 colors / type_scale；layouts 元数据按需调
+```
+
+详见 [reference/theme-authoring.md](reference/theme-authoring.md)。
+
+## 添加新图片 provider
+
+```bash
+# 在 scripts/providers/ 下新建一个 .py 文件
+# 实现 ImageProvider 接口 + 末尾 register(YourProvider())
+# 自动被 fetch 阶段发现
+```
+
+详见 [scripts/providers/README.md](scripts/providers/README.md)。
+
+## Architecture
+
+```
+ppt-agent/
+├── SKILL.md                       # skill 入口（Claude 自动加载）
+├── reference/                     # 渐进披露文档（需要时再读）
+│   ├── pyramid-outline-prompt.md  # sandun 开源的金字塔原理 prompt
+│   ├── bento-layouts-guide.md     # 6 种布局 + 6 种 component schema
+│   ├── image-providers.md         # AI 怎么写 src / source
+│   ├── theme-authoring.md         # 加新主题
+│   └── pptx-svg-internals.md      # svgBlip OOXML 细节
+├── scripts/
+│   ├── ppt.py                     # 主 CLI
+│   ├── render.py                  # SVG 装配 (jinja2)
+│   ├── shoot.py                   # Chrome headless 截图 + deck.html
+│   ├── export.py                  # SVG → PPTX (svgBlip 注入)
+│   ├── fetch.py                   # 图片 provider 调度
+│   ├── lint_cn.py                 # 中文版式硬约束
+│   └── providers/                 # 可插拔图片 provider
+│       ├── url_download.py        # 内置（无 API key）
+│       ├── nanobanana.py          # Gemini 3 Image (stub)
+│       └── unsplash.py            # Unsplash (stub)
+├── themes/
+│   └── bento-tech/                # 默认风格：深色 + 玻璃拟态卡片 + 渐变光斑
+│       ├── manifest.json          # 设计 token + layout 槽位元数据
+│       ├── slide-base.svg.j2      # 1280×720 容器
+│       ├── layouts/_base.svg.j2   # 数据驱动通用 layout
+│       └── components/            # card-hero / stat / list / quote / text / image / chart-bar
+└── examples/
+    └── dify-intro/                # 端到端跑通样本
+```
+
+## Credit
+
+- 方法论：[sandun @ linux.do](https://linux.do/t/topic/1782304) — 四步流水线 + Bento Grid + 整页 SVG
+- skill 框架：[Anthropic Claude Code](https://code.claude.com/docs/en/skills.md)
+- 实现：Claude (Opus 4.7) + 我
+
+## License
+
+MIT

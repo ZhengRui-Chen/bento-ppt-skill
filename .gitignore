@@ -1,0 +1,21 @@
+# macOS / editor noise
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# 工作区（每个用户的 deck）不应该提交
+ppt-decks/
+
+# 临时输出
+*.tmp
+*.log

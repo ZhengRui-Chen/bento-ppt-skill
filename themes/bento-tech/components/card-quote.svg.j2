@@ -1,0 +1,84 @@
+{# card-quote: 引言卡。
+   双模式：
+     - 小卡（H < 280，hero 横幅场景）：单行 quote + 右侧 author/role 横向布局，竖条贯穿全高
+     - 大卡（H ≥ 280，主体卡场景）：quote 居中换行 + 底部 author/role + 左侧竖条
+   data:
+     quote   string   引言正文
+     author  string?  出处/作者
+     role    string?  作者身份
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set is_banner = H < 280 -%}
+
+{# 字号自适应：横幅用 h3，大卡用 h2 #}
+{%- set q_size = theme.type_scale.h3 if is_banner else theme.type_scale.h2 -%}
+{%- set unit_w = (q_size * 0.55) | int -%}
+
+{%- if is_banner -%}
+{# 横幅模式：右侧给 author 留 280px，quote 占左侧剩余宽度 #}
+{%- set author_block_w = 300 if (d.author or d.role) else 0 -%}
+{%- set q_max_w = W - 32 - author_block_w - 24 -%}
+{%- set chars_per_line = (q_max_w / unit_w) | int -%}
+{%- else -%}
+{# 大卡模式：quote 占满宽度（除去左侧竖条 + 32px gutter）#}
+{%- set chars_per_line = ((W - 48) / unit_w) | int -%}
+{%- endif -%}
+
+{%- set line_h = (q_size * 1.25) | int -%}
+
+{# 左侧渐变竖条：横幅贯穿全高；大卡贯穿到 author 上方 #}
+{%- set bar_h = H if is_banner else (H - (110 if d.author else 30)) -%}
+<rect x="0" y="0" width="6" height="{{ bar_h }}" rx="3" fill="url(#accent-grad-v)"/>
+
+{# 拆行 #}
+{%- set lines = [] -%}
+{%- set ns = namespace(buf='', buf_len=0) -%}
+{%- for ch in (d.quote | default('')) -%}
+{%- set ch_w = 2 if ('\u4e00' <= ch <= '\u9fff') or ch in '，。：；！？""''（）《》、' else 1 -%}
+{%- if ns.buf_len + ch_w > chars_per_line -%}
+{%- set _ = lines.append(ns.buf) -%}
+{%- set ns.buf = ch -%}
+{%- set ns.buf_len = ch_w -%}
+{%- else -%}
+{%- set ns.buf = ns.buf + ch -%}
+{%- set ns.buf_len = ns.buf_len + ch_w -%}
+{%- endif -%}
+{%- endfor -%}
+{%- if ns.buf -%}{%- set _ = lines.append(ns.buf) -%}{%- endif -%}
+
+{%- set total_h = (lines | length) * line_h -%}
+
+{%- if is_banner -%}
+{# 横幅：quote 垂直居中，author/role 在右侧顶端竖排 #}
+{%- set start_y = ((H - total_h) / 2 + q_size) | int -%}
+{%- for line in lines -%}
+<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="600">{{ line }}</text>
+{%- endfor -%}
+{%- if d.author or d.role -%}
+{%- set ax = W - author_block_w + 16 -%}
+{%- set ay = ((H - 60) / 2 + 24) | int -%}
+{%- if d.author -%}
+<text x="{{ ax }}" y="{{ ay }}" class="h4" font-size="20">{{ d.author }}</text>
+{%- endif -%}
+{%- if d.role -%}
+<text x="{{ ax }}" y="{{ ay + 26 }}" font-size="14" fill="{{ theme.colors.text_muted }}">{{ d.role }}</text>
+{%- endif -%}
+{%- endif -%}
+{%- else -%}
+{# 大卡：quote 垂直居中（如有 author 上移 40 给底部留空间）#}
+{%- set start_y = ((H - total_h) / 2 + line_h / 2) | int -%}
+{%- if d.author -%}{%- set start_y = start_y - 40 -%}{%- endif -%}
+{%- if start_y < q_size + 20 -%}{%- set start_y = q_size + 20 -%}{%- endif -%}
+{%- for line in lines -%}
+<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="500" font-style="italic">{{ line }}</text>
+{%- endfor -%}
+{%- if d.author -%}
+<rect x="32" y="{{ H - 90 }}" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
+<text x="32" y="{{ H - 50 }}" class="h4">{{ d.author }}</text>
+{%- if d.role -%}
+<text x="32" y="{{ H - 22 }}" class="body" fill="{{ theme.colors.text_muted }}">{{ d.role }}</text>
+{%- endif -%}
+{%- endif -%}
+{%- endif -%}

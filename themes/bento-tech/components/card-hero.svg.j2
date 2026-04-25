@@ -1,0 +1,50 @@
+{# card-hero: eyebrow + 大标题 + 副标题 + footer 信息（封面/章节首页/金句页/hero 横幅）
+   data:
+     eyebrow  string?  顶部小字（英文短语/分类标签）
+     title    string|string[]   主标题（数组则多行）
+     subtitle string?  副标题
+     footer   string?  底部小字
+   位置策略：所有 y 都从顶部累加（绝对位置），而不是用 H 的百分比
+   字号自适应：H ≤ 200 用 h2(44)；H ≤ 320 用 h2*1.2；否则用 h1(60)
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+
+{# 字号自适应：hero 横幅（H≤200）/ 中等（H≤320）/ 大封面 #}
+{%- set h_size = theme.type_scale.h2 if H <= 200 else (theme.type_scale.h2 + 8 if H <= 320 else theme.type_scale.h1) -%}
+{%- set sub_size = theme.type_scale.h4 if H <= 200 else theme.type_scale.h3 -%}
+{%- set line_h = (h_size * 1.20) | int -%}
+{%- set ns = namespace(y=0) -%}
+
+{%- if d.eyebrow -%}
+{%- set ns.y = ns.y + theme.type_scale.eyebrow + 4 -%}
+<text x="0" y="{{ ns.y }}" class="eyebrow">{{ d.eyebrow }}</text>
+{%- set ns.y = ns.y + 18 -%}
+{%- endif -%}
+
+{%- if d.title -%}
+{%- if d.title is string -%}
+{%- set lines = [d.title] -%}
+{%- else -%}
+{%- set lines = d.title -%}
+{%- endif -%}
+{%- for line in lines -%}
+{%- set ns.y = ns.y + h_size -%}
+<text x="0" y="{{ ns.y }}" font-size="{{ h_size }}" fill="{{ theme.colors.text_primary }}" font-weight="700">{{ line }}</text>
+{%- if not loop.last -%}{%- set ns.y = ns.y + (line_h - h_size) -%}{%- endif -%}
+{%- endfor -%}
+{%- endif -%}
+
+{%- if d.subtitle -%}
+{%- set ns.y = ns.y + sub_size + 18 -%}
+<text x="0" y="{{ ns.y }}" font-size="{{ sub_size }}" fill="{{ theme.colors.text_secondary }}" font-weight="400">{{ d.subtitle }}</text>
+{%- endif -%}
+
+{# 底部装饰条 + footer：仅在 H ≥ 280 时显示，避免 hero 横幅被挤 #}
+{%- if H >= 280 -%}
+<rect x="0" y="{{ H - 70 }}" width="120" height="4" fill="url(#accent-grad)" rx="2"/>
+{%- if d.footer %}
+<text x="0" y="{{ H - 24 }}" class="body">{{ d.footer }}</text>
+{%- endif %}
+{%- endif -%}

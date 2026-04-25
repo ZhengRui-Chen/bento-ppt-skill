@@ -1,0 +1,341 @@
+{
+  "theme": "bento-tech",
+  "meta": {
+    "title": "Dify 企业介绍"
+  },
+  "pages": [
+    {
+      "page": 1,
+      "name": "cover",
+      "layout": "single-focus",
+      "cards": [
+        {
+          "slot": "main",
+          "component": "card-hero",
+          "data": {
+            "eyebrow": "PRODUCT INTRO · 2026 Q2",
+            "title": [
+              "Dify 企业介绍",
+              "下一代 AI 应用开发平台"
+            ],
+            "subtitle": "把生成式 AI 的不确定，变成产品落地的确定",
+            "footer": "presented by ppt-agent"
+          }
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "name": "two-col-symmetric-demo",
+      "layout": "two-col-symmetric",
+      "cards": [
+        {
+          "slot": "left",
+          "component": "card-stat",
+          "data": {
+            "label": "全球开发者",
+            "value": "180",
+            "unit": "万+",
+            "change": "180% YoY",
+            "change_dir": "up",
+            "desc": "覆盖 130+ 个国家与地区"
+          }
+        },
+        {
+          "slot": "right",
+          "component": "card-stat",
+          "data": {
+            "label": "企业客户",
+            "value": "12000",
+            "unit": "+",
+            "change": "Fortune 500 中的 23 家",
+            "change_dir": "up",
+            "desc": "金融、零售、教育、政务皆有落地"
+          }
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "name": "two-col-asymmetric-demo",
+      "layout": "two-col-asymmetric",
+      "cards": [
+        {
+          "slot": "main",
+          "component": "card-text",
+          "data": {
+            "eyebrow": "为什么选择 Dify",
+            "title": "把模型能力和业务流程缝起来",
+            "paragraphs": [
+              "Dify 不是又一个聊天机器人，而是把 LLM 能力变成稳定可交付的业务流程。从 prompt 编排到工具调用、从知识库到日志评测，全链路可观测、可回滚。",
+              "工程团队不需要重复造轮子。市场团队不需要等着 IT 排期。运维团队不需要担心 token 失控。"
+            ]
+          }
+        },
+        {
+          "slot": "side",
+          "component": "card-list",
+          "data": {
+            "title": "核心模块",
+            "items": [
+              {
+                "title": "Workflow",
+                "desc": "可视化编排"
+              },
+              {
+                "title": "Agent",
+                "desc": "工具调用框架"
+              },
+              {
+                "title": "Knowledge",
+                "desc": "RAG 引擎"
+              },
+              {
+                "title": "LLMOps",
+                "desc": "评测与监控"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "page": 4,
+      "name": "three-col-demo",
+      "layout": "three-col",
+      "cards": [
+        {
+          "slot": "left",
+          "component": "card-stat",
+          "data": {
+            "label": "搭建一个 AI 应用",
+            "value": "5",
+            "unit": "分钟",
+            "desc": "从模板到上线"
+          }
+        },
+        {
+          "slot": "middle",
+          "component": "card-stat",
+          "data": {
+            "label": "支持模型数",
+            "value": "200",
+            "unit": "+",
+            "desc": "OpenAI / Anthropic / 国产"
+          }
+        },
+        {
+          "slot": "right",
+          "component": "card-stat",
+          "data": {
+            "label": "可观测性",
+            "value": "100",
+            "unit": "%",
+            "desc": "全链路日志与评测"
+          }
+        }
+      ]
+    },
+    {
+      "page": 5,
+      "name": "major-minor-demo",
+      "layout": "major-minor",
+      "cards": [
+        {
+          "slot": "main",
+          "component": "card-quote",
+          "data": {
+            "quote": "AI 应用的瓶颈不是模型，而是工程化。",
+            "author": "Dify 创始团队",
+            "role": "2024 年技术分享会"
+          }
+        },
+        {
+          "slot": "top",
+          "component": "card-stat",
+          "data": {
+            "label": "模型延迟",
+            "value": "<200",
+            "unit": "ms"
+          }
+        },
+        {
+          "slot": "bottom",
+          "component": "card-stat",
+          "data": {
+            "label": "成本下降",
+            "value": "60",
+            "unit": "%",
+            "change_dir": "up"
+          }
+        },
+        {
+          "slot": "right_top",
+          "component": "card-stat",
+          "data": {
+            "label": "上线周期",
+            "value": "1/10",
+            "desc": "对比传统开发"
+          }
+        },
+        {
+          "slot": "right_bottom",
+          "component": "card-stat",
+          "data": {
+            "label": "客户留存",
+            "value": "94",
+            "unit": "%"
+          }
+        }
+      ]
+    },
+    {
+      "page": 6,
+      "name": "hero-top-demo",
+      "layout": "hero-top",
+      "cards": [
+        {
+          "slot": "hero",
+          "component": "card-hero",
+          "data": {
+            "eyebrow": "ARCHITECTURE",
+            "title": "分层架构：从数据层到编排层",
+            "subtitle": "每一层都可独立替换，整体可观测"
+          }
+        },
+        {
+          "slot": "col1",
+          "component": "card-list",
+          "data": {
+            "title": "数据层",
+            "items": [
+              {
+                "title": "向量库"
+              },
+              {
+                "title": "对象存储"
+              },
+              {
+                "title": "审计日志"
+              }
+            ]
+          }
+        },
+        {
+          "slot": "col2",
+          "component": "card-list",
+          "data": {
+            "title": "能力层",
+            "items": [
+              {
+                "title": "模型路由"
+              },
+              {
+                "title": "工具调用"
+              },
+              {
+                "title": "知识检索"
+              }
+            ]
+          }
+        },
+        {
+          "slot": "col3",
+          "component": "card-list",
+          "data": {
+            "title": "编排层",
+            "items": [
+              {
+                "title": "Workflow"
+              },
+              {
+                "title": "Agent"
+              },
+              {
+                "title": "Chat 流"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "page": 7,
+      "name": "mixed-grid-demo",
+      "layout": "mixed-grid",
+      "cards": [
+        {
+          "slot": "tl",
+          "component": "chart-bar",
+          "data": {
+            "title": "模型调用量月环比",
+            "items": [
+              {
+                "label": "GPT-4",
+                "value": 42,
+                "unit": "亿"
+              },
+              {
+                "label": "Claude",
+                "value": 31,
+                "unit": "亿"
+              },
+              {
+                "label": "Gemini",
+                "value": 18,
+                "unit": "亿"
+              }
+            ]
+          }
+        },
+        {
+          "slot": "tr",
+          "component": "card-stat",
+          "data": {
+            "label": "API 平均响应",
+            "value": "187",
+            "unit": "ms",
+            "change_dir": "up"
+          }
+        },
+        {
+          "slot": "bl",
+          "component": "card-image",
+          "data": {
+            "title": "界面预览",
+            "alt": "Workflow 编排画布概念图",
+            "src": "/private/tmp/ppt-test/2026-04-25-Dify-企业介绍/assets/b0f2e749292c.png"
+          }
+        },
+        {
+          "slot": "br",
+          "component": "card-text",
+          "data": {
+            "title": "落地案例",
+            "paragraphs": [
+              "某头部券商：用 Dify 把 17 个内部系统的接口能力封装成 Agent 工具，把客户经理日均处理工单数从 23 提升到 78。",
+              "某省级政务平台：基于 Dify 知识库构建公文助手，问答准确率从 62% 提升到 91%。"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "page": 8,
+      "name": "end",
+      "layout": "single-focus",
+      "cards": [
+        {
+          "slot": "main",
+          "component": "card-hero",
+          "data": {
+            "eyebrow": "THANK YOU",
+            "title": "让我们一起，把 AI 装进每一个业务流程",
+            "subtitle": "联系 sales@dify.ai 安排技术演示",
+            "footer": "Dify · 2026"
+          }
+        }
+      ]
+    }
+  ]
+}

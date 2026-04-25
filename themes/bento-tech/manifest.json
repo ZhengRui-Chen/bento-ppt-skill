@@ -1,0 +1,114 @@
+{
+  "name": "bento-tech",
+  "version": "1.0.0",
+  "description": "Bento Grid 现代风（科技/发布会调性，深色背景 + 渐变光斑 + 玻璃拟态卡片）",
+  "viewBox": {
+    "width": 1280,
+    "height": 720
+  },
+  "fonts": {
+    "sans": "'PingFang SC', 'Microsoft YaHei', 'SF Pro Display', 'Inter', sans-serif",
+    "mono": "'SF Mono', 'JetBrains Mono', Menlo, monospace",
+    "display": "'PingFang SC', 'Microsoft YaHei', 'SF Pro Display', 'Inter', sans-serif"
+  },
+  "type_scale": {
+    "eyebrow": 16,
+    "h1": 60,
+    "h2": 44,
+    "h3": 30,
+    "h4": 22,
+    "body": 18,
+    "small": 14,
+    "stat_huge": 110,
+    "stat_unit": 28
+  },
+  "colors": {
+    "bg_start": "#0a0e27",
+    "bg_end": "#1a1f3a",
+    "card_fill": "#ffffff",
+    "card_fill_opacity": 0.06,
+    "card_stroke": "#ffffff",
+    "card_stroke_opacity": 0.12,
+    "text_primary": "#ffffff",
+    "text_secondary": "#bcc4d8",
+    "text_muted": "#6b7392",
+    "accent_primary": "#7c5cff",
+    "accent_secondary": "#00d4ff",
+    "accent_tertiary": "#ff7eb6",
+    "accent_success": "#22d97f",
+    "accent_warning": "#ffb84d"
+  },
+  "spacing": {
+    "page_padding": 56,
+    "footer_height": 30,
+    "card_padding": 40,
+    "card_gap": 20,
+    "card_radius": 20,
+    "card_stroke_width": 1
+  },
+  "layouts": {
+    "single-focus": {
+      "card_count": 1,
+      "description": "1 张大卡片占满，适合金句/核心数字/封面",
+      "slots": {
+        "main": { "x": 56, "y": 56, "w": 1168, "h": 578 }
+      }
+    },
+    "two-col-symmetric": {
+      "card_count": 2,
+      "description": "2 张等宽，适合对比/并列两个概念",
+      "slots": {
+        "left":  { "x": 56,  "y": 56, "w": 574, "h": 578 },
+        "right": { "x": 650, "y": 56, "w": 574, "h": 578 }
+      }
+    },
+    "two-col-asymmetric": {
+      "card_count": 2,
+      "description": "2/3 主 + 1/3 副，主信息 + 数据辅助",
+      "slots": {
+        "main":  { "x": 56,  "y": 56, "w": 776, "h": 578 },
+        "side":  { "x": 852, "y": 56, "w": 372, "h": 578 }
+      }
+    },
+    "three-col": {
+      "card_count": 3,
+      "description": "3 张等宽，三步流程/三个特性",
+      "slots": {
+        "left":   { "x": 56,  "y": 56, "w": 376, "h": 578 },
+        "middle": { "x": 452, "y": 56, "w": 376, "h": 578 },
+        "right":  { "x": 848, "y": 56, "w": 376, "h": 578 }
+      }
+    },
+    "major-minor": {
+      "card_count": 3,
+      "description": "中央大卡 + 两侧小卡，1 主信息 + 2 支撑细节",
+      "slots": {
+        "main":  { "x": 308, "y": 56,  "w": 664, "h": 578 },
+        "top":   { "x": 56,  "y": 56,  "w": 232, "h": 280 },
+        "bottom":{ "x": 56,  "y": 354, "w": 232, "h": 280 },
+        "right_top":   { "x": 992, "y": 56,  "w": 232, "h": 280 },
+        "right_bottom":{ "x": 992, "y": 354, "w": 232, "h": 280 }
+      }
+    },
+    "hero-top": {
+      "card_count": 4,
+      "description": "顶部横幅 + 下方 3 等宽，论点 + 多个论据",
+      "slots": {
+        "hero":  { "x": 56,  "y": 56,  "w": 1168, "h": 240 },
+        "col1":  { "x": 56,  "y": 316, "w": 376,  "h": 318 },
+        "col2":  { "x": 452, "y": 316, "w": 376,  "h": 318 },
+        "col3":  { "x": 848, "y": 316, "w": 376,  "h": 318 }
+      }
+    },
+    "mixed-grid": {
+      "card_count": 4,
+      "description": "自由混合，4 个不同大小卡片",
+      "slots": {
+        "tl": { "x": 56,  "y": 56,  "w": 776, "h": 280 },
+        "tr": { "x": 852, "y": 56,  "w": 372, "h": 280 },
+        "bl": { "x": 56,  "y": 356, "w": 372, "h": 278 },
+        "br": { "x": 452, "y": 356, "w": 772, "h": 278 }
+      }
+    }
+  }
+}

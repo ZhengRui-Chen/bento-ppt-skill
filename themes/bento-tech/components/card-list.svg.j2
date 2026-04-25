@@ -1,0 +1,74 @@
+{# card-list: 标题 + 多条要点（带序号方块）
+   行高自适应：每行至少 44px（容下 18px h4 标题 + 22px desc + spacing）
+   slot 高度不够 N 行时，自动减少 max_items（不能塞 5 个就塞 4 个或更少）
+   data:
+     eyebrow string?  顶部小字
+     title   string?  卡片大标题
+     accent  string?  序号方块色调：'success'|'warning'|'default'（默认 default = 紫蓝渐变）
+     items   array of {title, desc?} | array of strings
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set items_in = d['items'] or [] -%}
+
+{# 序号方块色 + 编号字色：根据 accent 切换 #}
+{%- set accent = d.accent | default('default') -%}
+{%- if accent == 'success' -%}
+{%- set badge_fill = theme.colors.accent_success -%}
+{%- set badge_text = '#0a3a1f' -%}
+{%- elif accent == 'warning' -%}
+{%- set badge_fill = theme.colors.accent_warning -%}
+{%- set badge_text = '#3a2308' -%}
+{%- else -%}
+{%- set badge_fill = 'url(#accent-grad)' -%}
+{%- set badge_text = '#0a0e27' -%}
+{%- endif -%}
+
+{%- set y = namespace(p=0) -%}
+
+{%- if d.eyebrow -%}
+{%- set y.p = y.p + theme.type_scale.eyebrow + 4 -%}
+<text x="0" y="{{ y.p }}" class="eyebrow">{{ d.eyebrow }}</text>
+{%- endif -%}
+
+{%- if d.title -%}
+{%- set y.p = y.p + theme.type_scale.h3 + 18 -%}
+<text x="0" y="{{ y.p }}" class="h3">{{ d.title }}</text>
+{%- set y.p = y.p + 16 -%}
+{%- endif -%}
+
+{%- if not d.eyebrow and not d.title -%}{%- set y.p = 8 -%}{%- endif -%}
+{%- set list_top = y.p + 12 -%}
+
+{%- set has_desc = items_in | selectattr('desc', 'defined') | list | length > 0 -%}
+{%- set min_row = 56 if has_desc else 44 -%}
+{%- set avail_h = H - list_top - 16 -%}
+{%- set max_fit = (avail_h / min_row) | int -%}
+{%- set n = items_in | length -%}
+{%- if n > max_fit -%}{%- set n = max_fit -%}{%- endif -%}
+{%- if n < 1 -%}{%- set n = 1 -%}{%- endif -%}
+{%- set items_use = items_in[:n] -%}
+
+{%- set row_h = (avail_h / n) | int -%}
+{%- if row_h < min_row -%}{%- set row_h = min_row -%}{%- endif -%}
+{%- if row_h > 80 -%}{%- set row_h = 80 -%}{%- endif -%}
+
+{%- for it in items_use -%}
+{%- set ry = list_top + loop.index0 * row_h -%}
+{%- if it is string -%}
+{%- set it_title = it -%}
+{%- set it_desc = none -%}
+{%- else -%}
+{%- set it_title = it.title -%}
+{%- set it_desc = it.desc -%}
+{%- endif -%}
+<g transform="translate(0, {{ ry }})">
+  <rect x="0" y="0" width="32" height="32" rx="8" fill="{{ badge_fill }}"/>
+  <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="{{ badge_text }}">{{ '%02d' | format(loop.index) }}</text>
+  <text x="48" y="22" font-size="18" fill="{{ theme.colors.text_primary }}" font-weight="600">{{ it_title }}</text>
+  {%- if it_desc %}
+  <text x="48" y="46" font-size="14" fill="{{ theme.colors.text_secondary }}">{{ it_desc }}</text>
+  {%- endif %}
+</g>
+{%- endfor -%}

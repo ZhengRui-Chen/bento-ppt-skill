@@ -1,0 +1,45 @@
+{# chart-bar: 简易水平柱状图
+   data:
+     title  string?
+     items  array of {label, value, unit?, color?}
+       value 用于决定柱长（自动取最大值归一化）
+   适合 5 条以内对比。多于 5 条建议拆页或换 chart-line。
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set items = d['items'] or [] -%}
+{%- set max_items = 6 -%}
+{%- set items_use = items[:max_items] -%}
+
+{%- if d.title -%}
+<text x="0" y="22" class="eyebrow">{{ d.title }}</text>
+{%- endif -%}
+
+{# 计算最大值用于归一化 #}
+{%- set ns = namespace(maxv=0) -%}
+{%- for it in items_use -%}
+{%- if it.value > ns.maxv -%}{%- set ns.maxv = it.value -%}{%- endif -%}
+{%- endfor -%}
+{%- set max_val = ns.maxv or 1 -%}
+
+{%- set chart_y = 56 if d.title else 20 -%}
+{%- set avail_h = H - chart_y - 40 -%}
+{%- set bar_h = ((avail_h - (items_use | length - 1) * 18) / (items_use | length or 1)) | int -%}
+{%- set bar_h_capped = bar_h if bar_h < 56 else 56 -%}
+{%- set label_w = 180 -%}
+{%- set value_w = 140 -%}
+{%- set bar_w_max = W - label_w - value_w - 24 -%}
+
+{%- for it in items_use -%}
+{%- set y = chart_y + loop.index0 * (bar_h_capped + 18) -%}
+{%- set bar_w = (it.value / max_val * bar_w_max) | int -%}
+{%- set bar_color = it.color or 'url(#accent-grad)' -%}
+<g transform="translate(0, {{ y }})">
+  <text x="0" y="{{ bar_h_capped / 2 + 6 }}" class="body" font-weight="500">{{ it.label }}</text>
+  <rect x="{{ label_w }}" y="0" width="{{ bar_w_max }}" height="{{ bar_h_capped }}" rx="6"
+        fill="{{ theme.colors.card_fill }}" fill-opacity="0.06"/>
+  <rect x="{{ label_w }}" y="0" width="{{ bar_w }}" height="{{ bar_h_capped }}" rx="6" fill="{{ bar_color }}"/>
+  <text x="{{ label_w + bar_w + 12 }}" y="{{ bar_h_capped / 2 + 6 }}" class="h4" fill="{{ theme.colors.text_primary }}">{{ it.value }}{% if it.unit %} <tspan font-size="14" fill="{{ theme.colors.text_muted }}">{{ it.unit }}</tspan>{% endif %}</text>
+</g>
+{%- endfor -%}

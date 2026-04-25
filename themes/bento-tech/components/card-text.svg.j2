@@ -1,0 +1,55 @@
+{# card-text: 标题 + 多段落文本（自动换行）
+   字宽估算：CJK ≈ font-size，ASCII ≈ font-size * 0.55
+   累加策略：CJK 算 2 单位，ASCII 算 1 单位，1 单位 = font-size * 0.5 ≈ 9px @ 18px
+   每行容量 = (W - 16) / 单位宽，留 16px 右内边距
+#}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set body_size = theme.type_scale.body -%}
+{%- set unit_w = (body_size * 0.5) | int -%}
+{%- set chars_per_line = ((W - 16) / unit_w) | int -%}
+{%- set line_h = (body_size * 1.6) | int -%}
+
+{%- set y = namespace(p=0) -%}
+
+{%- if d.eyebrow -%}
+{%- set y.p = y.p + theme.type_scale.eyebrow + 4 -%}
+<text x="0" y="{{ y.p }}" class="eyebrow">{{ d.eyebrow }}</text>
+{%- set y.p = y.p + 18 -%}
+{%- endif -%}
+
+{%- if d.title -%}
+{%- set y.p = y.p + theme.type_scale.h3 + 8 -%}
+<text x="0" y="{{ y.p }}" class="h3">{{ d.title }}</text>
+{%- set y.p = y.p + 16 -%}
+{%- endif -%}
+
+{%- if not d.eyebrow and not d.title -%}{%- set y.p = 8 -%}{%- endif -%}
+
+{%- for para in (d['paragraphs'] or []) -%}
+{# 把段落按 chars_per_line 拆行 #}
+{%- set lines = [] -%}
+{%- set ns2 = namespace(buf='', buf_len=0) -%}
+{%- for ch in para -%}
+{%- set ch_w = 2 if ('\u4e00' <= ch <= '\u9fff') or ch in '，。：；！？""''（）《》、' else 1 -%}
+{%- if ns2.buf_len + ch_w > chars_per_line -%}
+{%- set _ = lines.append(ns2.buf) -%}
+{%- set ns2.buf = ch -%}
+{%- set ns2.buf_len = ch_w -%}
+{%- else -%}
+{%- set ns2.buf = ns2.buf + ch -%}
+{%- set ns2.buf_len = ns2.buf_len + ch_w -%}
+{%- endif -%}
+{%- endfor -%}
+{%- if ns2.buf -%}{%- set _ = lines.append(ns2.buf) -%}{%- endif -%}
+{%- for line in lines -%}
+{%- set y.p = y.p + line_h -%}
+{# 超出 H 就停止渲染（裁掉而不是溢出）#}
+{%- if y.p < H - 8 -%}
+<text x="0" y="{{ y.p }}" font-size="{{ body_size }}" fill="{{ theme.colors.text_secondary }}">{{ line }}</text>
+{%- endif -%}
+{%- endfor -%}
+{# 段间 10px gap #}
+{%- set y.p = y.p + 10 -%}
+{%- endfor -%}
