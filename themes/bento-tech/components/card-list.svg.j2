@@ -1,18 +1,18 @@
 {# card-list: 标题 + 多条要点（带序号方块）
-   行高自适应：每行至少 44px（容下 18px h4 标题 + 22px desc + spacing）
-   slot 高度不够 N 行时，自动减少 max_items（不能塞 5 个就塞 4 个或更少）
    data:
-     eyebrow string?  顶部小字
-     title   string?  卡片大标题
-     accent  string?  序号方块色调：'success'|'warning'|'default'（默认 default = 紫蓝渐变）
-     items   array of {title, desc?} | array of strings
+     eyebrow string?
+     title   string?
+     accent  string?  序号方块色调：'success'|'warning'|'default'
+     items   array of {title, desc?, highlight?: bool} | array of strings
+       highlight: true 的项 — 序号方块实色 + 标题加亮 + 左侧主题色细线
+       未 highlight 的项 — 标题降亮（text_secondary）让重点更突出
+       注：如果**没有任何 item 带 highlight**，所有项视觉一致（不降亮）
 #}
 {%- set d = data -%}
 {%- set H = slot_h or 560 -%}
 {%- set W = slot_w or 600 -%}
 {%- set items_in = d['items'] or [] -%}
 
-{# 序号方块色 + 编号字色：根据 accent 切换 #}
 {%- set accent = d.accent | default('default') -%}
 {%- if accent == 'success' -%}
 {%- set badge_fill = theme.colors.accent_success -%}
@@ -24,6 +24,13 @@
 {%- set badge_fill = 'url(#accent-grad)' -%}
 {%- set badge_text = '#0a0e27' -%}
 {%- endif -%}
+
+{# 是否启用降亮模式：只要有任何 item 带 highlight=true #}
+{%- set ns_h = namespace(any=false) -%}
+{%- for it in items_in -%}
+{%- if it is mapping and it.highlight -%}{%- set ns_h.any = true -%}{%- endif -%}
+{%- endfor -%}
+{%- set dim_others = ns_h.any -%}
 
 {%- set y = namespace(p=0) -%}
 
@@ -59,16 +66,32 @@
 {%- if it is string -%}
 {%- set it_title = it -%}
 {%- set it_desc = none -%}
+{%- set is_hl = false -%}
 {%- else -%}
 {%- set it_title = it.title -%}
 {%- set it_desc = it.desc -%}
+{%- set is_hl = it.highlight | default(false) -%}
 {%- endif -%}
-<g transform="translate(0, {{ ry }})">
+{# 颜色策略：dim_others 模式下，非高亮项降亮 #}
+{%- set this_fill = badge_fill -%}
+{%- set this_op = '1.0' -%}
+{%- set title_fill = theme.colors.text_primary -%}
+{%- set desc_fill = theme.colors.text_secondary -%}
+{%- if dim_others and not is_hl -%}
+{%- set this_op = '0.45' -%}
+{%- set title_fill = theme.colors.text_secondary -%}
+{%- set desc_fill = theme.colors.text_muted -%}
+{%- endif -%}
+<g transform="translate(0, {{ ry }})" opacity="{{ this_op }}">
+  {%- if is_hl %}
+  {# 高亮项：左侧 3px 主题色细条 #}
+  <rect x="-12" y="-2" width="3" height="{{ (row_h - 8) }}" rx="1.5" fill="{{ badge_fill }}"/>
+  {%- endif %}
   <rect x="0" y="0" width="32" height="32" rx="8" fill="{{ badge_fill }}"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="{{ badge_text }}">{{ '%02d' | format(loop.index) }}</text>
-  <text x="48" y="22" font-size="18" fill="{{ theme.colors.text_primary }}" font-weight="600">{{ it_title }}</text>
+  <text x="48" y="22" font-size="18" fill="{{ title_fill }}" font-weight="{{ '700' if is_hl else '600' }}">{{ it_title }}</text>
   {%- if it_desc %}
-  <text x="48" y="46" font-size="14" fill="{{ theme.colors.text_secondary }}">{{ it_desc }}</text>
+  <text x="48" y="46" font-size="14" fill="{{ desc_fill }}">{{ it_desc }}</text>
   {%- endif %}
 </g>
 {%- endfor -%}

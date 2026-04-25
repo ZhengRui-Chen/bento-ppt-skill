@@ -1,0 +1,59 @@
+{# 通用 SVG macro 库。其他 component 用 {% from "macros.svg.j2" import badge %} 复用。 #}
+
+{# badge: 胶囊形小标签
+   text     string    标签文字
+   variant  string?   'accent' | 'success' | 'warning' | 'muted'，默认 accent
+   x, y     number    左上角坐标（相对父 transform 原点）
+   字号 11px，高 22px，自适应宽度
+#}
+{% macro badge(text, variant='accent', x=0, y=0, theme={}) -%}
+{%- set bg = theme.colors.accent_primary -%}
+{%- set fg = '#ffffff' -%}
+{%- set bg_op = 0.22 -%}
+{%- set stroke_op = 0.55 -%}
+{%- if variant == 'success' -%}
+{%- set bg = theme.colors.accent_success -%}
+{%- set bg_op = 0.18 -%}
+{%- elif variant == 'warning' -%}
+{%- set bg = theme.colors.accent_warning -%}
+{%- set bg_op = 0.18 -%}
+{%- elif variant == 'muted' -%}
+{%- set bg = '#ffffff' -%}
+{%- set fg = theme.colors.text_secondary -%}
+{%- set bg_op = 0.06 -%}
+{%- set stroke_op = 0.18 -%}
+{%- endif -%}
+{%- set ns_b = namespace(w=0) -%}
+{%- for ch in text -%}
+{%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns_b.w = ns_b.w + 12 -%}
+{%- else -%}{%- set ns_b.w = ns_b.w + 7 -%}{%- endif -%}
+{%- endfor -%}
+{%- set tw = ns_b.w + 18 -%}
+<g transform="translate({{ x }}, {{ y }})">
+  <rect x="0" y="0" width="{{ tw }}" height="22" rx="11" fill="{{ bg }}" fill-opacity="{{ bg_op }}" stroke="{{ bg }}" stroke-opacity="{{ stroke_op }}" stroke-width="1"/>
+  <text x="{{ tw / 2 }}" y="15" text-anchor="middle" font-size="11" font-weight="600" fill="{{ fg }}" letter-spacing="0.5">{{ text }}</text>
+</g>
+{%- endmacro %}
+
+{# render_badges: 一排 badges，自动从 (start_x, y) 起横向铺，间距 8px。
+   返回最右侧 x（方便后续对齐）。
+   badges 项可以是字符串（默认 accent variant）或 {text, variant} 对象。
+#}
+{% macro render_badges(badges, start_x=0, y=0, theme={}) -%}
+{%- set ns_x = namespace(x=start_x) -%}
+{%- for b in badges -%}
+{%- if b is string -%}
+{%- set txt = b -%}{%- set var = 'accent' -%}
+{%- else -%}
+{%- set txt = b.text -%}{%- set var = b.variant | default('accent') -%}
+{%- endif -%}
+{{ badge(txt, var, ns_x.x, y, theme) }}
+{%- set tw_inc = 0 -%}
+{%- set ns_w = namespace(w=0) -%}
+{%- for ch in txt -%}
+{%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns_w.w = ns_w.w + 12 -%}
+{%- else -%}{%- set ns_w.w = ns_w.w + 7 -%}{%- endif -%}
+{%- endfor -%}
+{%- set ns_x.x = ns_x.x + ns_w.w + 18 + 8 -%}
+{%- endfor -%}
+{%- endmacro %}

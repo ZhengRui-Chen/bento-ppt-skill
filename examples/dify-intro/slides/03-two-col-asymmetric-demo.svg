@@ -22,8 +22,9 @@
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
@@ -40,8 +41,8 @@
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>
-
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
@@ -67,17 +68,13 @@
   <svg x="40" y="40"
        width="292" height="498"
        viewBox="0 0 292 498">
-    <text x="0" y="48" class="h3">核心模块</text><g transform="translate(0, 76)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+    <text x="0" y="48" class="h3">核心模块</text><g transform="translate(0, 76)" opacity="1.0">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Workflow</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">可视化编排</text></g><g transform="translate(0, 156)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Workflow</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">可视化编排</text></g><g transform="translate(0, 156)" opacity="1.0">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Agent</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">工具调用框架</text></g><g transform="translate(0, 236)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Agent</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">工具调用框架</text></g><g transform="translate(0, 236)" opacity="1.0">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Knowledge</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">RAG 引擎</text></g><g transform="translate(0, 316)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Knowledge</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">RAG 引擎</text></g><g transform="translate(0, 316)" opacity="1.0">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">04</text>
   <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">LLMOps</text>  <text x="48" y="46" font-size="14" fill="#bcc4d8">评测与监控</text></g>
   </svg>

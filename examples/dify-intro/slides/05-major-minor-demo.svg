@@ -22,8 +22,9 @@
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
@@ -40,8 +41,8 @@
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>
-
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
@@ -58,7 +59,7 @@
        viewBox="0 0 584 498">
     <rect x="0" y="0" width="6" height="388" rx="3" fill="url(#accent-grad-v)"/>
 
-<text x="32" y="181" font-size="44" fill="#ffffff" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型，</text><text x="32" y="236" font-size="44" fill="#ffffff" font-weight="500" font-style="italic">而是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
+<text x="32" y="181" font-size="44" fill="#ffffff" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型</text><text x="32" y="236" font-size="44" fill="#ffffff" font-weight="500" font-style="italic">，而是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
 <text x="32" y="448" class="h4">Dify 创始团队</text><text x="32" y="476" class="body" fill="#6b7392">2024 年技术分享会</text>
   </svg>
 </g><g transform="translate(56, 56)">
@@ -92,7 +93,7 @@
   <svg x="40" y="40"
        width="152" height="200"
        viewBox="0 0 152 200">
-    <text x="0" y="20" class="eyebrow">上线周期</text><text x="0" y="112" font-size="64" fill="#ffffff" font-weight="800">1/10</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="168" class="small">对比传统开发</text>
+    <text x="0" y="20" class="eyebrow">上线周期</text><text x="0" y="112" font-size="64" fill="#ffffff" font-weight="800">1/10</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="168" font-size="14" fill="#bcc4d8">对比传统开发</text>
   </svg>
 </g><g transform="translate(992, 354)">
   <rect x="0" y="0" width="232" height="280"

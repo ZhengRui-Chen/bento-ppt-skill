@@ -22,8 +22,9 @@
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
@@ -40,8 +41,8 @@
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>
-
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
@@ -56,7 +57,7 @@
   <svg x="40" y="40"
        width="494" height="498"
        viewBox="0 0 494 498">
-    <text x="0" y="20" class="eyebrow">全球开发者</text><text x="0" y="158" font-size="110" fill="#ffffff" font-weight="800">180</text><text x="188" y="158" font-size="30" fill="#bcc4d8" font-weight="500">万+</text><text x="0" y="196" font-size="22" fill="#22d97f" font-weight="600">↑ 180% YoY</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" class="small">覆盖 130+ 个国家与地区</text>
+    <text x="0" y="20" class="eyebrow">全球开发者</text><text x="0" y="158" font-size="110" fill="#ffffff" font-weight="800">180</text><text x="188" y="158" font-size="30" fill="#bcc4d8" font-weight="500">万+</text><text x="0" y="196" font-size="22" fill="#22d97f" font-weight="600">↑ 180% YoY</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" font-size="14" fill="#bcc4d8">覆盖 130+ 个国家与地区</text>
   </svg>
 </g><g transform="translate(650, 56)">
   <rect x="0" y="0" width="574" height="578"
@@ -67,7 +68,7 @@
   <svg x="40" y="40"
        width="494" height="498"
        viewBox="0 0 494 498">
-    <text x="0" y="20" class="eyebrow">企业客户</text><text x="0" y="158" font-size="110" fill="#ffffff" font-weight="800">12000</text><text x="308" y="158" font-size="30" fill="#bcc4d8" font-weight="500">+</text><text x="0" y="196" font-size="22" fill="#22d97f" font-weight="600">↑ Fortune 500 中的 23 家</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" class="small">金融、零售、教育、政务皆有落地</text>
+    <text x="0" y="20" class="eyebrow">企业客户</text><text x="0" y="158" font-size="110" fill="#ffffff" font-weight="800">12000</text><text x="308" y="158" font-size="30" fill="#bcc4d8" font-weight="500">+</text><text x="0" y="196" font-size="22" fill="#22d97f" font-weight="600">↑ Fortune 500 中的 23 家</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" font-size="14" fill="#bcc4d8">金融、零售、教育、政务皆有落地</text>
   </svg>
 </g>
 

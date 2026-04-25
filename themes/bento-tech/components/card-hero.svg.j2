@@ -1,21 +1,27 @@
-{# card-hero: eyebrow + 大标题 + 副标题 + footer 信息（封面/章节首页/金句页/hero 横幅）
+{# card-hero: eyebrow + 大标题 + badges + 副标题 + footer 信息（封面/章节首页/金句页/hero 横幅）
    data:
-     eyebrow  string?  顶部小字（英文短语/分类标签）
-     title    string|string[]   主标题（数组则多行）
-     subtitle string?  副标题
-     footer   string?  底部小字
-   位置策略：所有 y 都从顶部累加（绝对位置），而不是用 H 的百分比
-   字号自适应：H ≤ 200 用 h2(44)；H ≤ 320 用 h2*1.2；否则用 h1(60)
+     eyebrow      string?  顶部小字
+     title        string|string[]   主标题
+     badges       array?   胶囊小标签 [string] 或 [{text,variant}]，渲染在 title 下方
+     subtitle     string?  副标题
+     footer       string?  底部小字（H >= 280 才显示）
+     meta_columns array?   底部 3 栏 metadata [{label,value}]，覆盖 footer。封面专用
+     deco_text    string?  右下半透明大字装饰（如 "2026 FUTURE"）
 #}
+{%- from "macros.svg.j2" import badge, render_badges -%}
 {%- set d = data -%}
 {%- set H = slot_h or 560 -%}
 {%- set W = slot_w or 600 -%}
 
-{# 字号自适应：hero 横幅（H≤200）/ 中等（H≤320）/ 大封面 #}
 {%- set h_size = theme.type_scale.h2 if H <= 200 else (theme.type_scale.h2 + 8 if H <= 320 else theme.type_scale.h1) -%}
 {%- set sub_size = theme.type_scale.h4 if H <= 200 else theme.type_scale.h3 -%}
 {%- set line_h = (h_size * 1.20) | int -%}
 {%- set ns = namespace(y=0) -%}
+
+{# 装饰大字（右下半透明）：先画，文字在上层 #}
+{%- if d.deco_text and H >= 320 -%}
+<text x="{{ W - 20 }}" y="{{ H - 16 }}" text-anchor="end" font-size="{{ (H * 0.32) | int }}" font-weight="900" fill="{{ theme.colors.accent_primary }}" opacity="0.07" letter-spacing="6" font-family="{{ theme.fonts.display }}">{{ d.deco_text }}</text>
+{%- endif -%}
 
 {%- if d.eyebrow -%}
 {%- set ns.y = ns.y + theme.type_scale.eyebrow + 4 -%}
@@ -36,15 +42,30 @@
 {%- endfor -%}
 {%- endif -%}
 
+{%- if d.badges -%}
+{%- set ns.y = ns.y + 22 -%}
+{{ render_badges(d.badges, 0, ns.y, theme) }}
+{%- set ns.y = ns.y + 14 -%}
+{%- endif -%}
+
 {%- if d.subtitle -%}
 {%- set ns.y = ns.y + sub_size + 18 -%}
 <text x="0" y="{{ ns.y }}" font-size="{{ sub_size }}" fill="{{ theme.colors.text_secondary }}" font-weight="400">{{ d.subtitle }}</text>
 {%- endif -%}
 
-{# 底部装饰条 + footer：仅在 H ≥ 280 时显示，避免 hero 横幅被挤 #}
+{# 底部装饰条 + footer/meta_columns：仅 H >= 280 显示 #}
 {%- if H >= 280 -%}
-<rect x="0" y="{{ H - 70 }}" width="120" height="4" fill="url(#accent-grad)" rx="2"/>
-{%- if d.footer %}
+<rect x="0" y="{{ H - 80 }}" width="120" height="4" fill="url(#accent-grad)" rx="2"/>
+
+{%- if d.meta_columns -%}
+{# 三栏 metadata：演讲人 / 日期 / 单位 #}
+{%- set col_w = (W / (d.meta_columns | length)) | int -%}
+{%- for c in d.meta_columns -%}
+{%- set cx = loop.index0 * col_w -%}
+<text x="{{ cx }}" y="{{ H - 38 }}" font-size="12" fill="{{ theme.colors.text_muted }}" letter-spacing="2">{{ c.label }}</text>
+<text x="{{ cx }}" y="{{ H - 12 }}" font-size="18" fill="{{ theme.colors.text_primary }}" font-weight="600">{{ c.value }}</text>
+{%- endfor -%}
+{%- elif d.footer -%}
 <text x="0" y="{{ H - 24 }}" class="body">{{ d.footer }}</text>
-{%- endif %}
+{%- endif -%}
 {%- endif -%}

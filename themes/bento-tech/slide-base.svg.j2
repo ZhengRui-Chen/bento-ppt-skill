@@ -23,6 +23,18 @@
       <stop offset="0%" stop-color="{{ theme.colors.accent_secondary }}" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="{{ theme.colors.accent_secondary }}" stop-opacity="0"/>
     </radialGradient>
+    {%- set bg_tex = (theme.effects.bg_texture if theme.effects else 'none') | default('none') -%}
+    {%- set tex_op = (theme.effects.bg_texture_opacity if theme.effects else 0.05) | default(0.05) -%}
+    {%- set tex_sz = (theme.effects.bg_texture_size if theme.effects else 48) | default(48) -%}
+    {%- if bg_tex == 'grid' %}
+    <pattern id="bg-texture" width="{{ tex_sz }}" height="{{ tex_sz }}" patternUnits="userSpaceOnUse">
+      <path d="M {{ tex_sz }} 0 L 0 0 0 {{ tex_sz }}" fill="none" stroke="#ffffff" stroke-opacity="{{ tex_op }}" stroke-width="0.5"/>
+    </pattern>
+    {%- elif bg_tex == 'dots' %}
+    <pattern id="bg-texture" width="{{ tex_sz }}" height="{{ tex_sz }}" patternUnits="userSpaceOnUse">
+      <circle cx="{{ (tex_sz / 2) | int }}" cy="{{ (tex_sz / 2) | int }}" r="0.9" fill="#ffffff" fill-opacity="{{ tex_op * 2 }}"/>
+    </pattern>
+    {%- endif %}
   </defs>
 
   <style type="text/css">
@@ -41,6 +53,10 @@
 
   <!-- 背景渐变 -->
   <rect width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}" fill="url(#bg-grad)"/>
+  {%- if bg_tex in ('grid', 'dots') %}
+  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}" fill="url(#bg-texture)"/>
+  {%- endif %}
 
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>

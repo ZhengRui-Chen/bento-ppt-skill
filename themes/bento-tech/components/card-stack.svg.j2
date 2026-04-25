@@ -1,0 +1,79 @@
+{# card-stack: 多数据叠加卡（一张卡承载一组相关指标）
+   原版参考：AIoT 卡 = 大数字 8.6亿+ + 两小数字 + 进度条 + 描述
+   data:
+     label    string?   顶部小字（数据组的标题）
+     primary  object    主数字 {value, unit?, suffix?}
+                          - value: 大字数字
+                          - unit:  紧贴 value 右侧的小单位
+                          - suffix: 数字下方/右侧的描述短语（"连接设备数"）
+     secondary array?   2-3 个支撑指标 [{label, value}]，横向铺
+     progress  object?  {percent: 0-100, label?: string}  底部进度条
+     badges    array?   胶囊小标签
+   字号自适应：W < 380 用 64；< 600 用 80；否则用 100（比 card-stat 稍小，留位置给 secondary）
+#}
+{%- from "macros.svg.j2" import render_badges -%}
+{%- set d = data -%}
+{%- set H = slot_h or 560 -%}
+{%- set W = slot_w or 600 -%}
+{%- set huge = 64 if W < 380 else (80 if W < 600 else 100) -%}
+{%- set unit_size = (huge * 0.30) | int -%}
+{%- set p = d.primary or {} -%}
+{%- set v_str = p.value | default('') | string -%}
+
+{%- set ns = namespace(vw=0) -%}
+{%- for ch in v_str -%}
+{%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns.vw = ns.vw + huge -%}
+{%- else -%}{%- set ns.vw = ns.vw + (huge * 0.55) | int -%}{%- endif -%}
+{%- endfor -%}
+
+{%- set y = namespace(p=0) -%}
+
+{%- if d.label -%}
+{%- set y.p = y.p + theme.type_scale.eyebrow + 4 -%}
+<text x="0" y="{{ y.p }}" class="eyebrow">{{ d.label }}</text>
+{%- endif -%}
+
+{%- if d.badges -%}
+{%- set y.p = y.p + 28 -%}
+{{ render_badges(d.badges, 0, y.p - 18, theme) }}
+{%- set y.p = y.p + 4 -%}
+{%- endif -%}
+
+{# 主数字 #}
+{%- if p.value -%}
+{%- set y.p = y.p + 28 + huge -%}
+<text x="0" y="{{ y.p }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800">{{ v_str }}</text>
+{%- if p.unit -%}
+<text x="{{ ns.vw + 8 }}" y="{{ y.p }}" font-size="{{ unit_size }}" fill="{{ theme.colors.accent_secondary }}" font-weight="600">{{ p.unit }}</text>
+{%- endif -%}
+{%- if p.suffix -%}
+{%- set unit_w_est = ((p.unit | default('') | length) * unit_size * 0.6) | int -%}
+<text x="{{ ns.vw + 8 + unit_w_est + (12 if p.unit else 0) }}" y="{{ y.p - 4 }}" font-size="{{ theme.type_scale.body }}" fill="{{ theme.colors.text_secondary }}">{{ p.suffix }}</text>
+{%- endif -%}
+{%- endif -%}
+
+{# secondary 横向铺：2-3 个小指标 #}
+{%- if d.secondary -%}
+{%- set sec = d.secondary[:3] -%}
+{%- set col_w = (W / (sec | length)) | int -%}
+{%- set y.p = y.p + 40 -%}
+{%- for s in sec -%}
+{%- set sx = loop.index0 * col_w -%}
+<text x="{{ sx }}" y="{{ y.p }}" font-size="12" fill="{{ theme.colors.text_muted }}" letter-spacing="1">{{ s.label }}</text>
+<text x="{{ sx }}" y="{{ y.p + 30 }}" font-size="{{ theme.type_scale.h3 }}" fill="{{ theme.colors.text_primary }}" font-weight="700">{{ s.value }}</text>
+{%- endfor -%}
+{%- set y.p = y.p + 50 -%}
+{%- endif -%}
+
+{# 进度条：底部 #}
+{%- if d.progress -%}
+{%- set pct = d.progress.percent | default(0) | int -%}
+{%- if pct < 0 -%}{%- set pct = 0 -%}{%- endif -%}
+{%- if pct > 100 -%}{%- set pct = 100 -%}{%- endif -%}
+{%- set bar_y = H - (60 if d.progress.label else 30) -%}
+<rect x="0" y="{{ bar_y }}" width="{{ W }}" height="6" rx="3" fill="{{ theme.colors.card_fill }}" fill-opacity="0.10"/>
+<rect x="0" y="{{ bar_y }}" width="{{ ((W * pct) / 100) | int }}" height="6" rx="3" fill="url(#accent-grad)"/>
+{%- if d.progress.label -%}
+<text x="0" y="{{ bar_y + 28 }}" font-size="{{ theme.type_scale.small }}" fill="{{ theme.colors.text_secondary }}">{{ d.progress.label }}</text>
+{%- endif -%}
+{%- endif -%}

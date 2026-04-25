@@ -22,8 +22,9 @@
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
@@ -40,8 +41,8 @@
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>
-
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
@@ -67,16 +68,13 @@
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
-    <text x="0" y="48" class="h3">数据层</text><g transform="translate(0, 76)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+    <text x="0" y="48" class="h3">数据层</text><g transform="translate(0, 76)" opacity="1.0">  <rect x="-12" y="-2" width="3" height="40" rx="1.5" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">向量库</text></g><g transform="translate(0, 124)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">向量库</text></g><g transform="translate(0, 124)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">对象存储</text></g><g transform="translate(0, 172)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">对象存储</text></g><g transform="translate(0, 172)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">审计日志</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">审计日志</text></g>
   </svg>
 </g><g transform="translate(452, 316)">
   <rect x="0" y="0" width="376" height="318"
@@ -87,16 +85,13 @@
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
-    <text x="0" y="48" class="h3">能力层</text><g transform="translate(0, 76)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+    <text x="0" y="48" class="h3">能力层</text><g transform="translate(0, 76)" opacity="1.0">  <rect x="-12" y="-2" width="3" height="40" rx="1.5" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">模型路由</text></g><g transform="translate(0, 124)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">模型路由</text></g><g transform="translate(0, 124)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">工具调用</text></g><g transform="translate(0, 172)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">工具调用</text></g><g transform="translate(0, 172)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">知识检索</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">知识检索</text></g>
   </svg>
 </g><g transform="translate(848, 316)">
   <rect x="0" y="0" width="376" height="318"
@@ -107,16 +102,13 @@
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
-    <text x="0" y="48" class="h3">编排层</text><g transform="translate(0, 76)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+    <text x="0" y="48" class="h3">编排层</text><g transform="translate(0, 76)" opacity="1.0">  <rect x="-12" y="-2" width="3" height="40" rx="1.5" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Workflow</text></g><g transform="translate(0, 124)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">Workflow</text></g><g transform="translate(0, 124)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Agent</text></g><g transform="translate(0, 172)">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">Agent</text></g><g transform="translate(0, 172)" opacity="0.45">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="600">Chat 流</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">Chat 流</text></g>
   </svg>
 </g>
 

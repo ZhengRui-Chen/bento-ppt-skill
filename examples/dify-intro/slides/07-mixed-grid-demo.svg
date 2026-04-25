@@ -22,8 +22,9 @@
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
@@ -40,8 +41,8 @@
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>
-
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
   <!-- 装饰光斑（不影响内容可读性） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
@@ -85,7 +86,10 @@
   <svg x="40" y="40"
        width="292" height="200"
        viewBox="0 0 292 200">
-    <text x="0" y="20" class="eyebrow">API 平均响应</text><text x="0" y="136" font-size="88" fill="#ffffff" font-weight="800">187</text><text x="152" y="136" font-size="24" fill="#bcc4d8" font-weight="500">ms</text><rect x="0" y="160" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
+    <text x="0" y="20" class="eyebrow">运行指标</text><text x="0" y="112" font-size="64" fill="#ffffff" font-weight="800">187</text><text x="113" y="112" font-size="19" fill="#00d4ff" font-weight="600">ms</text><text x="147" y="108" font-size="18" fill="#bcc4d8">API 平均响应</text><text x="0" y="152" font-size="12" fill="#6b7392" letter-spacing="1">99 分位</text>
+<text x="0" y="182" font-size="30" fill="#ffffff" font-weight="700">420 ms</text><text x="146" y="152" font-size="12" fill="#6b7392" letter-spacing="1">错误率</text>
+<text x="146" y="182" font-size="30" fill="#ffffff" font-weight="700">0.03%</text><rect x="0" y="140" width="292" height="6" rx="3" fill="#ffffff" fill-opacity="0.10"/>
+<rect x="0" y="140" width="289" height="6" rx="3" fill="url(#accent-grad)"/><text x="0" y="168" font-size="14" fill="#bcc4d8">SLA 99% 达标</text>
   </svg>
 </g><g transform="translate(56, 356)">
   <rect x="0" y="0" width="372" height="278"

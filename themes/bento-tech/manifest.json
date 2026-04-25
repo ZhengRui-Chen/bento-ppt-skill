@@ -46,6 +46,11 @@
     "card_radius": 20,
     "card_stroke_width": 1
   },
+  "effects": {
+    "bg_texture": "grid",
+    "bg_texture_opacity": 0.08,
+    "bg_texture_size": 48
+  },
   "layouts": {
     "single-focus": {
       "card_count": 1,

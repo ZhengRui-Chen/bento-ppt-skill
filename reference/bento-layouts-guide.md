@@ -81,10 +81,23 @@
 {
   "eyebrow": "PRODUCT INTRO · 2026 Q2",   // 顶部小字（可选）
   "title": "主标题" | ["第一行", "第二行"],   // 字符串 = 单行；数组 = 多行
+  "badges": ["PRODUCTION-READY", {"text": "BETA", "variant": "warning"}],  // 可选胶囊小标签
   "subtitle": "副标题",                     // 可选
-  "footer": "底部小字"                      // 可选
+  "footer": "底部小字",                     // 可选（非封面用）
+  "meta_columns": [                         // 可选（封面专用，会覆盖 footer）：底部三栏
+    {"label": "PRESENTED BY", "value": "..."},
+    {"label": "DATE", "value": "..."},
+    {"label": "AUDIENCE", "value": "..."}
+  ],
+  "deco_text": "2026 FUTURE"                // 可选：右下半透明大字装饰（H>=320 才显示）
 }
 ```
+
+`badges`：每项可以是字符串（默认 `accent` 色）或 `{text, variant}`，variant: `accent|success|warning|muted`。
+
+`meta_columns`：封面用，会覆盖 footer。常用三栏：演讲人 / 日期 / 受众；或 项目名 / 版本 / 提交日期 等。
+
+`deco_text`：3-12 字英文/数字最佳，做封面背景装饰（半透明大字）。
 
 ### card-stat（数据卡）
 
@@ -110,13 +123,40 @@
   "title": "卡片大标题",        // 可选
   "accent": "success",          // 可选：'success'|'warning'|'default'，影响序号方块颜色
   "items": [
-    { "title": "Workflow", "desc": "可视化编排" },
+    { "title": "Workflow", "desc": "可视化编排", "highlight": true },  // highlight: 重点项
+    { "title": "Agent", "desc": "工具调用框架" },
     "字符串也行"               // 简短形式
   ]
 }
 ```
 
 `accent` 用法：好评 / 优势 / 已完成项用 `success`（绿）；差评 / 风险 / 未完成项用 `warning`（橙）；默认 `default`（紫蓝渐变）。两栏对比布局（如好评 vs 差评）一定要用此字段做色彩区分。
+
+`item.highlight: true`：标记当前焦点项。**只要有任何一项 highlight=true**，模板会进入"降亮模式"——非高亮项变灰、高亮项加粗 + 左侧细线。适合"3 步流程当前在哪一步""5 个特性主推哪一个"的场景。
+
+### card-stack（多数据叠加卡 — 一卡承载一组相关指标）
+
+```json
+{
+  "label": "全球最大消费级 IoT 平台",
+  "primary": {
+    "value": "8.6",
+    "unit": "亿+",                     // 可选：紧贴 value 右侧
+    "suffix": "连接设备数"             // 可选：单位右侧的描述短语
+  },
+  "secondary": [                       // 可选：2-3 个支撑指标，横向铺
+    { "label": "全球月活用户", "value": "6.86 亿" },
+    { "label": "日均互联使用", "value": "4000 万次" }
+  ],
+  "progress": {                        // 可选：底部进度条
+    "percent": 95,                     // 0-100
+    "label": "覆盖 95% 以上生活场景"
+  },
+  "badges": [...]                      // 可选
+}
+```
+
+**何时用 card-stack 而不是 card-stat**：当一张卡需要承载"主数据 + 2-3 个相关支撑数据 + 完成度"时。例：用户画像、性能指标组、销售达成情况。一张 card-stack ≈ 3-4 张 card-stat 的信息量，但视觉更集中。
 
 ### card-quote（引言）
 
@@ -134,6 +174,7 @@
 {
   "eyebrow": "顶部小字",                 // 可选
   "title": "标题",                       // 可选
+  "badges": ["资本市场", {"text": "已跌停", "variant": "warning"}],  // 可选
   "paragraphs": [
     "第一段。",
     "第二段。"
