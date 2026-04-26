@@ -710,12 +710,13 @@ class NativeRenderer:
                 it_title = it.get("title", "")
                 it_desc = it.get("desc")
                 is_hl = bool(it.get("highlight"))
-            # 高亮项左竖条：覆盖整个 row 高度（与序号 + title + desc 视觉对齐）
+            # 高亮项左竖条：对齐"实际内容区"高度（序号方块顶到 desc 底），而不是含 gap 的整 row_h
             if is_hl:
+                content_h = 50 if it_desc else 32
                 self._add_solid_rect(
                     slide,
                     inner["x"] - 12, inner["y"] + ry,
-                    4, row_h - 4,
+                    4, content_h,
                     badge_fill,
                 )
             # 序号方块
@@ -812,14 +813,15 @@ class NativeRenderer:
                             run.font.color.rgb = _hex(self.theme["colors"]["text_muted"])
                         run.font.name = "PingFang SC"
         else:
-            # 大卡模式：quote 居中（PowerPoint 自动换行）
+            # 大卡模式：quote 居中（PowerPoint 自动换行 + 垂直居中）
             available_h = H - (110 if data.get("author") else 30)
             self._add_textbox(
                 slide, quote,
-                inner["x"] + 32, inner["y"] + 40, W - 64, available_h - 40,
+                inner["x"] + 32, inner["y"] + 30, W - 64, available_h - 30,
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 italic=True,
+                v_anchor="middle",
             )
             if data.get("author"):
                 self._add_solid_rect(
@@ -1033,6 +1035,24 @@ class NativeRenderer:
             h_size, sub_size = ts["h1"], ts["h3"]
         line_h = int(h_size * 1.20)
 
+        # 横幅模式（H<280）且无底部信息 → 中段内容整体垂直居中
+        has_bottom = (H >= 280) and (data.get("meta_columns") or data.get("footer"))
+        top_pad = 0
+        if H < 280 and not has_bottom:
+            # 估算 eyebrow + title + badges + subtitle 总高
+            est = 0
+            if data.get("eyebrow"):
+                est += ts["eyebrow"] + 18
+            if data.get("title"):
+                t = data["title"]
+                lines = 1 if isinstance(t, str) else len(t)
+                est += h_size + (line_h * (lines - 1))
+            if data.get("badges"):
+                est += 22 + 14
+            if data.get("subtitle"):
+                est += sub_size + 18
+            top_pad = max(0, (H - est) // 2)
+
         # 装饰大字 deco_text（仅 H>=320，半透明大字放右下，先画在底层）
         if data.get("deco_text") and H >= 320:
             dt_size = int(H * 0.32)
@@ -1046,7 +1066,7 @@ class NativeRenderer:
                 transparency=0.93, letter_spacing=600,
             )
 
-        y = 0
+        y = top_pad
         # eyebrow
         if data.get("eyebrow"):
             y += ts["eyebrow"] + 4

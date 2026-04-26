@@ -99,8 +99,9 @@
 {%- endif -%}
 <g transform="translate(0, {{ ry }})" opacity="{{ this_op }}">
   {%- if is_hl %}
-  {# 高亮项视觉强化：左侧 4px 主题色粗条（覆盖整个 row 高度，与文案对齐）#}
-  <rect x="-12" y="0" width="4" height="{{ row_h - 4 }}" rx="2" fill="{{ badge_fill }}"/>
+  {# 高亮项视觉强化：左侧 4px 主题色粗条，对齐"内容区"高度（不含 row 间的 gap）#}
+  {%- set bar_h = 50 if it_desc else 32 -%}
+  <rect x="-12" y="0" width="4" height="{{ bar_h }}" rx="2" fill="{{ badge_fill }}"/>
   {%- endif %}
   <rect x="0" y="0" width="32" height="32" rx="8" fill="{{ badge_fill }}"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="{{ badge_text }}">{{ '%02d' | format(loop.index) }}</text>
