@@ -11,14 +11,14 @@ A Claude Code skill that turns a topic or document into a 16:9 SVG slide deck in
 ## Features
 
 - **7 阶段流水线**：needs（反问） → research → outline（金字塔原理） → planning → fetch → design → review → export
-- **6 种 Bento 布局** + **7 种卡片组件**：single-focus / two-col-symmetric / two-col-asymmetric / three-col / major-minor / hero-top / mixed-grid 任选；卡内可放 card-hero / card-stat / **card-stack**（多数据叠加）/ card-list（支持 highlight 焦点项）/ card-quote / card-text / card-image / chart-bar
-- **跨组件装饰元素**：胶囊 badges / 三栏 metadata / 半透明装饰大字 / 网格背景纹理 — 接近原版高密度设计稿的视觉效果
+- **6 种 Bento 布局** + **9 种卡片组件**：single-focus / two-col-symmetric / two-col-asymmetric / three-col / major-minor / hero-top / mixed-grid 任选；卡内可放 card-hero / card-stat / **card-stack**（多数据叠加）/ card-list（highlight 焦点项）/ card-quote / card-text / card-image / **card-compare**（多列对比表）/ chart-bar
+- **跨组件装饰元素**：胶囊 badges / 三栏 metadata / 半透明装饰大字 / **ghost_text 背景装饰字** / 网格背景纹理
+- **双主题**：`bento-tech`（深色科技风）/ `bento-light`（浅色商务风），主题继承机制让新主题只需一个 manifest.json
 - **底层 SVG**（viewBox `0 0 1280 720`），双 PPTX 导出路径：
   - **Native**（默认）：`scripts/native_render.py` 用 python-pptx 直接画原生 shape，**100% 可编辑**（单击文字直接改、无需"转换为形状"）。视觉商务平面（无渐变 / 光斑）
   - **SVG**（备选 `--format pptx-svg`）：通过 `asvg:svgBlip` OOXML 注入到 pptx，PowerPoint 2019+/Office 365 显示完美矢量但默认是 picture 对象
 - **HTML 翻页预览**：左右键 / 缩略图栏 / 全屏，在浏览器里直接放映
 - **图片 provider 协议**：可插拔的 `url_download` / `nanobanana` / `unsplash`，AI 自己决定用搜还是生
-- **风格包系统**：`themes/<name>/` 自包含，复制 + 改 manifest 就能扩新风格
 - **中文版式 lint**：默认拦截英文标点（公众号/严苛场景可开"中英不空格"）
 
 ## Install
@@ -108,31 +108,33 @@ mkdir themes/<your-style>
 ppt-agent/
 ├── SKILL.md                       # skill 入口（Claude 自动加载）
 ├── reference/                     # 渐进披露文档（需要时再读）
-│   ├── pyramid-outline-prompt.md  # sandun 开源的金字塔原理 prompt
-│   ├── extension-guide.md     # Layout / Component / Theme 延展规范（接力开发必读）
+│   ├── extension-guide.md         # Layout / Component / Theme 延展规范（接力开发必读）
 │   ├── bento-layouts-guide.md     # 6 种布局 + component data schema
+│   ├── pyramid-outline-prompt.md  # sandun 开源的金字塔原理 prompt
 │   ├── image-providers.md         # AI 怎么写 src / source
-│   ├── theme-authoring.md         # 加新主题
-│   └── pptx-svg-internals.md      # svgBlip OOXML 细节
+│   ├── pptx-rendering.md          # 双 Renderer 路线（native vs svgBlip）
+│   └── theme-authoring.md         # 加新主题（简版）
 ├── scripts/
 │   ├── ppt.py                     # 主 CLI
-│   ├── render.py                  # SVG 装配 (jinja2)
+│   ├── render.py                  # SVG 装配 (jinja2 + 主题继承)
+│   ├── native_render.py           # Native PPTX 渲染（python-pptx，100% 可编辑）
 │   ├── shoot.py                   # Chrome headless 截图 + deck.html
-│   ├── export.py                  # SVG → PPTX (svgBlip 注入)
+│   ├── export.py                  # SVG → PPTX (svgBlip 备选路线)
 │   ├── fetch.py                   # 图片 provider 调度
 │   ├── lint_cn.py                 # 中文版式硬约束
 │   └── providers/                 # 可插拔图片 provider
 │       ├── url_download.py        # 内置（无 API key）
-│       ├── nanobanana.py          # Gemini 3 Image (stub)
+│       ├── nanobanana.py          # Gemini Image (stub)
 │       └── unsplash.py            # Unsplash (stub)
 ├── themes/
-│   └── bento-tech/                # 默认风格：深色 + 玻璃拟态卡片 + 渐变光斑
-│       ├── manifest.json          # 设计 token + layout 槽位元数据
-│       ├── slide-base.svg.j2      # 1280×720 容器
-│       ├── layouts/_base.svg.j2   # 数据驱动通用 layout
-│       └── components/            # card-hero / stat / list / quote / text / image / chart-bar
+│   ├── bento-tech/                # 深色科技风（默认）：渐变光斑 + 玻璃拟态卡片
+│   │   ├── manifest.json          # 设计 token + layout 槽位元数据
+│   │   ├── slide-base.svg.j2      # 1280×720 容器（背景 / defs / ghost_text / 页脚）
+│   │   ├── layouts/_base.svg.j2   # 数据驱动通用 layout
+│   │   └── components/            # 9 种 component 模板
+│   └── bento-light/               # 浅色商务风：只有 manifest.json，模板继承 bento-tech
 └── examples/
-    └── dify-intro/                # 端到端跑通样本
+    └── dify-intro/                # 端到端跑通样本（8 页，覆盖全部布局）
 ```
 
 ## Credit

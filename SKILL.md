@@ -111,17 +111,25 @@ ppt new "<topic>"
 | `hero-top` | 顶部一句话 + 下方多个要点 | 横幅 + 2-4 等宽卡片 |
 | `mixed-grid` | 内容多样、有数据有图 | 自由混合 |
 
-每页 component 选自（在卡片内填充）：`card-hero` / `card-stat` / `card-list` / `card-quote` / `card-text` / `card-image` / `chart-bar`。详见 reference 文档。
+每页 component 选自（在卡片内填充）：`card-hero` / `card-stat` / `card-stack` / `card-list` / `card-quote` / `card-text` / `card-image` / `card-compare` / `chart-bar`。详见 reference 文档。
+
+页面还支持可选的 `ghost_text` 字段（3-10 个英文/数字字符），在背景渲染巨型半透明装饰文字（opacity 0.04），适合章节首页和核心数据页：
+
+```json
+{ "page": 3, "ghost_text": "VISION", "layout": "single-focus", "cards": [...] }
+```
 
 ## 阶段 5：设计渲染
 
 确认 `layout.json` 内容质量后（中文标点、字数控制、必须信息齐全），运行：
 
 ```bash
-ppt scaffold <ws>            # 渲染所有页
-ppt render <ws> --page 3     # 重渲第 3 页
-ppt render <ws> --theme <name>  # 切主题重渲
+ppt scaffold <ws>                        # 渲染所有页（默认主题 bento-tech）
+ppt render <ws> --page 3                 # 重渲第 3 页
+ppt render <ws> --theme bento-light      # 切换为浅色主题重渲
 ```
+
+可用主题：`bento-tech`（深色科技风，默认）/ `bento-light`（浅色商务风）。也可在 `layout.json` 顶层设 `"theme": "bento-light"` 固定主题。
 
 渲染前会自动跑 `lint_cn.py` 检查中文版式。命中阻断会要求重写——**这不是警告，是错误**。
 
@@ -191,13 +199,22 @@ python3 $SKILL/scripts/ppt.py export <ws> --format pptx|pdf|html
 首次使用前需要 Python 依赖：
 
 ```bash
-pip3 install jinja2 python-pptx playwright cairosvg lxml
-playwright install chromium
+pip3 install jinja2 python-pptx lxml
 ```
+
+截图（`ppt shoot`）自动探测系统已安装的 Chrome / Chromium / Edge / Brave，无需额外配置。找不到浏览器时请安装 Chrome 后重试。
 
 ## 添加新主题
 
-复制 `themes/bento-tech/` 改名，按 [reference/theme-authoring.md](reference/theme-authoring.md) 修改 manifest.json + layouts/components 模板。`ppt scaffold --theme <name>` 自动识别。
+只需创建 `themes/<name>/manifest.json`，模板文件自动从 `bento-tech` 继承：
+
+```bash
+mkdir themes/<your-style>
+# 复制 bento-light/manifest.json 作为浅色底板，或 bento-tech/manifest.json 作为深色底板
+# 修改 colors / effects / type_scale
+```
+
+完整字段说明和颜色设计要点见 [reference/extension-guide.md](reference/extension-guide.md)。
 
 ## 中文版式硬约束
 
