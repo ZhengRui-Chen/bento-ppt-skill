@@ -49,7 +49,7 @@
 {%- set list_top = y.p + 12 -%}
 
 {%- set has_desc = items_in | selectattr('desc', 'defined') | list | length > 0 -%}
-{%- set min_row = 48 if has_desc else 36 -%}
+{%- set min_row = 44 if has_desc else 32 -%}
 {%- set avail_h = H - list_top - 16 -%}
 {%- set max_fit = (avail_h / min_row) | int -%}
 {%- if max_fit < 1 -%}{%- set max_fit = 1 -%}{%- endif -%}
@@ -99,8 +99,8 @@
 {%- endif -%}
 <g transform="translate(0, {{ ry }})" opacity="{{ this_op }}">
   {%- if is_hl %}
-  {# 高亮项视觉强化：左侧 4px 主题色粗条（外凸于 list 区）+ 标题加粗 + 序号方块原色（不降亮） #}
-  <rect x="-12" y="-4" width="4" height="{{ row_h - 8 }}" rx="2" fill="{{ badge_fill }}"/>
+  {# 高亮项视觉强化：左侧 4px 主题色粗条（覆盖整个 row 高度，与文案对齐）#}
+  <rect x="-12" y="0" width="4" height="{{ row_h - 4 }}" rx="2" fill="{{ badge_fill }}"/>
   {%- endif %}
   <rect x="0" y="0" width="32" height="32" rx="8" fill="{{ badge_fill }}"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="{{ badge_text }}">{{ '%02d' | format(loop.index) }}</text>

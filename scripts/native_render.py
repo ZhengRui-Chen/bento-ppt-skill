@@ -663,21 +663,29 @@ class NativeRenderer:
                 bold=True, letter_spacing=300,
             )
         if data.get("title"):
-            y += ts["h3"] + 18
+            # 估算 title 是否会 wrap：CJK 字宽 ≈ font_size * 0.9，ASCII ≈ font_size * 0.5
+            title = data["title"]
+            title_w_est = sum(
+                int(ts["h3"] * 0.9) if "\u4e00" <= ch <= "\u9fff"
+                else int(ts["h3"] * 0.5)
+                for ch in title
+            )
+            title_lines = 1 if title_w_est <= W - 16 else 2
+            title_h = int(ts["h3"] * 1.25 * title_lines)
             self._add_textbox(
-                slide, data["title"],
-                inner["x"], inner["y"] + y - ts["h3"], W, int(ts["h3"] * 1.4),
+                slide, title,
+                inner["x"], inner["y"] + y, W, title_h,
                 font_size=ts["h3"],
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
             )
-            y += 16
+            y += title_h + 8
         if not data.get("eyebrow") and not data.get("title"):
             y = 8
         list_top = y + 12
 
         has_desc = any(isinstance(it, dict) and it.get("desc") for it in items_in)
-        min_row = 48 if has_desc else 36
+        min_row = 44 if has_desc else 32
         avail_h = H - list_top - 16
         max_fit = max(1, avail_h // min_row)
         # 选项策略：必须截断时优先保留 highlight 项；剩余按原顺序填补
@@ -702,12 +710,12 @@ class NativeRenderer:
                 it_title = it.get("title", "")
                 it_desc = it.get("desc")
                 is_hl = bool(it.get("highlight"))
-            # 高亮项左竖条
+            # 高亮项左竖条：覆盖整个 row 高度（与序号 + title + desc 视觉对齐）
             if is_hl:
                 self._add_solid_rect(
                     slide,
-                    inner["x"] - 12, inner["y"] + ry - 4,
-                    4, row_h - 8,
+                    inner["x"] - 12, inner["y"] + ry,
+                    4, row_h - 4,
                     badge_fill,
                 )
             # 序号方块
