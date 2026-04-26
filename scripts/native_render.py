@@ -108,9 +108,18 @@ class NativeRenderer:
     # ---------- 背景 + 页脚 ----------
 
     def _add_background(self, slide) -> None:
-        bg = slide.background
+        """全屏底层矩形作为背景（不依赖 slide.background，那个被 master 继承覆盖）。
+        放在所有 shape 之前画，确保 z-order 在最底。"""
+        bg = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE,
+            Emu(0), Emu(0),
+            self.prs.slide_width, self.prs.slide_height,
+        )
         bg.fill.solid()
         bg.fill.fore_color.rgb = _hex(self.theme["colors"]["bg_start"])
+        bg.line.fill.background()
+        # 锁住，防止用户误选误移（PowerPoint 端右键能解锁）
+        # python-pptx 不直接支持 lockAspectRatio + selection lock，跳过
 
     def _add_footer(self, slide, meta: dict, page: dict, total: int) -> None:
         title = meta.get("title", "")
