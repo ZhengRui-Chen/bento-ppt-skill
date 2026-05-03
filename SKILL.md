@@ -182,12 +182,12 @@ ppt export <ws> --format html       # 单文件版 deck-standalone.html
 ```bash
 SKILL=${CLAUDE_SKILL_DIR:-$HOME/.claude/skills/ppt-agent}
 
-python3 $SKILL/scripts/ppt.py new "<topic>"
-python3 $SKILL/scripts/ppt.py fetch <ws>
-python3 $SKILL/scripts/ppt.py scaffold <ws>
-python3 $SKILL/scripts/ppt.py render <ws> [--page N] [--theme <name>]
-python3 $SKILL/scripts/ppt.py shoot <ws>
-python3 $SKILL/scripts/ppt.py export <ws> --format pptx|pdf|html
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" new "<topic>"
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" fetch <ws>
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" scaffold <ws>
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" render <ws> [--page N] [--theme <name>]
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" shoot <ws>
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" export <ws> --format pptx|pdf|html
 ```
 
 工作区根目录默认 `~/ppt-decks/`，可通过 env `PPT_DECKS_DIR` 覆盖。
