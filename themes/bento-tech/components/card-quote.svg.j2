@@ -20,10 +20,10 @@
 {# 横幅模式：右侧给 author 留 280px，quote 占左侧剩余宽度 #}
 {%- set author_block_w = 300 if (d.author or d.role) else 0 -%}
 {%- set q_max_w = W - 32 - author_block_w - 24 -%}
-{%- set chars_per_line = (q_max_w / unit_w) | int -%}
+{%- set chars_per_line = (q_max_w / unit_w * 1.1) | int -%}
 {%- else -%}
-{# 大卡模式：quote 占满宽度（除去左侧竖条 + 32px gutter）#}
-{%- set chars_per_line = ((W - 48) / unit_w) | int -%}
+{# 大卡模式：quote 占满宽度（除去左侧竖条 + 32px gutter）；1.1x 余量防 CJK 词组拆分 #}
+{%- set chars_per_line = ((W - 48) / unit_w * 1.1) | int -%}
 {%- endif -%}
 
 {%- set line_h = (q_size * 1.25) | int -%}

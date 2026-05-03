@@ -466,7 +466,7 @@ class NativeRenderer:
                 letter_spacing=300,
             )
 
-        # 主数字
+        # 主数字：窄卡设 word_wrap=True 防止截断（如 "<200" 在 152px 宽卡内）
         y += 28 + huge
         self._add_textbox(
             slide,
@@ -478,7 +478,7 @@ class NativeRenderer:
             font_size=huge,
             color=self.theme["colors"]["text_primary"],
             bold=True,
-            word_wrap=False,
+            word_wrap=(W < 300),
         )
 
         unit = data.get("unit")
@@ -1071,11 +1071,12 @@ class NativeRenderer:
         # 段落：合并成一个 textbox 多 paragraph，PowerPoint 自动换行
         paragraphs = data.get("paragraphs") or []
         if paragraphs:
+            para_h = max(H - y - 8, 64)  # 窄卡保底 64px 防截断
             tb = slide.shapes.add_textbox(
                 self._x(inner["x"]),
                 self._y(inner["y"] + y),
                 self._x(W),
-                self._y(H - y - 8),
+                self._y(para_h),
             )
             tf = tb.text_frame
             tf.margin_left = tf.margin_right = 0
