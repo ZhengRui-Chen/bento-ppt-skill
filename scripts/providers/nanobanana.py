@@ -30,7 +30,7 @@ class NanoBananaProvider(ImageProvider):
     def fetch(self, source: dict[str, Any], out_dir: Path) -> Path | None:
         query = source.get("query", "")
         aspect = source.get("aspect", "16:9")
-        slug = hashlib.md5(query.encode()).hexdigest()[:12]
+        slug = hashlib.md5(f"{query}|{aspect}".encode()).hexdigest()[:12]
 
         try:
             import google.generativeai as genai  # type: ignore[import-untyped]
