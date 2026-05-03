@@ -25,7 +25,6 @@ DEFAULT_ROOT = Path.home() / "ppt-decks"
 
 # ---------- 工作区管理 ----------
 
-
 def get_decks_root() -> Path:
     env = os.environ.get("PPT_DECKS_DIR")
     return Path(env).expanduser().resolve() if env else DEFAULT_ROOT
@@ -73,7 +72,7 @@ def require_workspace(arg: str) -> Path:
             f"[ws] 不是合法工作区: {p}\n"
             f"  缺少 {LAYOUT_MARKER} 标识文件。\n"
             f"  请先用 new 命令创建工作区："
-            f'  python3 {__file__} new "<主题>"'
+            f"  python3 {__file__} new \"<主题>\""
         )
     return ws
 
@@ -139,12 +138,10 @@ def cmd_new(topic: str) -> dict:
 
 # ---------- scaffold / render（委托给 render.py）----------
 
-
 def _import_render():
     """延迟导入，避免没装 jinja2 时跑 new 也失败。"""
     sys.path.insert(0, str(Path(__file__).parent))
     import render  # type: ignore
-
     return render
 
 
@@ -173,31 +170,25 @@ def cmd_render(ws: Path, page: int | None = None, theme: str | None = None) -> d
 
 # ---------- shoot（委托给 shoot.py）----------
 
-
 def cmd_shoot(ws: Path) -> dict:
     sys.path.insert(0, str(Path(__file__).parent))
     import shoot  # type: ignore
-
     return shoot.shoot_all(ws)
 
 
 # ---------- fetch（委托给 fetch.py）----------
 
-
 def cmd_fetch(ws: Path) -> dict:
     sys.path.insert(0, str(Path(__file__).parent))
     import fetch  # type: ignore
-
     return fetch.fetch_all(ws)
 
 
 # ---------- export（委托给 export.py）----------
 
-
 def cmd_export(ws: Path, fmt: str) -> dict:
     sys.path.insert(0, str(Path(__file__).parent))
     import export  # type: ignore
-
     if fmt == "pptx":
         return export.to_pptx(ws)
     if fmt == "pptx-svg":
@@ -210,7 +201,6 @@ def cmd_export(ws: Path, fmt: str) -> dict:
 
 
 # ---------- main ----------
-
 
 def main():
     ap = argparse.ArgumentParser(description="ppt-agent: 主题 → 可演讲 PPT 的端到端流水线")

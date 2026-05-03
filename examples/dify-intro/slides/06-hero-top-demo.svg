@@ -4,39 +4,39 @@
      width="1280" height="720">
   <defs>
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F6F3EE"/>
-      <stop offset="100%" stop-color="#EDE9E2"/>
+      <stop offset="0%" stop-color="#0a0e27"/>
+      <stop offset="100%" stop-color="#1a1f3a"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#6644ee"/>
-      <stop offset="100%" stop-color="#0066bb"/>
+      <stop offset="0%" stop-color="#7c5cff"/>
+      <stop offset="100%" stop-color="#00d4ff"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#6644ee"/>
-      <stop offset="100%" stop-color="#0066bb"/>
+      <stop offset="0%" stop-color="#7c5cff"/>
+      <stop offset="100%" stop-color="#00d4ff"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#6644ee" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#6644ee" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0066bb" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#0066bb" stop-opacity="0"/>
-    </radialGradient>    <pattern id="bg-texture" width="32" height="32" patternUnits="userSpaceOnUse">
-      <circle cx="16" cy="16" r="0.9" fill="#1a1a2e" fill-opacity="0.12"/>
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
     </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
     .mono { font-family: &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 16px; fill: #0066bb; letter-spacing: 3px; font-weight: 600; }
-    .h1 { font-size: 60px; fill: #0F0F10; font-weight: 700; }
-    .h2 { font-size: 44px; fill: #0F0F10; font-weight: 700; }
-    .h3 { font-size: 30px; fill: #0F0F10; font-weight: 600; }
-    .h4 { font-size: 22px; fill: #0F0F10; font-weight: 600; }
-    .body { font-size: 18px; fill: #555666; }
-    .small { font-size: 14px; fill: #9BA0B0; }
-    .stat-huge { font-size: 110px; fill: #0F0F10; font-weight: 800; }
-    .stat-unit { font-size: 28px; fill: #555666; font-weight: 500; }
+    .eyebrow { font-size: 16px; fill: #00d4ff; letter-spacing: 3px; font-weight: 600; }
+    .h1 { font-size: 60px; fill: #ffffff; font-weight: 700; }
+    .h2 { font-size: 44px; fill: #ffffff; font-weight: 700; }
+    .h3 { font-size: 30px; fill: #ffffff; font-weight: 600; }
+    .h4 { font-size: 22px; fill: #ffffff; font-weight: 600; }
+    .body { font-size: 18px; fill: #bcc4d8; }
+    .small { font-size: 14px; fill: #6b7392; }
+    .stat-huge { font-size: 110px; fill: #ffffff; font-weight: 800; }
+    .stat-unit { font-size: 28px; fill: #bcc4d8; font-weight: 500; }
   </style>
 
   <!-- 背景渐变 -->
@@ -49,64 +49,64 @@
   <g transform="translate(56, 56)">
   <rect x="0" y="0" width="1168" height="240"
         rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        fill="#ffffff" fill-opacity="0.06"
+        stroke="#ffffff" stroke-opacity="0.12"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="1088" height="160"
        viewBox="0 0 1088 160">
-    <text x="0" y="20" class="eyebrow">ARCHITECTURE</text><text x="0" y="82" font-size="44" fill="#0F0F10" font-weight="700">分层架构：从数据层到编排层</text><text x="0" y="122" font-size="22" fill="#555666" font-weight="400">每一层都可独立替换，整体可观测</text>
+    <text x="0" y="20" class="eyebrow">ARCHITECTURE</text><text x="0" y="82" font-size="44" fill="#ffffff" font-weight="700">分层架构：从数据层到编排层</text><text x="0" y="122" font-size="22" fill="#bcc4d8" font-weight="400">每一层都可独立替换，整体可观测</text>
   </svg>
 </g><g transform="translate(56, 316)">
   <rect x="0" y="0" width="376" height="318"
         rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        fill="#ffffff" fill-opacity="0.06"
+        stroke="#ffffff" stroke-opacity="0.12"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
     <text x="0" y="48" class="h3">数据层</text><g transform="translate(0, 76)" opacity="1.0"><rect x="-12" y="0" width="4" height="32" rx="2" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#0F0F10" font-weight="700">向量库</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">向量库</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">对象存储</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">对象存储</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">审计日志</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">审计日志</text></g>
   </svg>
 </g><g transform="translate(452, 316)">
   <rect x="0" y="0" width="376" height="318"
         rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        fill="#ffffff" fill-opacity="0.06"
+        stroke="#ffffff" stroke-opacity="0.12"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
     <text x="0" y="48" class="h3">能力层</text><g transform="translate(0, 76)" opacity="1.0"><rect x="-12" y="0" width="4" height="32" rx="2" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#0F0F10" font-weight="700">模型路由</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">模型路由</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">工具调用</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">工具调用</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">知识检索</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">知识检索</text></g>
   </svg>
 </g><g transform="translate(848, 316)">
   <rect x="0" y="0" width="376" height="318"
         rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        fill="#ffffff" fill-opacity="0.06"
+        stroke="#ffffff" stroke-opacity="0.12"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="296" height="238"
        viewBox="0 0 296 238">
     <text x="0" y="48" class="h3">编排层</text><g transform="translate(0, 76)" opacity="1.0"><rect x="-12" y="0" width="4" height="32" rx="2" fill="url(#accent-grad)"/>  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">01</text>
-  <text x="48" y="22" font-size="18" fill="#0F0F10" font-weight="700">Workflow</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#ffffff" font-weight="700">Workflow</text></g><g transform="translate(0, 124)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">02</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">Agent</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">Agent</text></g><g transform="translate(0, 172)" opacity="0.42">  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#accent-grad)"/>
   <text x="16" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#0a0e27">03</text>
-  <text x="48" y="22" font-size="18" fill="#555666" font-weight="600">Chat 流</text></g>
+  <text x="48" y="22" font-size="18" fill="#bcc4d8" font-weight="600">Chat 流</text></g>
   </svg>
 </g>
 

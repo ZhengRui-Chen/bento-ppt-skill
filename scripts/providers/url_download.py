@@ -16,6 +16,7 @@ from typing import Any
 
 from .base import ImageProvider, register
 
+
 _VALID_EXTS = {"png", "jpg", "jpeg", "gif", "webp", "svg", "bmp"}
 
 

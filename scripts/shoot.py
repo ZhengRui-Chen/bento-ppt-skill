@@ -54,7 +54,6 @@ def shoot_svg(chrome: str, svg_path: Path, out_path: Path, viewport=(1280, 720))
     """
     import tempfile
     import time
-
     if out_path.exists():
         out_path.unlink()
     with tempfile.TemporaryDirectory(prefix="ppt-shoot-") as tmpdir:
@@ -250,18 +249,17 @@ def shoot_all(ws: Path) -> dict:
     for svg in svgs:
         png = shots_dir / (svg.stem + ".png")
         shoot_svg(chrome, svg, png)
-        slides_meta.append(
-            {
-                "svg": f"slides/{svg.name}",
-                "thumb": f"shots/{png.name}",
-                "name": svg.stem,
-            }
-        )
+        slides_meta.append({
+            "svg": f"slides/{svg.name}",
+            "thumb": f"shots/{png.name}",
+            "name": svg.stem,
+        })
         print(f"  ✓ {svg.name}", flush=True)
 
     # 写 deck.html（用相对路径引用 slides/ 和 shots/）
     deck_html = (
-        _DECK_HTML_TEMPLATE.replace("{title}", _read_title(ws))
+        _DECK_HTML_TEMPLATE
+        .replace("{title}", _read_title(ws))
         .replace("__TOTAL__", f"{len(svgs):02d}")
         .replace("__SLIDES_JSON__", json.dumps(slides_meta, ensure_ascii=False))
     )

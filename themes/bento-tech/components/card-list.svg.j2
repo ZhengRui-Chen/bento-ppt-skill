@@ -14,16 +14,15 @@
 {%- set items_in = d['items'] or [] -%}
 
 {%- set accent = d.accent | default('default') -%}
-{%- set is_light = theme.colors.bg_start[:3] == '#F' -%}
 {%- if accent == 'success' -%}
 {%- set badge_fill = theme.colors.accent_success -%}
-{%- set badge_text = '#ffffff' if is_light else '#0a3a1f' -%}
+{%- set badge_text = '#0a3a1f' -%}
 {%- elif accent == 'warning' -%}
 {%- set badge_fill = theme.colors.accent_warning -%}
-{%- set badge_text = '#ffffff' if is_light else '#3a2308' -%}
+{%- set badge_text = '#3a2308' -%}
 {%- else -%}
 {%- set badge_fill = 'url(#accent-grad)' -%}
-{%- set badge_text = '#ffffff' if is_light else '#0a0e27' -%}
+{%- set badge_text = '#0a0e27' -%}
 {%- endif -%}
 
 {# 是否启用降亮模式：只要有任何 item 带 highlight=true #}
