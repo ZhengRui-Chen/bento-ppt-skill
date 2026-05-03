@@ -57,7 +57,7 @@
        viewBox="0 0 584 498">
     <rect x="0" y="0" width="6" height="388" rx="3" fill="url(#accent-grad-v)"/>
 
-<text x="32" y="181" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型</text><text x="32" y="236" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">，而是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
+<text x="32" y="181" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型，</text><text x="32" y="236" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">而是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
 <text x="32" y="448" class="h4">Dify 创始团队</text><text x="32" y="476" class="body" fill="#9BA0B0">2024 年技术分享会</text>
   </svg>
 </g><g transform="translate(56, 56)">
