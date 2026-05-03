@@ -1,0 +1,35 @@
+{
+  "ppt_outline": {
+    "cover": {
+      "title": "Dify 企业介绍",
+      "sub_title": "下一代 AI 应用开发平台",
+      "content": []
+    },
+    "table_of_contents": {
+      "title": "目录",
+      "content": []
+    },
+    "parts": [
+      {
+        "part_title": "第一部分：产品概览",
+        "pages": [
+          { "title": "核心数据", "content": ["全球开发者 180 万+", "企业客户 12000+"] },
+          { "title": "为什么选择 Dify", "content": ["全链路可观测", "prompt 编排到工具调用"] },
+          { "title": "三大核心指标", "content": ["5分钟搭建应用", "200+模型", "100%可观测"] }
+        ]
+      },
+      {
+        "part_title": "第二部分：技术与落地",
+        "pages": [
+          { "title": "工程化能力", "content": ["AI应用的瓶颈不是模型而是工程化"] },
+          { "title": "分层架构", "content": ["数据层", "能力层", "编排层"] },
+          { "title": "运行指标与案例", "content": ["187ms API响应", "落地案例"] }
+        ]
+      }
+    ],
+    "end_page": {
+      "title": "总结与展望",
+      "content": []
+    }
+  }
+}

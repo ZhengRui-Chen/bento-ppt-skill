@@ -18,9 +18,7 @@ import json
 import re
 from pathlib import Path
 
-SPACE_BETWEEN_CN_EN_RE = re.compile(
-    r"([\u4e00-\u9fff]) +([A-Za-z0-9])|([A-Za-z0-9]) +([\u4e00-\u9fff])"
-)
+SPACE_BETWEEN_CN_EN_RE = re.compile(r"([\u4e00-\u9fff]) +([A-Za-z0-9])|([A-Za-z0-9]) +([\u4e00-\u9fff])")
 ASCII_PUNCT_IN_CN_RE = re.compile(r"[\u4e00-\u9fff][,.:;!?](?:[^A-Za-z0-9]|$)")
 
 CN_RATIO_THRESHOLD = 0.3
@@ -51,13 +49,13 @@ def check_text(s: str, path: str, rules: dict) -> list[str]:
     if rules.get("no_cn_en_space"):
         m = SPACE_BETWEEN_CN_EN_RE.search(s)
         if m:
-            snippet = s[max(0, m.start() - 6): m.end() + 6]
+            snippet = s[max(0, m.start() - 6) : m.end() + 6]
             issues.append(f"{path}: 中英/数字间多空格 → ...{snippet}...")
 
     if rules.get("no_ascii_punct"):
         m2 = ASCII_PUNCT_IN_CN_RE.search(s)
         if m2:
-            snippet = s[max(0, m2.start() - 6): m2.end() + 6]
+            snippet = s[max(0, m2.start() - 6) : m2.end() + 6]
             issues.append(f"{path}: 中文段用了英文标点 → ...{snippet}...（应改用 ，。：；！？）")
 
     return issues
@@ -96,6 +94,7 @@ def lint_layout(layout: dict) -> list[str]:
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 2:
         print("usage: lint_cn.py <layout.json>")
         sys.exit(2)

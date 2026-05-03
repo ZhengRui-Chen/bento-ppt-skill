@@ -20,6 +20,8 @@ from pptx.enum.text import PP_ALIGN
 from pptx.util import Emu, Inches, Pt
 
 SKILL_DIR = Path(os.environ.get("CLAUDE_SKILL_DIR", str(Path.home() / ".claude/skills/ppt-agent"))).resolve()
+if not SKILL_DIR.exists():
+    SKILL_DIR = Path(__file__).resolve().parent.parent  # fallback: dev clone
 SLIDE_W_INCH = 13.333
 SLIDE_H_INCH = 7.5
 VIEWPORT_W = 1280
@@ -65,6 +67,11 @@ class NativeRenderer:
         if not path.exists():
             raise SystemExit(f"[native_render] theme not found: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
+
+    @property
+    def _is_light(self) -> bool:
+        """Detect light themes so we can pick contrasting text colors on accent fills."""
+        return self.theme["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
 
     # ---------- 坐标转换 ----------
 
@@ -116,8 +123,10 @@ class NativeRenderer:
         放在所有 shape 之前画，确保 z-order 在最底。"""
         bg = slide.shapes.add_shape(
             MSO_SHAPE.RECTANGLE,
-            Emu(0), Emu(0),
-            self.prs.slide_width, self.prs.slide_height,
+            Emu(0),
+            Emu(0),
+            self.prs.slide_width,
+            self.prs.slide_height,
         )
         bg.fill.solid()
         bg.fill.fore_color.rgb = _hex(self.theme["colors"]["bg_start"])
@@ -131,16 +140,27 @@ class NativeRenderer:
         small_size = self.theme["type_scale"]["small"]
         # 左下：deck title
         self._add_textbox(
-            slide, title,
-            56, VIEWPORT_H - 26, 600, 20,
-            font_size=small_size, color=self.theme["colors"]["text_muted"],
+            slide,
+            title,
+            56,
+            VIEWPORT_H - 26,
+            600,
+            20,
+            font_size=small_size,
+            color=self.theme["colors"]["text_muted"],
         )
         # 右下：页码
         self._add_textbox(
-            slide, f"{page_n:02d} / {total:02d}",
-            VIEWPORT_W - 200 - 56, VIEWPORT_H - 26, 200, 20,
-            font_size=small_size, color=self.theme["colors"]["text_muted"],
-            font_name="SF Mono", align="right",
+            slide,
+            f"{page_n:02d} / {total:02d}",
+            VIEWPORT_W - 200 - 56,
+            VIEWPORT_H - 26,
+            200,
+            20,
+            font_size=small_size,
+            color=self.theme["colors"]["text_muted"],
+            font_name="SF Mono",
+            align="right",
         )
 
     # ---------- 卡片背景 ----------
@@ -148,8 +168,10 @@ class NativeRenderer:
     def _add_card_bg(self, slide, slot: dict) -> None:
         sh = slide.shapes.add_shape(
             MSO_SHAPE.ROUNDED_RECTANGLE,
-            self._x(slot["x"]), self._y(slot["y"]),
-            self._x(slot["w"]), self._y(slot["h"]),
+            self._x(slot["x"]),
+            self._y(slot["y"]),
+            self._x(slot["w"]),
+            self._y(slot["h"]),
         )
         # 卡片半透明白填充（玻璃感）
         self._set_solid_fill(
@@ -200,8 +222,10 @@ class NativeRenderer:
         v_anchor='middle' 让文字在 textbox 内垂直居中（适合 quote 这种 wrap 后高度不定的场景）。
         """
         tb = slide.shapes.add_textbox(
-            self._x(svg_x), self._y(svg_y),
-            self._x(svg_w), self._y(svg_h),
+            self._x(svg_x),
+            self._y(svg_y),
+            self._x(svg_w),
+            self._y(svg_h),
         )
         tf = tb.text_frame
         tf.margin_left = tf.margin_right = 0
@@ -209,9 +233,11 @@ class NativeRenderer:
         tf.word_wrap = word_wrap
         if v_anchor == "middle":
             from pptx.enum.text import MSO_ANCHOR
+
             tf.vertical_anchor = MSO_ANCHOR.MIDDLE
         elif v_anchor == "bottom":
             from pptx.enum.text import MSO_ANCHOR
+
             tf.vertical_anchor = MSO_ANCHOR.BOTTOM
         p = tf.paragraphs[0]
         p.text = text
@@ -260,17 +286,23 @@ class NativeRenderer:
                 var = b.get("variant", "accent")
             w_est = sum(12 if "\u4e00" <= ch <= "\u9fff" else 7 for ch in txt) + 18
             if var == "success":
-                bg = self.theme["colors"]["accent_success"]; fg = "#ffffff"
+                bg = self.theme["colors"]["accent_success"]
+                fg = "#ffffff"
             elif var == "warning":
-                bg = self.theme["colors"]["accent_warning"]; fg = "#ffffff"
+                bg = self.theme["colors"]["accent_warning"]
+                fg = "#ffffff"
             elif var == "muted":
-                bg = "#ffffff"; fg = self.theme["colors"]["text_secondary"]
+                bg = "#ffffff"
+                fg = self.theme["colors"]["text_secondary"]
             else:
-                bg = self.theme["colors"]["accent_primary"]; fg = "#ffffff"
+                bg = self.theme["colors"]["accent_primary"]
+                fg = "#ffffff"
             sh = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(x_cursor), self._y(svg_y),
-                self._x(w_est), self._y(22),
+                self._x(x_cursor),
+                self._y(svg_y),
+                self._x(w_est),
+                self._y(22),
             )
             self._set_solid_fill(sh, bg, opacity=0.22)
             self._set_line_alpha(sh, bg, opacity=0.55, width_pt=0.5)
@@ -279,8 +311,16 @@ class NativeRenderer:
             except Exception:
                 pass
             self._add_textbox(
-                slide, txt, x_cursor, svg_y + 3, w_est, 18,
-                font_size=11, color=fg, bold=True, align="center",
+                slide,
+                txt,
+                x_cursor,
+                svg_y + 3,
+                w_est,
+                18,
+                font_size=11,
+                color=fg,
+                bold=True,
+                align="center",
                 letter_spacing=50,
             )
             x_cursor += w_est + 8
@@ -328,13 +368,16 @@ class NativeRenderer:
 
     # ---------- 共用工具：进度条 + 装饰条 + accent 实色矩形 ----------
 
-    def _add_solid_rect(self, slide, svg_x, svg_y, svg_w, svg_h, color: str,
-                        rounded: bool = False, transparency: float = 0.0):
+    def _add_solid_rect(
+        self, slide, svg_x, svg_y, svg_w, svg_h, color: str, rounded: bool = False, transparency: float = 0.0
+    ):
         shape_type = MSO_SHAPE.ROUNDED_RECTANGLE if rounded else MSO_SHAPE.RECTANGLE
         sh = slide.shapes.add_shape(
             shape_type,
-            self._x(svg_x), self._y(svg_y),
-            self._x(svg_w), self._y(svg_h),
+            self._x(svg_x),
+            self._y(svg_y),
+            self._x(svg_w),
+            self._y(svg_h),
         )
         self._set_solid_fill(sh, color, opacity=1.0 - transparency)
         sh.line.fill.background()
@@ -349,8 +392,10 @@ class NativeRenderer:
         # 底层灰色轨道
         track = slide.shapes.add_shape(
             MSO_SHAPE.ROUNDED_RECTANGLE,
-            self._x(svg_x), self._y(svg_y),
-            self._x(svg_w), self._y(6),
+            self._x(svg_x),
+            self._y(svg_y),
+            self._x(svg_w),
+            self._y(6),
         )
         self._set_solid_fill(track, self.theme["colors"]["card_fill"], opacity=0.10)
         track.line.fill.background()
@@ -364,8 +409,10 @@ class NativeRenderer:
             fill_w = int(svg_w * pct / 100)
             bar = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(svg_x), self._y(svg_y),
-                self._x(fill_w), self._y(6),
+                self._x(svg_x),
+                self._y(svg_y),
+                self._x(fill_w),
+                self._y(6),
             )
             self._set_solid_fill(bar, self.theme["colors"]["accent_primary"], opacity=1.0)
             bar.line.fill.background()
@@ -375,7 +422,12 @@ class NativeRenderer:
                 pass
         if label:
             self._add_textbox(
-                slide, label, svg_x, svg_y + 14, svg_w, 20,
+                slide,
+                label,
+                svg_x,
+                svg_y + 14,
+                svg_w,
+                20,
                 font_size=self.theme["type_scale"]["small"],
                 color=self.theme["colors"]["text_secondary"],
             )
@@ -402,20 +454,27 @@ class NativeRenderer:
         if data.get("label"):
             y += ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["label"],
-                inner["x"], inner["y"] + y - ts["eyebrow"],
-                W, ts["eyebrow"] + 6,
+                slide,
+                data["label"],
+                inner["x"],
+                inner["y"] + y - ts["eyebrow"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
 
         # 主数字
         y += 28 + huge
         self._add_textbox(
-            slide, v_str,
-            inner["x"], inner["y"] + y - huge,
-            W, int(huge * 1.2),
+            slide,
+            v_str,
+            inner["x"],
+            inner["y"] + y - huge,
+            W,
+            int(huge * 1.2),
             font_size=huge,
             color=self.theme["colors"]["text_primary"],
             bold=True,
@@ -428,9 +487,12 @@ class NativeRenderer:
             if vw + 8 + unit_w_est <= W:
                 # 同行
                 self._add_textbox(
-                    slide, unit,
-                    inner["x"] + vw + 8, inner["y"] + y - unit_size - 2,
-                    int(unit_w_est) + 20, int(unit_size * 1.4),
+                    slide,
+                    unit,
+                    inner["x"] + vw + 8,
+                    inner["y"] + y - unit_size - 2,
+                    int(unit_w_est) + 20,
+                    int(unit_size * 1.4),
                     font_size=unit_size,
                     color=self.theme["colors"]["text_secondary"],
                     bold=True,
@@ -439,9 +501,12 @@ class NativeRenderer:
                 # 换行到下方
                 y += unit_size + 4
                 self._add_textbox(
-                    slide, unit,
-                    inner["x"], inner["y"] + y - unit_size,
-                    W, int(unit_size * 1.4),
+                    slide,
+                    unit,
+                    inner["x"],
+                    inner["y"] + y - unit_size,
+                    W,
+                    int(unit_size * 1.4),
                     font_size=unit_size,
                     color=self.theme["colors"]["text_secondary"],
                     bold=True,
@@ -451,9 +516,12 @@ class NativeRenderer:
             sub_size = int(huge * 0.24)
             y += sub_size + 8
             self._add_textbox(
-                slide, str(data["sub_value"]),
-                inner["x"], inner["y"] + y - sub_size,
-                W, int(sub_size * 1.4),
+                slide,
+                str(data["sub_value"]),
+                inner["x"],
+                inner["y"] + y - sub_size,
+                W,
+                int(sub_size * 1.4),
                 font_size=sub_size,
                 color=self.theme["colors"]["text_secondary"],
                 bold=True,
@@ -462,30 +530,46 @@ class NativeRenderer:
         if data.get("change"):
             cd = data.get("change_dir")
             if cd == "up":
-                ch_color = self.theme["colors"]["accent_success"]; arrow = "↑"
+                ch_color = self.theme["colors"]["accent_success"]
+                arrow = "↑"
             elif cd == "down":
-                ch_color = self.theme["colors"]["accent_warning"]; arrow = "↓"
+                ch_color = self.theme["colors"]["accent_warning"]
+                arrow = "↓"
             else:
-                ch_color = self.theme["colors"]["text_secondary"]; arrow = "·"
+                ch_color = self.theme["colors"]["text_secondary"]
+                arrow = "·"
             y += ch_size + 16
             self._add_textbox(
-                slide, f"{arrow} {data['change']}",
-                inner["x"], inner["y"] + y - ch_size,
-                W, int(ch_size * 1.4),
-                font_size=ch_size, color=ch_color, bold=True,
+                slide,
+                f"{arrow} {data['change']}",
+                inner["x"],
+                inner["y"] + y - ch_size,
+                W,
+                int(ch_size * 1.4),
+                font_size=ch_size,
+                color=ch_color,
+                bold=True,
             )
 
         # 装饰条 + desc：动态 y
         deco_y = max(y + 24, H - 64)
         if deco_y < H - 12:
             self._add_solid_rect(
-                slide, inner["x"], inner["y"] + deco_y, 60, 3,
+                slide,
+                inner["x"],
+                inner["y"] + deco_y,
+                60,
+                3,
                 self.theme["colors"]["accent_primary"],
             )
             if data.get("desc") and deco_y + 30 < H:
                 self._add_textbox(
-                    slide, data["desc"],
-                    inner["x"], inner["y"] + deco_y + 14, W, 20,
+                    slide,
+                    data["desc"],
+                    inner["x"],
+                    inner["y"] + deco_y + 14,
+                    W,
+                    20,
                     font_size=ts["small"],
                     color=self.theme["colors"]["text_secondary"],
                 )
@@ -516,12 +600,16 @@ class NativeRenderer:
         if data.get("label"):
             y += ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["label"],
-                inner["x"], inner["y"] + y - ts["eyebrow"],
-                W, ts["eyebrow"] + 6,
+                slide,
+                data["label"],
+                inner["x"],
+                inner["y"] + y - ts["eyebrow"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
         if data.get("badges"):
             y += 28
@@ -552,9 +640,12 @@ class NativeRenderer:
         # primary
         if p.get("value"):
             self._add_textbox(
-                slide, v_str,
-                inner["x"], inner["y"] + primary_y - huge,
-                W, int(huge * 1.2),
+                slide,
+                v_str,
+                inner["x"],
+                inner["y"] + primary_y - huge,
+                W,
+                int(huge * 1.2),
                 font_size=huge,
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
@@ -562,9 +653,12 @@ class NativeRenderer:
             )
             if p.get("unit"):
                 self._add_textbox(
-                    slide, p["unit"],
-                    inner["x"] + vw + 8, inner["y"] + primary_y - unit_size - 2,
-                    int(unit_size * len(p["unit"]) * 0.7) + 20, int(unit_size * 1.4),
+                    slide,
+                    p["unit"],
+                    inner["x"] + vw + 8,
+                    inner["y"] + primary_y - unit_size - 2,
+                    int(unit_size * len(p["unit"]) * 0.7) + 20,
+                    int(unit_size * 1.4),
                     font_size=unit_size,
                     color=self.theme["colors"]["accent_secondary"],
                     bold=True,
@@ -572,10 +666,12 @@ class NativeRenderer:
             if p.get("suffix"):
                 p_unit_w = int(len(p.get("unit", "")) * unit_size * 0.6)
                 self._add_textbox(
-                    slide, p["suffix"],
+                    slide,
+                    p["suffix"],
                     inner["x"] + vw + 8 + p_unit_w + (12 if p.get("unit") else 0),
                     inner["y"] + primary_y - ts["body"] - 2,
-                    int(W - vw - p_unit_w - 30), int(ts["body"] * 1.4),
+                    int(W - vw - p_unit_w - 30),
+                    int(ts["body"] * 1.4),
                     font_size=ts["body"],
                     color=self.theme["colors"]["text_secondary"],
                 )
@@ -595,14 +691,23 @@ class NativeRenderer:
                 for i, s in enumerate(sec):
                     sx = inner["x"] + primary_block_w + i * sec_col_w
                     self._add_textbox(
-                        slide, s.get("label", ""),
-                        sx, inner["y"] + sec_label_y - 12, sec_col_w, 18,
-                        font_size=12, color=self.theme["colors"]["text_muted"],
+                        slide,
+                        s.get("label", ""),
+                        sx,
+                        inner["y"] + sec_label_y - 12,
+                        sec_col_w,
+                        18,
+                        font_size=12,
+                        color=self.theme["colors"]["text_muted"],
                         letter_spacing=100,
                     )
                     self._add_textbox(
-                        slide, str(s.get("value", "")),
-                        sx, inner["y"] + sec_value_y - sec_value_size, sec_col_w, int(sec_value_size * 1.4),
+                        slide,
+                        str(s.get("value", "")),
+                        sx,
+                        inner["y"] + sec_value_y - sec_value_size,
+                        sec_col_w,
+                        int(sec_value_size * 1.4),
                         font_size=sec_value_size,
                         color=self.theme["colors"]["text_primary"],
                         bold=True,
@@ -615,14 +720,23 @@ class NativeRenderer:
                     for i, s in enumerate(sec):
                         sx = inner["x"] + i * col_w
                         self._add_textbox(
-                            slide, s.get("label", ""),
-                            sx, inner["y"] + sec_label_y - 12, col_w, 18,
-                            font_size=12, color=self.theme["colors"]["text_muted"],
+                            slide,
+                            s.get("label", ""),
+                            sx,
+                            inner["y"] + sec_label_y - 12,
+                            col_w,
+                            18,
+                            font_size=12,
+                            color=self.theme["colors"]["text_muted"],
                             letter_spacing=100,
                         )
                         self._add_textbox(
-                            slide, str(s.get("value", "")),
-                            sx, inner["y"] + sec_value_y - sec_value_size, col_w, int(sec_value_size * 1.4),
+                            slide,
+                            str(s.get("value", "")),
+                            sx,
+                            inner["y"] + sec_value_y - sec_value_size,
+                            col_w,
+                            int(sec_value_size * 1.4),
                             font_size=sec_value_size,
                             color=self.theme["colors"]["text_primary"],
                             bold=True,
@@ -633,8 +747,12 @@ class NativeRenderer:
             pr = data["progress"]
             bar_y = H - bottom_h
             self._add_progress_bar(
-                slide, inner["x"], inner["y"] + bar_y, W,
-                pr.get("percent", 0), pr.get("label"),
+                slide,
+                inner["x"],
+                inner["y"] + bar_y,
+                W,
+                pr.get("percent", 0),
+                pr.get("label"),
             )
 
     # ---------- Component: card-list ----------
@@ -646,13 +764,13 @@ class NativeRenderer:
         accent = data.get("accent", "default")
         if accent == "success":
             badge_fill = self.theme["colors"]["accent_success"]
-            badge_text_color = "#0a3a1f"
+            badge_text_color = "#ffffff" if self._is_light else "#0a3a1f"
         elif accent == "warning":
             badge_fill = self.theme["colors"]["accent_warning"]
-            badge_text_color = "#3a2308"
+            badge_text_color = "#ffffff" if self._is_light else "#3a2308"
         else:
             badge_fill = self.theme["colors"]["accent_primary"]
-            badge_text_color = "#0a0e27"
+            badge_text_color = "#ffffff" if self._is_light else "#0a0e27"
 
         any_hl = any(isinstance(it, dict) and it.get("highlight") for it in items_in)
 
@@ -660,25 +778,32 @@ class NativeRenderer:
         if data.get("eyebrow"):
             y += ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["eyebrow"],
-                inner["x"], inner["y"] + y - ts["eyebrow"], W, ts["eyebrow"] + 6,
+                slide,
+                data["eyebrow"],
+                inner["x"],
+                inner["y"] + y - ts["eyebrow"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
         if data.get("title"):
             # 估算 title 是否会 wrap：CJK 字宽 ≈ font_size * 0.9，ASCII ≈ font_size * 0.5
             title = data["title"]
             title_w_est = sum(
-                int(ts["h3"] * 0.9) if "\u4e00" <= ch <= "\u9fff"
-                else int(ts["h3"] * 0.5)
-                for ch in title
+                int(ts["h3"] * 0.9) if "\u4e00" <= ch <= "\u9fff" else int(ts["h3"] * 0.5) for ch in title
             )
             title_lines = 1 if title_w_est <= W - 16 else 2
             title_h = int(ts["h3"] * 1.25 * title_lines)
             self._add_textbox(
-                slide, title,
-                inner["x"], inner["y"] + y, W, title_h,
+                slide,
+                title,
+                inner["x"],
+                inner["y"] + y,
+                W,
+                title_h,
                 font_size=ts["h3"],
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
@@ -719,15 +844,19 @@ class NativeRenderer:
                 content_h = 50 if it_desc else 32
                 self._add_solid_rect(
                     slide,
-                    inner["x"] - 12, inner["y"] + ry,
-                    4, content_h,
+                    inner["x"] - 12,
+                    inner["y"] + ry,
+                    4,
+                    content_h,
                     badge_fill,
                 )
             # 序号方块
             badge_box = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(inner["x"]), self._y(inner["y"] + ry),
-                self._x(32), self._y(32),
+                self._x(inner["x"]),
+                self._y(inner["y"] + ry),
+                self._x(32),
+                self._y(32),
             )
             badge_box.fill.solid()
             badge_box.fill.fore_color.rgb = _hex(badge_fill)
@@ -737,23 +866,47 @@ class NativeRenderer:
             except Exception:
                 pass
             self._add_textbox(
-                slide, f"{i+1:02d}",
-                inner["x"], inner["y"] + ry + 6, 32, 22,
-                font_size=15, color=badge_text_color, bold=True, align="center",
+                slide,
+                f"{i + 1:02d}",
+                inner["x"],
+                inner["y"] + ry + 6,
+                32,
+                22,
+                font_size=15,
+                color=badge_text_color,
+                bold=True,
+                align="center",
             )
             # 标题
-            title_color = self.theme["colors"]["text_primary"] if (is_hl or not any_hl) else self.theme["colors"]["text_secondary"]
-            desc_color = self.theme["colors"]["text_secondary"] if (is_hl or not any_hl) else self.theme["colors"]["text_muted"]
+            title_color = (
+                self.theme["colors"]["text_primary"]
+                if (is_hl or not any_hl)
+                else self.theme["colors"]["text_secondary"]
+            )
+            desc_color = (
+                self.theme["colors"]["text_secondary"] if (is_hl or not any_hl) else self.theme["colors"]["text_muted"]
+            )
             self._add_textbox(
-                slide, it_title,
-                inner["x"] + 48, inner["y"] + ry + 4, W - 48, 24,
-                font_size=18, color=title_color, bold=True,
+                slide,
+                it_title,
+                inner["x"] + 48,
+                inner["y"] + ry + 4,
+                W - 48,
+                24,
+                font_size=18,
+                color=title_color,
+                bold=True,
             )
             if it_desc:
                 self._add_textbox(
-                    slide, it_desc,
-                    inner["x"] + 48, inner["y"] + ry + 28, W - 48, 22,
-                    font_size=14, color=desc_color,
+                    slide,
+                    it_desc,
+                    inner["x"] + 48,
+                    inner["y"] + ry + 28,
+                    W - 48,
+                    22,
+                    font_size=14,
+                    color=desc_color,
                 )
 
     # ---------- Component: card-quote ----------
@@ -766,8 +919,13 @@ class NativeRenderer:
         # 左侧渐变竖条（用纯色 accent）
         bar_h = H if is_banner else (H - (110 if data.get("author") else 30))
         self._add_solid_rect(
-            slide, inner["x"], inner["y"], 6, bar_h,
-            self.theme["colors"]["accent_primary"], rounded=True,
+            slide,
+            inner["x"],
+            inner["y"],
+            6,
+            bar_h,
+            self.theme["colors"]["accent_primary"],
+            rounded=True,
         )
 
         quote = data.get("quote", "")
@@ -778,8 +936,12 @@ class NativeRenderer:
             q_max_w = W - 32 - author_w - 24
             # textbox 高度 = H，用 vertical_anchor=middle 让 PowerPoint 自动垂直居中
             self._add_textbox(
-                slide, quote,
-                inner["x"] + 32, inner["y"], q_max_w, H,
+                slide,
+                quote,
+                inner["x"] + 32,
+                inner["y"],
+                q_max_w,
+                H,
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
@@ -795,14 +957,17 @@ class NativeRenderer:
                     a_lines.append(("role", data["role"]))
                 # 用 textbox 容纳两行：用 add_paragraph
                 tb = slide.shapes.add_textbox(
-                    self._x(ax), self._y(inner["y"]),
-                    self._x(author_w - 16), self._y(H),
+                    self._x(ax),
+                    self._y(inner["y"]),
+                    self._x(author_w - 16),
+                    self._y(H),
                 )
                 tf = tb.text_frame
                 tf.margin_left = tf.margin_right = 0
                 tf.margin_top = tf.margin_bottom = 0
                 tf.word_wrap = True
                 from pptx.enum.text import MSO_ANCHOR
+
                 tf.vertical_anchor = MSO_ANCHOR.MIDDLE
                 for i, (kind, text) in enumerate(a_lines):
                     p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
@@ -810,7 +975,8 @@ class NativeRenderer:
                     run = p.runs[0] if p.runs else None
                     if run is not None:
                         if kind == "author":
-                            run.font.size = Pt(_px_to_pt(20)); run.font.bold = True
+                            run.font.size = Pt(_px_to_pt(20))
+                            run.font.bold = True
                             run.font.color.rgb = _hex(self.theme["colors"]["text_primary"])
                         else:
                             run.font.size = Pt(_px_to_pt(14))
@@ -820,8 +986,12 @@ class NativeRenderer:
             # 大卡模式：quote 居中（PowerPoint 自动换行 + 垂直居中）
             available_h = H - (110 if data.get("author") else 30)
             self._add_textbox(
-                slide, quote,
-                inner["x"] + 32, inner["y"] + 30, W - 64, available_h - 30,
+                slide,
+                quote,
+                inner["x"] + 32,
+                inner["y"] + 30,
+                W - 64,
+                available_h - 30,
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 italic=True,
@@ -829,19 +999,32 @@ class NativeRenderer:
             )
             if data.get("author"):
                 self._add_solid_rect(
-                    slide, inner["x"] + 32, inner["y"] + H - 90, 48, 3,
+                    slide,
+                    inner["x"] + 32,
+                    inner["y"] + H - 90,
+                    48,
+                    3,
                     self.theme["colors"]["accent_primary"],
                 )
                 self._add_textbox(
-                    slide, data["author"],
-                    inner["x"] + 32, inner["y"] + H - 70, W - 64, 28,
+                    slide,
+                    data["author"],
+                    inner["x"] + 32,
+                    inner["y"] + H - 70,
+                    W - 64,
+                    28,
                     font_size=ts["h4"],
-                    color=self.theme["colors"]["text_primary"], bold=True,
+                    color=self.theme["colors"]["text_primary"],
+                    bold=True,
                 )
                 if data.get("role"):
                     self._add_textbox(
-                        slide, data["role"],
-                        inner["x"] + 32, inner["y"] + H - 38, W - 64, 22,
+                        slide,
+                        data["role"],
+                        inner["x"] + 32,
+                        inner["y"] + H - 38,
+                        W - 64,
+                        22,
                         font_size=ts["body"],
                         color=self.theme["colors"]["text_muted"],
                     )
@@ -855,18 +1038,27 @@ class NativeRenderer:
         if data.get("eyebrow"):
             y += ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["eyebrow"],
-                inner["x"], inner["y"] + y - ts["eyebrow"], W, ts["eyebrow"] + 6,
+                slide,
+                data["eyebrow"],
+                inner["x"],
+                inner["y"] + y - ts["eyebrow"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
             y += 18
         if data.get("title"):
             y += ts["h3"] + 8
             self._add_textbox(
-                slide, data["title"],
-                inner["x"], inner["y"] + y - ts["h3"], W, int(ts["h3"] * 1.4),
+                slide,
+                data["title"],
+                inner["x"],
+                inner["y"] + y - ts["h3"],
+                W,
+                int(ts["h3"] * 1.4),
                 font_size=ts["h3"],
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
@@ -880,8 +1072,10 @@ class NativeRenderer:
         paragraphs = data.get("paragraphs") or []
         if paragraphs:
             tb = slide.shapes.add_textbox(
-                self._x(inner["x"]), self._y(inner["y"] + y),
-                self._x(W), self._y(H - y - 8),
+                self._x(inner["x"]),
+                self._y(inner["y"] + y),
+                self._x(W),
+                self._y(H - y - 8),
             )
             tf = tb.text_frame
             tf.margin_left = tf.margin_right = 0
@@ -906,11 +1100,16 @@ class NativeRenderer:
         if data.get("title"):
             y_top = ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["title"],
-                inner["x"], inner["y"], W, ts["eyebrow"] + 6,
+                slide,
+                data["title"],
+                inner["x"],
+                inner["y"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
             y_top += 16
         bottom_reserve = 30 if data.get("caption") else 8
@@ -920,8 +1119,10 @@ class NativeRenderer:
             try:
                 slide.shapes.add_picture(
                     str(Path(src).expanduser()),
-                    self._x(inner["x"]), self._y(inner["y"] + y_top),
-                    width=self._x(W), height=self._y(img_h),
+                    self._x(inner["x"]),
+                    self._y(inner["y"] + y_top),
+                    width=self._x(W),
+                    height=self._y(img_h),
                 )
             except Exception:
                 self._add_image_placeholder(slide, inner, y_top, img_h, data.get("alt", "image"))
@@ -929,8 +1130,12 @@ class NativeRenderer:
             self._add_image_placeholder(slide, inner, y_top, img_h, data.get("alt", "image"))
         if data.get("caption"):
             self._add_textbox(
-                slide, data["caption"],
-                inner["x"], inner["y"] + H - 22, W, 20,
+                slide,
+                data["caption"],
+                inner["x"],
+                inner["y"] + H - 22,
+                W,
+                20,
                 font_size=ts["small"],
                 color=self.theme["colors"]["text_secondary"],
             )
@@ -938,8 +1143,10 @@ class NativeRenderer:
     def _add_image_placeholder(self, slide, inner, y_top, img_h, alt):
         ph = slide.shapes.add_shape(
             MSO_SHAPE.ROUNDED_RECTANGLE,
-            self._x(inner["x"]), self._y(inner["y"] + y_top),
-            self._x(inner["w"]), self._y(img_h),
+            self._x(inner["x"]),
+            self._y(inner["y"] + y_top),
+            self._x(inner["w"]),
+            self._y(img_h),
         )
         self._set_solid_fill(ph, self.theme["colors"]["accent_primary"], opacity=0.10)
         self._set_line_alpha(ph, self.theme["colors"]["accent_primary"], opacity=0.4, width_pt=1)
@@ -948,8 +1155,12 @@ class NativeRenderer:
         except Exception:
             pass
         self._add_textbox(
-            slide, alt,
-            inner["x"], inner["y"] + y_top + img_h // 2 - 12, inner["w"], 24,
+            slide,
+            alt,
+            inner["x"],
+            inner["y"] + y_top + img_h // 2 - 12,
+            inner["w"],
+            24,
             font_size=14,
             color=self.theme["colors"]["text_secondary"],
             align="center",
@@ -964,11 +1175,16 @@ class NativeRenderer:
         items_use = items[:6]
         if data.get("title"):
             self._add_textbox(
-                slide, data["title"],
-                inner["x"], inner["y"], W, ts["eyebrow"] + 6,
+                slide,
+                data["title"],
+                inner["x"],
+                inner["y"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
             chart_y = 40
         else:
@@ -984,16 +1200,22 @@ class NativeRenderer:
         for i, it in enumerate(items_use):
             ry = chart_y + i * (bar_h + 14)
             self._add_textbox(
-                slide, it.get("label", ""),
-                inner["x"], inner["y"] + ry + (bar_h - 18) // 2, label_w, 22,
+                slide,
+                it.get("label", ""),
+                inner["x"],
+                inner["y"] + ry + (bar_h - 18) // 2,
+                label_w,
+                22,
                 font_size=ts["body"],
                 color=self.theme["colors"]["text_primary"],
             )
             # 轨道
             track = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(inner["x"] + label_w), self._y(inner["y"] + ry),
-                self._x(bar_w_max), self._y(bar_h),
+                self._x(inner["x"] + label_w),
+                self._y(inner["y"] + ry),
+                self._x(bar_w_max),
+                self._y(bar_h),
             )
             self._set_solid_fill(track, self.theme["colors"]["card_fill"], opacity=0.08)
             track.line.fill.background()
@@ -1008,8 +1230,10 @@ class NativeRenderer:
                 fill_color = it.get("color") or self.theme["colors"]["accent_primary"]
                 bar = slide.shapes.add_shape(
                     MSO_SHAPE.ROUNDED_RECTANGLE,
-                    self._x(inner["x"] + label_w), self._y(inner["y"] + ry),
-                    self._x(fw), self._y(bar_h),
+                    self._x(inner["x"] + label_w),
+                    self._y(inner["y"] + ry),
+                    self._x(fw),
+                    self._y(bar_h),
                 )
                 bar.fill.solid()
                 bar.fill.fore_color.rgb = _hex(fill_color)
@@ -1020,11 +1244,15 @@ class NativeRenderer:
                     pass
             unit_str = (" " + it.get("unit", "")) if it.get("unit") else ""
             self._add_textbox(
-                slide, f"{v}{unit_str}",
-                inner["x"] + label_w + fw + 12, inner["y"] + ry + (bar_h - 22) // 2,
-                value_w, 26,
+                slide,
+                f"{v}{unit_str}",
+                inner["x"] + label_w + fw + 12,
+                inner["y"] + ry + (bar_h - 22) // 2,
+                value_w,
+                26,
                 font_size=ts["h4"],
-                color=self.theme["colors"]["text_primary"], bold=True,
+                color=self.theme["colors"]["text_primary"],
+                bold=True,
             )
 
     # ---------- Component: card-compare ----------
@@ -1043,17 +1271,29 @@ class NativeRenderer:
         y = 0
         if data.get("eyebrow"):
             self._add_textbox(
-                slide, data["eyebrow"],
-                inner["x"], inner["y"] + y - 4, W, ts["eyebrow"] + 6,
-                font_size=ts["eyebrow"], color=c["accent_secondary"],
-                bold=True, letter_spacing=300,
+                slide,
+                data["eyebrow"],
+                inner["x"],
+                inner["y"] + y - 4,
+                W,
+                ts["eyebrow"] + 6,
+                font_size=ts["eyebrow"],
+                color=c["accent_secondary"],
+                bold=True,
+                letter_spacing=300,
             )
             y += ts["eyebrow"] + 18
         if data.get("title"):
             self._add_textbox(
-                slide, data["title"],
-                inner["x"], inner["y"] + y - int(ts["h3"] * 0.15), W, ts["h3"] + 8,
-                font_size=ts["h3"], color=c["text_primary"], bold=True,
+                slide,
+                data["title"],
+                inner["x"],
+                inner["y"] + y - int(ts["h3"] * 0.15),
+                W,
+                ts["h3"] + 8,
+                font_size=ts["h3"],
+                color=c["text_primary"],
+                bold=True,
             )
             y += ts["h3"] + 22
 
@@ -1071,8 +1311,10 @@ class NativeRenderer:
             rec_col_x = inner["x"] + label_w + recommend * (col_w + col_gap)
             hl_bg = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(rec_col_x - 2), self._y(inner["y"] + table_y),
-                self._x(col_w + 4), self._y(total_h),
+                self._x(rec_col_x - 2),
+                self._y(inner["y"] + table_y),
+                self._x(col_w + 4),
+                self._y(total_h),
             )
             self._set_solid_fill(hl_bg, c["accent_primary"], opacity=0.08)
             hl_bg.line.fill.background()
@@ -1086,12 +1328,14 @@ class NativeRenderer:
             col_x = inner["x"] + label_w + i * (col_w + col_gap)
             hdr = slide.shapes.add_shape(
                 MSO_SHAPE.ROUNDED_RECTANGLE,
-                self._x(col_x), self._y(inner["y"] + table_y),
-                self._x(col_w), self._y(head_h),
+                self._x(col_x),
+                self._y(inner["y"] + table_y),
+                self._x(col_w),
+                self._y(head_h),
             )
             if i == recommend:
                 self._set_solid_fill(hdr, c["accent_primary"], opacity=1.0)
-                text_color = "#0a0e27"
+                text_color = "#ffffff" if self._is_light else "#0a0e27"
                 bold = True
             else:
                 self._set_solid_fill(hdr, c["text_primary"], opacity=0.08)
@@ -1103,10 +1347,16 @@ class NativeRenderer:
             except Exception:
                 pass
             self._add_textbox(
-                slide, h,
-                col_x, inner["y"] + table_y + (head_h - ts["h4"]) // 2 - 2,
-                col_w, ts["h4"] + 8,
-                font_size=ts["h4"], color=text_color, bold=bold, align="center",
+                slide,
+                h,
+                col_x,
+                inner["y"] + table_y + (head_h - ts["h4"]) // 2 - 2,
+                col_w,
+                ts["h4"] + 8,
+                font_size=ts["h4"],
+                color=text_color,
+                bold=bold,
+                align="center",
             )
 
         # 数据行
@@ -1116,11 +1366,14 @@ class NativeRenderer:
             if is_hl or ri % 2 == 0:
                 row_bg = slide.shapes.add_shape(
                     MSO_SHAPE.ROUNDED_RECTANGLE,
-                    self._x(inner["x"]), self._y(inner["y"] + ry),
-                    self._x(W), self._y(row_h),
+                    self._x(inner["x"]),
+                    self._y(inner["y"] + ry),
+                    self._x(W),
+                    self._y(row_h),
                 )
-                self._set_solid_fill(row_bg, c["accent_primary"] if is_hl else c["text_primary"],
-                                     opacity=0.12 if is_hl else 0.04)
+                self._set_solid_fill(
+                    row_bg, c["accent_primary"] if is_hl else c["text_primary"], opacity=0.12 if is_hl else 0.04
+                )
                 row_bg.line.fill.background()
                 try:
                     row_bg.adjustments[0] = 0.08
@@ -1128,22 +1381,30 @@ class NativeRenderer:
                     pass
             # 行标签
             self._add_textbox(
-                slide, row.get("label", ""),
-                inner["x"], inner["y"] + ry + (row_h - ts["body"]) // 2 - 2,
-                label_w - 8, ts["body"] + 6,
-                font_size=ts["body"], color=c["text_muted"],
+                slide,
+                row.get("label", ""),
+                inner["x"],
+                inner["y"] + ry + (row_h - ts["body"]) // 2 - 2,
+                label_w - 8,
+                ts["body"] + 6,
+                font_size=ts["body"],
+                color=c["text_muted"],
             )
             # 各列值
             for ci, val in enumerate(row.get("values") or []):
                 col_x = inner["x"] + label_w + ci * (col_w + col_gap)
-                is_rec = (ci == recommend)
+                is_rec = ci == recommend
                 self._add_textbox(
-                    slide, str(val),
-                    col_x, inner["y"] + ry + (row_h - ts["body"]) // 2 - 2,
-                    col_w, ts["body"] + 6,
+                    slide,
+                    str(val),
+                    col_x,
+                    inner["y"] + ry + (row_h - ts["body"]) // 2 - 2,
+                    col_w,
+                    ts["body"] + 6,
                     font_size=ts["body"],
                     color=c["text_primary"] if (is_hl or is_rec) else c["text_secondary"],
-                    bold=is_hl or is_rec, align="center",
+                    bold=is_hl or is_rec,
+                    align="center",
                 )
 
     def _render_card_hero(self, slide, inner: dict, data: dict) -> None:
@@ -1180,13 +1441,18 @@ class NativeRenderer:
         if data.get("deco_text") and H >= 320:
             dt_size = int(H * 0.32)
             self._add_textbox(
-                slide, data["deco_text"],
-                inner["x"], inner["y"] + H - dt_size - 16,
-                W, dt_size + 24,
+                slide,
+                data["deco_text"],
+                inner["x"],
+                inner["y"] + H - dt_size - 16,
+                W,
+                dt_size + 24,
                 font_size=dt_size,
                 color=self.theme["colors"]["accent_primary"],
-                bold=True, align="right",
-                transparency=0.93, letter_spacing=600,
+                bold=True,
+                align="right",
+                transparency=0.93,
+                letter_spacing=600,
             )
 
         y = top_pad
@@ -1194,12 +1460,16 @@ class NativeRenderer:
         if data.get("eyebrow"):
             y += ts["eyebrow"] + 4
             self._add_textbox(
-                slide, data["eyebrow"],
-                inner["x"], inner["y"] + y - ts["eyebrow"],
-                W, ts["eyebrow"] + 6,
+                slide,
+                data["eyebrow"],
+                inner["x"],
+                inner["y"] + y - ts["eyebrow"],
+                W,
+                ts["eyebrow"] + 6,
                 font_size=ts["eyebrow"],
                 color=self.theme["colors"]["accent_secondary"],
-                bold=True, letter_spacing=300,
+                bold=True,
+                letter_spacing=300,
             )
             y += 18
 
@@ -1215,9 +1485,12 @@ class NativeRenderer:
             for line in title_lines:
                 y += h_size
                 self._add_textbox(
-                    slide, line,
-                    inner["x"], inner["y"] + y - h_size,
-                    W, line_h,
+                    slide,
+                    line,
+                    inner["x"],
+                    inner["y"] + y - h_size,
+                    W,
+                    line_h,
                     font_size=h_size,
                     color=self.theme["colors"]["text_primary"],
                     bold=True,
@@ -1234,9 +1507,12 @@ class NativeRenderer:
         if data.get("subtitle"):
             y += sub_size + 18
             self._add_textbox(
-                slide, data["subtitle"],
-                inner["x"], inner["y"] + y - sub_size,
-                W, int(sub_size * 1.4),
+                slide,
+                data["subtitle"],
+                inner["x"],
+                inner["y"] + y - sub_size,
+                W,
+                int(sub_size * 1.4),
                 font_size=sub_size,
                 color=self.theme["colors"]["text_secondary"],
             )
@@ -1245,8 +1521,10 @@ class NativeRenderer:
         if H >= 280:
             bar = slide.shapes.add_shape(
                 MSO_SHAPE.RECTANGLE,
-                self._x(inner["x"]), self._y(inner["y"] + H - 80),
-                self._x(120), self._y(4),
+                self._x(inner["x"]),
+                self._y(inner["y"] + H - 80),
+                self._x(120),
+                self._y(4),
             )
             bar.fill.solid()
             bar.fill.fore_color.rgb = _hex(self.theme["colors"]["accent_primary"])
@@ -1258,23 +1536,35 @@ class NativeRenderer:
                 for i, c in enumerate(cols):
                     cx = inner["x"] + i * col_w
                     self._add_textbox(
-                        slide, c.get("label", ""),
-                        cx, inner["y"] + H - 50, col_w, 18,
+                        slide,
+                        c.get("label", ""),
+                        cx,
+                        inner["y"] + H - 50,
+                        col_w,
+                        18,
                         font_size=12,
                         color=self.theme["colors"]["text_muted"],
                         letter_spacing=200,
                     )
                     self._add_textbox(
-                        slide, c.get("value", ""),
-                        cx, inner["y"] + H - 28, col_w, 22,
+                        slide,
+                        c.get("value", ""),
+                        cx,
+                        inner["y"] + H - 28,
+                        col_w,
+                        22,
                         font_size=18,
                         color=self.theme["colors"]["text_primary"],
                         bold=True,
                     )
             elif data.get("footer"):
                 self._add_textbox(
-                    slide, data["footer"],
-                    inner["x"], inner["y"] + H - 26, W, int(ts["body"] * 1.4),
+                    slide,
+                    data["footer"],
+                    inner["x"],
+                    inner["y"] + H - 26,
+                    W,
+                    int(ts["body"] * 1.4),
                     font_size=ts["body"],
                     color=self.theme["colors"]["text_secondary"],
                 )

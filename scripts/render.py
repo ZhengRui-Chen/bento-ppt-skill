@@ -40,6 +40,8 @@ from jinja2 import Environment, FileSystemLoader
 sys.path.insert(0, str(Path(__file__).parent))
 
 SKILL_DIR = Path(os.environ.get("CLAUDE_SKILL_DIR", str(Path.home() / ".claude/skills/ppt-agent"))).resolve()
+if not SKILL_DIR.exists():
+    SKILL_DIR = Path(__file__).resolve().parent.parent  # fallback: dev clone
 
 
 def slugify(name: str) -> str:
@@ -84,7 +86,7 @@ def render_card(env: Environment, manifest: dict, card: dict, slot_w: int = 0, s
     try:
         tpl = env.get_template(tpl_path)
     except Exception as e:
-        raise SystemExit(f"[render] 找不到 component 模板: {tpl_path} ({e})")
+        raise SystemExit(f"[render] 找不到 component 模板: {tpl_path} ({e})") from e
     return tpl.render(
         theme=manifest,
         data=card.get("data", {}),
@@ -115,11 +117,13 @@ def render_one_page(env: Environment, manifest: dict, page: dict, total_pages: i
         slot = slot_defs.get(slot_name) if slot_name else None
         slot_w = (slot["w"] - card_padding * 2) if slot else 0
         slot_h = (slot["h"] - card_padding * 2) if slot else 0
-        rendered_cards.append({
-            "slot": slot_name,
-            "data": card.get("data", {}),
-            "svg": render_card(env, manifest, card, slot_w=slot_w, slot_h=slot_h),
-        })
+        rendered_cards.append(
+            {
+                "slot": slot_name,
+                "data": card.get("data", {}),
+                "svg": render_card(env, manifest, card, slot_w=slot_w, slot_h=slot_h),
+            }
+        )
 
     # 渲染 layout：优先找 layouts/<layout-name>.svg.j2 专属模板，缺省用 _base.svg.j2
     try:
@@ -142,7 +146,10 @@ def lint_check(layout: dict) -> None:
     issues = lint_layout(layout)
     if issues:
         msg = "[lint] 中文版式检查未通过：\n" + "\n".join(f"  - {i}" for i in issues)
-        msg += "\n\n规则：\n  - 中文与英文/数字之间不加空格\n  - 用中文标点（，。：！？""）不用英文标点\n请修改 layout.json 的 data.* 文案后重新渲染。"
+        msg += (
+            "\n\n规则：\n  - 中文与英文/数字之间不加空格\n  - 用中文标点（，。：！？"
+            "）不用英文标点\n请修改 layout.json 的 data.* 文案后重新渲染。"
+        )
         raise SystemExit(msg)
 
 
