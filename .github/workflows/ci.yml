@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  python:
+    name: Python checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "0.11.8"
+          enable-cache: true
+          cache-dependency-glob: |
+            pyproject.toml
+            uv.lock
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+
+      - name: Ruff
+        run: uv run ruff check .
+
+      - name: Mypy
+        run: uv run mypy
+
+      - name: Compile Python scripts
+        run: uv run python -m compileall -q scripts
+
+      - name: Import Python scripts
+        run: |
+          uv run python - <<'PY'
+          import importlib
+
+          modules = [
+              "scripts.lint_cn",
+              "scripts.render",
+              "scripts.ppt",
+              "scripts.shoot",
+              "scripts.fetch",
+              "scripts.export",
+              "scripts.native_render",
+          ]
+          for module in modules:
+              importlib.import_module(module)
+          print("imports ok")
+          PY
+
+      - name: Chinese typography lint sample
+        run: uv run python scripts/lint_cn.py examples/dify-intro/layout.json

@@ -14,7 +14,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import re
 import sys
@@ -36,7 +35,7 @@ def ensure_root() -> Path:
     if not root.exists():
         root.mkdir(parents=True, exist_ok=True)
         print(f"[init] 已创建 deck 工作区根目录: {root}")
-        print(f"       今后所有 deck 工作区都会在这里。如需更改路径，设环境变量 PPT_DECKS_DIR。")
+        print("       今后所有 deck 工作区都会在这里。如需更改路径，设环境变量 PPT_DECKS_DIR。")
     return root
 
 
@@ -235,7 +234,7 @@ def main():
         result = cmd_new(args.topic)
         ws = result["workspace"]
         print(f"[ok] 工作区已创建: {ws}")
-        print(f"\n下一步（按 SKILL.md 7 阶段流程）：")
+        print("\n下一步（按 SKILL.md 7 阶段流程）：")
         print(f"  1. 阶段 1（needs）：反问用户 3-5 个问题，把答案填进 {ws}/brief.md")
         print(f"  2. 阶段 2（research）：用 WebSearch 按主题搜资料，落到 {ws}/research/<chapter>.md")
         print(f"  3. 阶段 3（outline）：用 reference/pyramid-outline-prompt.md 出 {ws}/outline.json")

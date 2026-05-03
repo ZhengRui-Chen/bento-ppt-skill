@@ -42,7 +42,7 @@ def is_chinese_dominant(s: str) -> bool:
 
 
 def check_text(s: str, path: str, rules: dict) -> list[str]:
-    issues = []
+    issues: list[str] = []
     if not isinstance(s, str) or not s.strip():
         return issues
     if not is_chinese_dominant(s):

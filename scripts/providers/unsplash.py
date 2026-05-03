@@ -38,7 +38,7 @@ class UnsplashProvider(ImageProvider):
         #   first = resp.json()['results'][0]
         #   url = first['urls']['regular']
         #   下载 url → out_dir/<hash>.jpg → return path
-        print(f"  [unsplash] stub 未实现，请按 unsplash.py 顶部说明接 API")
+        print("  [unsplash] stub 未实现，请按 unsplash.py 顶部说明接 API")
         return None
 
 

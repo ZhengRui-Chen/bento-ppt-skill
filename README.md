@@ -25,7 +25,8 @@ A Claude Code skill that turns a topic or document into a 16:9 SVG slide deck in
 
 ```bash
 git clone https://github.com/YingYveltal/bento-ppt-skill.git ~/.claude/skills/ppt-agent
-pip3 install jinja2 python-pptx lxml
+cd ~/.claude/skills/ppt-agent
+uv sync
 ```
 
 可选（看你机器上有没有）：
@@ -59,11 +60,11 @@ Claude 会自动加载 ppt-agent skill，反问受众/调性/页数，然后跑�
 ```bash
 SKILL=~/.claude/skills/ppt-agent
 
-python3 $SKILL/scripts/ppt.py new "<topic>"
-python3 $SKILL/scripts/ppt.py fetch <ws>      # 可选，下载/生成 card-image
-python3 $SKILL/scripts/ppt.py scaffold <ws>    # SVG 渲染
-python3 $SKILL/scripts/ppt.py shoot <ws>       # 截图 + deck.html
-python3 $SKILL/scripts/ppt.py export <ws> --format pptx
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" new "<topic>"
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" fetch <ws>      # 可选，下载/生成 card-image
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" scaffold <ws>    # SVG 渲染
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" shoot <ws>       # 截图 + deck.html
+uv --project "$SKILL" run python "$SKILL/scripts/ppt.py" export <ws> --format pptx
 ```
 
 ## Sample
@@ -73,6 +74,33 @@ python3 $SKILL/scripts/ppt.py export <ws> --format pptx
 - 8 页 deck，覆盖全部 6 种 Bento 布局
 - 含 layout.json（输入）、slides/SVG（产物）、shots/PNG（截图）、deck.pptx
 - 直接 `open examples/dify-intro/deck.html` 看翻页效果
+
+## Development
+
+依赖由 uv 管理。提交前运行和 CI 相同的本地检查：
+
+```bash
+uv sync --locked --all-extras --dev
+uv run ruff check .
+uv run mypy
+uv run python -m compileall -q scripts
+uv run python - <<'PY'
+import importlib
+
+for module in [
+    "scripts.lint_cn",
+    "scripts.render",
+    "scripts.ppt",
+    "scripts.shoot",
+    "scripts.fetch",
+    "scripts.export",
+    "scripts.native_render",
+]:
+    importlib.import_module(module)
+print("imports ok")
+PY
+uv run python scripts/lint_cn.py examples/dify-intro/layout.json
+```
 
 ## 延展开发（Layout / Component / Theme）
 
