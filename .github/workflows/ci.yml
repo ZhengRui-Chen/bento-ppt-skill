@@ -58,5 +58,8 @@ jobs:
           print("imports ok")
           PY
 
+      - name: Run tests
+        run: uv run pytest -v
+
       - name: Chinese typography lint sample
         run: uv run python scripts/lint_cn.py examples/dify-intro/layout.json

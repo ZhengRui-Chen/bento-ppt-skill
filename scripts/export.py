@@ -39,6 +39,7 @@ def to_pptx(ws: Path) -> dict:
     """默认 PPTX 路径：用 NativeRenderer 直接生成原生 shape，100% 可编辑。"""
     sys.path.insert(0, str(Path(__file__).parent))
     from native_render import render_pptx
+
     out_path = render_pptx(ws)
     return {"output": str(out_path)}
 
@@ -75,8 +76,10 @@ def to_pptx_svg(ws: Path) -> dict:
         slide = prs.slides.add_slide(blank_layout)
         pic = slide.shapes.add_picture(
             str(png_path),
-            left=0, top=0,
-            width=prs.slide_width, height=prs.slide_height,
+            left=0,
+            top=0,
+            width=prs.slide_width,
+            height=prs.slide_height,
         )
         _inject_svg_blip(slide, pic, svg_path, slide_idx=idx)
 
@@ -113,12 +116,17 @@ def to_pdf(ws: Path) -> dict:
         raise SystemExit(f"[export] 没找到 {deck}，先跑 ppt shoot 生成 deck.html")
     sys.path.insert(0, str(Path(__file__).parent))
     from shoot import find_chrome
+
     chrome = find_chrome()
     out_path = ws / "deck.pdf"
     with tempfile.TemporaryDirectory(prefix="ppt-export-") as tmpdir:
         cmd = [
-            chrome, "--headless", "--disable-gpu", "--no-sandbox",
-            "--no-first-run", "--no-default-browser-check",
+            chrome,
+            "--headless",
+            "--disable-gpu",
+            "--no-sandbox",
+            "--no-first-run",
+            "--no-default-browser-check",
             f"--user-data-dir={tmpdir}",
             f"--print-to-pdf={out_path}",
             "--print-to-pdf-no-header",
@@ -144,11 +152,13 @@ def to_html(ws: Path) -> dict:
         svg_b64 = base64.b64encode(svg.read_bytes()).decode("ascii")
         png = shots_dir / (svg.stem + ".png")
         png_b64 = base64.b64encode(png.read_bytes()).decode("ascii") if png.exists() else ""
-        slides_inline.append({
-            "svg": f"data:image/svg+xml;base64,{svg_b64}",
-            "thumb": f"data:image/png;base64,{png_b64}",
-            "name": svg.stem,
-        })
+        slides_inline.append(
+            {
+                "svg": f"data:image/svg+xml;base64,{svg_b64}",
+                "thumb": f"data:image/png;base64,{png_b64}",
+                "name": svg.stem,
+            }
+        )
 
     html = deck.read_text(encoding="utf-8")
     html = re.sub(

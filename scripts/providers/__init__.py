@@ -14,7 +14,7 @@ from pathlib import Path
 
 from .base import ImageProvider, find_provider, get_providers, register
 
-__all__ = ["ImageProvider", "register", "get_providers", "find_provider"]
+__all__ = ["ImageProvider", "find_provider", "get_providers", "register"]
 
 # Auto-discovery：import 同目录下所有 module（除 base / __init__），触发其 register()
 _pkg_dir = Path(__file__).parent
