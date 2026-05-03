@@ -16,15 +16,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from providers import find_provider, get_providers  # noqa: E402
+from providers import find_provider, get_providers
 
 
 def fetch_all(ws: Path) -> dict:
     layout_path = ws / "layout.json"
     if not layout_path.exists():
-        raise SystemExit(
-            f"[fetch] {layout_path} 不存在；先把 layout.json 写好再 fetch"
-        )
+        raise SystemExit(f"[fetch] {layout_path} 不存在；先把 layout.json 写好再 fetch")
     layout = json.loads(layout_path.read_text(encoding="utf-8"))
 
     assets_dir = ws / "assets"
@@ -32,10 +30,7 @@ def fetch_all(ws: Path) -> dict:
 
     all_providers = get_providers()
     available = [p for p in all_providers if p.is_available()]
-    print(
-        f"[fetch] 已注册 {len(all_providers)} 个 provider, "
-        f"{len(available)} 个就绪: {[p.name for p in available]}"
-    )
+    print(f"[fetch] 已注册 {len(all_providers)} 个 provider, {len(available)} 个就绪: {[p.name for p in available]}")
     if len(available) < len(all_providers):
         unavail = [p.name for p in all_providers if not p.is_available()]
         print(f"        未启用: {unavail}（缺 API key 或依赖；详见 providers/README.md）")
@@ -88,10 +83,7 @@ def fetch_all(ws: Path) -> dict:
             provider = find_provider(source)
             if not provider:
                 kind = source.get("kind", "?")
-                print(
-                    f"  [skip] {tag}: 没有可用 provider 处理 kind={kind}; "
-                    f"prefer={source.get('prefer') or []}"
-                )
+                print(f"  [skip] {tag}: 没有可用 provider 处理 kind={kind}; prefer={source.get('prefer') or []}")
                 no_provider += 1
                 continue
 
