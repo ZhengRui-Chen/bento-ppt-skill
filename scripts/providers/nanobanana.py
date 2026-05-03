@@ -38,7 +38,7 @@ class NanoBananaProvider(ImageProvider):
         #   style = source.get("style")  # screenshot / illustration / photo / abstract
         #   aspect = source.get("aspect", "16:9")
         #   ... 调 API ... 写到 out_dir/<hash>.png ... return path
-        print(f"  [nanobanana] stub 未实现，请按 nanobanana.py 顶部说明接 API")
+        print("  [nanobanana] stub 未实现，请按 nanobanana.py 顶部说明接 API")
         return None
 
 

@@ -199,7 +199,8 @@ python3 $SKILL/scripts/ppt.py export <ws> --format pptx|pdf|html
 首次使用前需要 Python 依赖：
 
 ```bash
-pip3 install jinja2 python-pptx lxml
+cd ~/.claude/skills/ppt-agent
+uv sync
 ```
 
 截图（`ppt shoot`）自动探测系统已安装的 Chrome / Chromium / Edge / Brave，无需额外配置。找不到浏览器时请安装 Chrome 后重试。

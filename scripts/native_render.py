@@ -52,9 +52,13 @@ class NativeRenderer:
         self.prs = Presentation()
         self.prs.slide_width = Inches(SLIDE_W_INCH)
         self.prs.slide_height = Inches(SLIDE_H_INCH)
+        slide_width = self.prs.slide_width
+        slide_height = self.prs.slide_height
+        if slide_width is None or slide_height is None:
+            raise RuntimeError("presentation slide size was not initialized")
         # 每 SVG 单位对应多少 EMU
-        self.x_unit = self.prs.slide_width / VIEWPORT_W
-        self.y_unit = self.prs.slide_height / VIEWPORT_H
+        self.x_unit = slide_width / VIEWPORT_W
+        self.y_unit = slide_height / VIEWPORT_H
 
     def _load_manifest(self, name: str) -> dict:
         path = SKILL_DIR / "themes" / name / "manifest.json"
@@ -1164,8 +1168,8 @@ class NativeRenderer:
                 est += ts["eyebrow"] + 18
             if data.get("title"):
                 t = data["title"]
-                lines = 1 if isinstance(t, str) else len(t)
-                est += h_size + (line_h * (lines - 1))
+                line_count = len(t) if isinstance(t, list) else 1
+                est += h_size + (line_h * (line_count - 1))
             if data.get("badges"):
                 est += 22 + 14
             if data.get("subtitle"):
@@ -1202,8 +1206,13 @@ class NativeRenderer:
         # title (单行 string 或 多行 list)
         title = data.get("title")
         if title:
-            lines = [title] if isinstance(title, str) else title
-            for line in lines:
+            if isinstance(title, str):
+                title_lines = [title]
+            elif isinstance(title, list):
+                title_lines = [str(line) for line in title]
+            else:
+                title_lines = [str(title)]
+            for line in title_lines:
                 y += h_size
                 self._add_textbox(
                     slide, line,
