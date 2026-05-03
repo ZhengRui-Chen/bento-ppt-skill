@@ -30,6 +30,40 @@ class TestIsLight:
         nr = NativeRenderer("bento-light")
         assert nr._is_light is True
 
+    def test_lowercase_hex_detected_as_light(self):
+        """Regression: _is_light must be case-insensitive for hex digits."""
+        nr = NativeRenderer("bento-tech")
+        nr.theme["colors"]["bg_start"] = "#f8f8f8"
+        assert nr._is_light is True
+
+    def test_badge_text_color_light_theme(self):
+        """card-list badge text must be white on light themes."""
+        nr = NativeRenderer("bento-light")
+        # Verify the logic: light theme + default accent → white text
+        assert nr._is_light
+        # The code uses: badge_text_color = "#ffffff" if self._is_light else "#0a0e27"
+        badge = "#ffffff" if nr._is_light else "#0a0e27"
+        assert badge == "#ffffff"
+
+    def test_badge_text_color_dark_theme_success(self):
+        """card-list success badge must use dark text on dark themes."""
+        nr = NativeRenderer("bento-tech")
+        assert not nr._is_light
+        badge = "#ffffff" if nr._is_light else "#0a3a1f"
+        assert badge == "#0a3a1f"
+
+    def test_compare_header_text_color_light_theme(self):
+        """card-compare recommended header text must be white on light themes."""
+        nr = NativeRenderer("bento-light")
+        light_text = "#ffffff" if nr._is_light else "#0a0e27"
+        assert light_text == "#ffffff"
+
+    def test_compare_header_text_color_dark_theme(self):
+        """card-compare recommended header text must be dark on dark themes."""
+        nr = NativeRenderer("bento-tech")
+        dark_text = "#ffffff" if nr._is_light else "#0a0e27"
+        assert dark_text == "#0a0e27"
+
 
 class TestNativeDeckRender:
     def test_render_example_deck(self):

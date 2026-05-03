@@ -14,7 +14,7 @@
 {%- set items_in = d['items'] or [] -%}
 
 {%- set accent = d.accent | default('default') -%}
-{%- set is_light = theme.colors.bg_start[:3] == '#F' -%}
+{%- set is_light = theme.colors.bg_start[:2] == '#F' -%}
 {%- if accent == 'success' -%}
 {%- set badge_fill = theme.colors.accent_success -%}
 {%- set badge_text = '#ffffff' if is_light else '#0a3a1f' -%}

@@ -20,6 +20,8 @@ from pptx.enum.text import PP_ALIGN
 from pptx.util import Emu, Inches, Pt
 
 SKILL_DIR = Path(os.environ.get("CLAUDE_SKILL_DIR", str(Path.home() / ".claude/skills/ppt-agent"))).resolve()
+if not SKILL_DIR.exists():
+    SKILL_DIR = Path(__file__).resolve().parent.parent  # fallback: dev clone
 SLIDE_W_INCH = 13.333
 SLIDE_H_INCH = 7.5
 VIEWPORT_W = 1280
@@ -69,7 +71,7 @@ class NativeRenderer:
     @property
     def _is_light(self) -> bool:
         """Detect light themes so we can pick contrasting text colors on accent fills."""
-        return self.theme["colors"]["bg_start"].lstrip("#").startswith("F")
+        return self.theme["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
 
     # ---------- 坐标转换 ----------
 

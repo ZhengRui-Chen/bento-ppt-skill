@@ -19,3 +19,8 @@ ppt-decks/
 # 临时输出
 *.tmp
 *.log
+
+# Coverage
+.coverage
+coverage_annotations/
+htmlcov/

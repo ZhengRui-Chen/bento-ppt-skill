@@ -57,7 +57,7 @@
 <rect x="{{ col_x }}" y="{{ table_y }}" width="{{ col_w }}" height="{{ head_h }}" rx="8" fill="url(#accent-grad)"/>
 <text x="{{ col_x + col_w // 2 }}" y="{{ table_y + (head_h // 2) + 8 }}"
       text-anchor="middle" font-size="{{ theme.type_scale.h4 }}" font-weight="700"
-      fill="{{ '#ffffff' if (theme.colors.bg_start[:3] == '#F') else '#0a0e27' }}">{{ h }}</text>
+      fill="{{ '#ffffff' if (theme.colors.bg_start[:2] == '#F') else '#0a0e27' }}">{{ h }}</text>
 {%- else -%}
 <rect x="{{ col_x }}" y="{{ table_y }}" width="{{ col_w }}" height="{{ head_h }}" rx="8"
       fill="{{ theme.colors.text_primary }}" fill-opacity="0.08"/>

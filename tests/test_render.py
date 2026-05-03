@@ -72,17 +72,60 @@ class TestThemeColorContrast:
     """Verify that hardcoded dark text colors are not used in light themes."""
 
     def test_badge_text_variants(self):
-        """Verify the SVG template picks contrasting badge text for light themes."""
-        import sys
-
-        sys.path.insert(0, "scripts")
-
-        # bento-light should use white text on accent backgrounds
+        """Verify light-theme SVG templates output white badge text, not dark."""
         light_manifest, _ = load_theme("bento-light")
-        is_light = light_manifest["colors"]["bg_start"].lstrip("#").startswith("F")
-        assert is_light  # light theme
+        is_light = light_manifest["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
+        assert is_light
 
-        # bento-tech should use dark text on accent backgrounds
         dark_manifest, _ = load_theme("bento-tech")
-        is_dark = not dark_manifest["colors"]["bg_start"].lstrip("#").startswith("F")
-        assert is_dark  # dark theme
+        is_dark = not dark_manifest["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
+        assert is_dark
+
+    def test_card_list_svg_light_theme_uses_white_badge_text(self):
+        """Regression: card-list.svg.j2 must emit white fill on light themes, not #0a0e27."""
+        manifest, env = load_theme("bento-light")
+        card = {"slot": "main", "component": "card-list", "data": {"items": [{"title": "test"}]}}
+        from render import render_card
+
+        svg = render_card(env, manifest, card, slot_w=500, slot_h=500)
+        # badge text fill must be #ffffff for light theme on default accent, not #0a0e27
+        assert 'fill="#ffffff"' in svg
+        assert 'fill="#0a0e27"' not in svg
+
+    def test_card_list_svg_dark_theme_uses_dark_badge_text(self):
+        """Regression: card-list.svg.j2 must use #0a0e27 on dark themes."""
+        manifest, env = load_theme("bento-tech")
+        card = {"slot": "main", "component": "card-list", "data": {"items": [{"title": "test"}]}}
+        from render import render_card
+
+        svg = render_card(env, manifest, card, slot_w=500, slot_h=500)
+        assert 'fill="#0a0e27"' in svg
+
+    def test_card_compare_svg_light_theme_uses_white_header_text(self):
+        """Regression: card-compare.svg.j2 must emit white fill on light themes."""
+        manifest, env = load_theme("bento-light")
+        card = {
+            "slot": "main",
+            "component": "card-compare",
+            "data": {"headers": ["A", "B"], "recommend": 0, "rows": []},
+        }
+        from render import render_card
+
+        svg = render_card(env, manifest, card, slot_w=500, slot_h=400)
+        # recommended header text must be #ffffff for light theme
+        assert 'fill="#ffffff"' in svg
+        # must not have dark fill on the recommended header
+        assert 'fill="#0a0e27"' not in svg
+
+    def test_card_compare_svg_dark_theme_uses_dark_header_text(self):
+        """Regression: card-compare.svg.j2 must use #0a0e27 on dark themes."""
+        manifest, env = load_theme("bento-tech")
+        card = {
+            "slot": "main",
+            "component": "card-compare",
+            "data": {"headers": ["A", "B"], "recommend": 0, "rows": []},
+        }
+        from render import render_card
+
+        svg = render_card(env, manifest, card, slot_w=500, slot_h=400)
+        assert 'fill="#0a0e27"' in svg
