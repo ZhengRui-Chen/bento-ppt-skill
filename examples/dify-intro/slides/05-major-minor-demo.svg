@@ -4,105 +4,105 @@
      width="1280" height="720">
   <defs>
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F6F3EE"/>
-      <stop offset="100%" stop-color="#EDE9E2"/>
+      <stop offset="0%" stop-color="#F5F0E8"/>
+      <stop offset="100%" stop-color="#EDE6D8"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#6644ee"/>
-      <stop offset="100%" stop-color="#0066bb"/>
+      <stop offset="0%" stop-color="#8B5E3C"/>
+      <stop offset="100%" stop-color="#4a7c6b"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#6644ee"/>
-      <stop offset="100%" stop-color="#0066bb"/>
+      <stop offset="0%" stop-color="#8B5E3C"/>
+      <stop offset="100%" stop-color="#4a7c6b"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#6644ee" stop-opacity="0.1"/>
-      <stop offset="100%" stop-color="#6644ee" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#8B5E3C" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#8B5E3C" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0066bb" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#0066bb" stop-opacity="0"/>
-    </radialGradient>    <pattern id="bg-texture" width="32" height="32" patternUnits="userSpaceOnUse">
-      <circle cx="16" cy="16" r="0.9" fill="#1a1a2e" fill-opacity="0.12"/>
+      <stop offset="0%" stop-color="#4a7c6b" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#4a7c6b" stop-opacity="0"/>
+    </radialGradient>    <pattern id="bg-texture" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.9" fill="#1a1815" fill-opacity="0.06"/>
     </pattern>  </defs>
 
   <style type="text/css">
-    text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
-    .mono { font-family: &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 16px; fill: #0066bb; letter-spacing: 3px; font-weight: 600; }
-    .h1 { font-size: 60px; fill: #0F0F10; font-weight: 700; }
-    .h2 { font-size: 44px; fill: #0F0F10; font-weight: 700; }
-    .h3 { font-size: 30px; fill: #0F0F10; font-weight: 600; }
-    .h4 { font-size: 22px; fill: #0F0F10; font-weight: 600; }
-    .body { font-size: 18px; fill: #555666; }
-    .small { font-size: 14px; fill: #9BA0B0; }
-    .stat-huge { font-size: 110px; fill: #0F0F10; font-weight: 800; }
-    .stat-unit { font-size: 28px; fill: #555666; font-weight: 500; }
+    text { font-family: &#39;Noto Sans SC&#39;, &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
+    .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .eyebrow { font-size: 14px; fill: #4a7c6b; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .body { font-size: 17px; fill: #5c5548; }
+    .small { font-size: 13px; fill: #9c9588; }
+    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .stat-unit { font-size: 26px; fill: #5c5548; font-weight: 500; }
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层 -->
   <rect width="1280" height="720" fill="url(#bg-texture)"/>
-  <!-- 装饰光斑（不影响内容可读性） -->
+  <!-- 装饰光斑（极淡，不干扰阅读） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
   <!-- layout 渲染区 -->
   <g transform="translate(308, 56)">
   <rect x="0" y="0" width="664" height="578"
-        rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="584" height="498"
        viewBox="0 0 584 498">
     <rect x="0" y="0" width="6" height="388" rx="3" fill="url(#accent-grad-v)"/>
 
-<text x="32" y="181" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型，</text><text x="32" y="236" font-size="44" fill="#0F0F10" font-weight="500" font-style="italic">而是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
-<text x="32" y="448" class="h4">Dify 创始团队</text><text x="32" y="476" class="body" fill="#9BA0B0">2024 年技术分享会</text>
+<text x="32" y="183" font-size="42" fill="#1a1815" font-weight="500" font-style="italic">AI 应用的瓶颈不是模型，而</text><text x="32" y="235" font-size="42" fill="#1a1815" font-weight="500" font-style="italic">是工程化。</text><rect x="32" y="408" width="48" height="3" fill="url(#accent-grad)" rx="2"/>
+<text x="32" y="448" class="h4">Dify 创始团队</text><text x="32" y="476" class="body" fill="#9c9588">2024 年技术分享会</text>
   </svg>
 </g><g transform="translate(56, 56)">
   <rect x="0" y="0" width="232" height="280"
-        rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="152" height="200"
        viewBox="0 0 152 200">
-    <text x="0" y="20" class="eyebrow">模型延迟</text><text x="0" y="112" font-size="64" fill="#0F0F10" font-weight="800">&lt;200</text><text x="0" y="133" font-size="17" fill="#555666" font-weight="500">ms</text><rect x="0" y="157" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
+    <text x="0" y="18" class="eyebrow">模型延迟</text><text x="0" y="110" font-size="64" fill="#1a1815" font-weight="800">&lt;200</text><text x="0" y="131" font-size="17" fill="#5c5548" font-weight="500">ms</text><rect x="0" y="155" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
   </svg>
 </g><g transform="translate(56, 354)">
   <rect x="0" y="0" width="232" height="280"
-        rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="152" height="200"
        viewBox="0 0 152 200">
-    <text x="0" y="20" class="eyebrow">成本下降</text><text x="0" y="112" font-size="64" fill="#0F0F10" font-weight="800">60</text><text x="78" y="112" font-size="17" fill="#555666" font-weight="500">%</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
+    <text x="0" y="18" class="eyebrow">成本下降</text><text x="0" y="110" font-size="64" fill="#1a1815" font-weight="800">60</text><text x="78" y="110" font-size="17" fill="#5c5548" font-weight="500">%</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
   </svg>
 </g><g transform="translate(992, 56)">
   <rect x="0" y="0" width="232" height="280"
-        rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="152" height="200"
        viewBox="0 0 152 200">
-    <text x="0" y="20" class="eyebrow">上线周期</text><text x="0" y="112" font-size="64" fill="#0F0F10" font-weight="800">1/10</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="168" font-size="14" fill="#555666">对比传统开发</text>
+    <text x="0" y="18" class="eyebrow">上线周期</text><text x="0" y="110" font-size="64" fill="#1a1815" font-weight="800">1/10</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="168" font-size="13" fill="#5c5548">对比传统开发</text>
   </svg>
 </g><g transform="translate(992, 354)">
   <rect x="0" y="0" width="232" height="280"
-        rx="20"
-        fill="#FFFFFF" fill-opacity="0.75"
-        stroke="#1a1a2e" stroke-opacity="0.09"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="152" height="200"
        viewBox="0 0 152 200">
-    <text x="0" y="20" class="eyebrow">客户留存</text><text x="0" y="112" font-size="64" fill="#0F0F10" font-weight="800">94</text><text x="78" y="112" font-size="17" fill="#555666" font-weight="500">%</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
+    <text x="0" y="18" class="eyebrow">客户留存</text><text x="0" y="110" font-size="64" fill="#1a1815" font-weight="800">94</text><text x="78" y="110" font-size="17" fill="#5c5548" font-weight="500">%</text><rect x="0" y="136" width="60" height="3" fill="url(#accent-grad)" rx="2"/>
   </svg>
 </g>
 
