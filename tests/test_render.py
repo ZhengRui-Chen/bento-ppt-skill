@@ -129,3 +129,38 @@ class TestThemeColorContrast:
 
         svg = render_card(env, manifest, card, slot_w=500, slot_h=400)
         assert 'fill="#0a0e27"' in svg
+
+
+class TestRenderCardEdgeCases:
+    def test_render_card_no_component(self):
+        manifest, env = load_theme("bento-tech")
+        from render import render_card
+
+        result = render_card(env, manifest, {"data": {}}, slot_w=500, slot_h=500)
+        assert result == ""
+
+    def test_render_card_missing_template(self):
+        manifest, env = load_theme("bento-tech")
+        import pytest
+        from render import render_card
+
+        with pytest.raises(SystemExit):
+            render_card(env, manifest, {"component": "nonexistent-component"}, slot_w=500, slot_h=500)
+
+
+class TestRenderOnePageErrors:
+    def test_missing_layout_field(self):
+        manifest, env = load_theme("bento-tech")
+        import pytest
+        from render import render_one_page
+
+        with pytest.raises(SystemExit):
+            render_one_page(env, manifest, {"page": 1}, total_pages=1, meta={})
+
+    def test_invalid_layout_name(self):
+        manifest, env = load_theme("bento-tech")
+        import pytest
+        from render import render_one_page
+
+        with pytest.raises(SystemExit):
+            render_one_page(env, manifest, {"page": 1, "layout": "nonexistent-layout"}, total_pages=1, meta={})
