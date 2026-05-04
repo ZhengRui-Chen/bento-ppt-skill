@@ -164,3 +164,33 @@ class TestRenderOnePageErrors:
 
         with pytest.raises(SystemExit):
             render_one_page(env, manifest, {"page": 1, "layout": "nonexistent-layout"}, total_pages=1, meta={})
+
+
+class TestBentoPaper:
+    def test_load_theme(self):
+        manifest, _ = load_theme("bento-paper")
+        assert manifest["name"] == "bento-paper"
+        assert manifest["effects"]["bg_texture"] == "dots"
+        assert "Noto Serif SC" in manifest["fonts"]["display"]
+
+    def test_render_example(self):
+        ws = Path("examples/dify-intro")
+        result = render_all(ws, theme="bento-paper")
+        assert result["rendered"] == 8
+        assert result["theme"] == "bento-paper"
+
+    def test_font_hierarchy_in_svg(self):
+        """Verify serif headings + sans body + mono eyebrow in rendered output."""
+        manifest, env = load_theme("bento-paper")
+        from render import render_one_page
+
+        page = {
+            "page": 1,
+            "layout": "single-focus",
+            "cards": [{"slot": "main", "component": "card-hero", "data": {"eyebrow": "MAGAZINE", "title": "标题", "subtitle": "副标题"}}],
+        }
+        svg = render_one_page(env, manifest, page, total_pages=1, meta={})
+        assert "Noto Serif SC" in svg
+        assert "IBM Plex Mono" in svg
+        assert "#F5F0E8" in svg
+        assert "#8B5E3C" in svg

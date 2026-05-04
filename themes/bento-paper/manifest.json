@@ -1,0 +1,121 @@
+{
+  "name": "bento-paper",
+  "version": "1.0.0",
+  "description": "电子杂志 × 纸质印刷美学 — 衬线标题 + 非衬线正文 + 等宽元数据，温暖的书籍质感",
+  "viewBox": {
+    "width": 1280,
+    "height": 720
+  },
+  "fonts": {
+    "sans": "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+    "mono": "'IBM Plex Mono', 'SF Mono', 'JetBrains Mono', Menlo, monospace",
+    "display": "'Noto Serif SC', 'Playfair Display', 'Times New Roman', serif"
+  },
+  "type_scale": {
+    "eyebrow": 14,
+    "h1": 56,
+    "h2": 42,
+    "h3": 28,
+    "h4": 20,
+    "body": 17,
+    "small": 13,
+    "stat_huge": 100,
+    "stat_unit": 26
+  },
+  "colors": {
+    "bg_start": "#F5F0E8",
+    "bg_end": "#EDE6D8",
+    "card_fill": "#FFFFFF",
+    "card_fill_opacity": 0.82,
+    "card_stroke": "#1a1815",
+    "card_stroke_opacity": 0.07,
+    "text_primary": "#1a1815",
+    "text_secondary": "#5c5548",
+    "text_muted": "#9c9588",
+    "accent_primary": "#8B5E3C",
+    "accent_secondary": "#4a7c6b",
+    "accent_tertiary": "#c44d34",
+    "accent_success": "#4a7c59",
+    "accent_warning": "#c47d00"
+  },
+  "spacing": {
+    "page_padding": 56,
+    "footer_height": 30,
+    "card_padding": 40,
+    "card_gap": 20,
+    "card_radius": 16,
+    "card_stroke_width": 1
+  },
+  "effects": {
+    "bg_texture": "dots",
+    "bg_texture_opacity": 0.03,
+    "bg_texture_size": 24,
+    "bg_texture_color": "#1a1815",
+    "bg_spot_opacity": 0.08
+  },
+  "layouts": {
+    "single-focus": {
+      "card_count": 1,
+      "description": "1 张大卡片占满，适合金句/核心数字/封面",
+      "slots": {
+        "main": { "x": 56, "y": 56, "w": 1168, "h": 578 }
+      }
+    },
+    "two-col-symmetric": {
+      "card_count": 2,
+      "description": "2 张等宽，适合对比/并列两个概念",
+      "slots": {
+        "left":  { "x": 56,  "y": 56, "w": 574, "h": 578 },
+        "right": { "x": 650, "y": 56, "w": 574, "h": 578 }
+      }
+    },
+    "two-col-asymmetric": {
+      "card_count": 2,
+      "description": "2/3 主 + 1/3 副，主信息 + 数据辅助",
+      "slots": {
+        "main":  { "x": 56,  "y": 56, "w": 776, "h": 578 },
+        "side":  { "x": 852, "y": 56, "w": 372, "h": 578 }
+      }
+    },
+    "three-col": {
+      "card_count": 3,
+      "description": "3 张等宽，三步流程/三个特性",
+      "slots": {
+        "left":   { "x": 56,  "y": 56, "w": 376, "h": 578 },
+        "middle": { "x": 452, "y": 56, "w": 376, "h": 578 },
+        "right":  { "x": 848, "y": 56, "w": 376, "h": 578 }
+      }
+    },
+    "major-minor": {
+      "card_count": 3,
+      "description": "中央大卡 + 两侧小卡，1 主信息 + 2 支撑细节",
+      "slots": {
+        "main":  { "x": 308, "y": 56,  "w": 664, "h": 578 },
+        "top":   { "x": 56,  "y": 56,  "w": 232, "h": 280 },
+        "bottom":{ "x": 56,  "y": 354, "w": 232, "h": 280 },
+        "right_top":   { "x": 992, "y": 56,  "w": 232, "h": 280 },
+        "right_bottom":{ "x": 992, "y": 354, "w": 232, "h": 280 }
+      }
+    },
+    "hero-top": {
+      "card_count": 4,
+      "description": "顶部横幅 + 下方 3 等宽，论点 + 多个论据",
+      "slots": {
+        "hero":  { "x": 56,  "y": 56,  "w": 1168, "h": 240 },
+        "col1":  { "x": 56,  "y": 316, "w": 376,  "h": 318 },
+        "col2":  { "x": 452, "y": 316, "w": 376,  "h": 318 },
+        "col3":  { "x": 848, "y": 316, "w": 376,  "h": 318 }
+      }
+    },
+    "mixed-grid": {
+      "card_count": 4,
+      "description": "自由混合，4 个不同大小卡片",
+      "slots": {
+        "tl": { "x": 56,  "y": 56,  "w": 776, "h": 280 },
+        "tr": { "x": 852, "y": 56,  "w": 372, "h": 280 },
+        "bl": { "x": 56,  "y": 356, "w": 372, "h": 278 },
+        "br": { "x": 452, "y": 356, "w": 772, "h": 278 }
+      }
+    }
+  }
+}

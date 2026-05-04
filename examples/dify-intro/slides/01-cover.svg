@@ -4,64 +4,64 @@
      width="1280" height="720">
   <defs>
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0e27"/>
-      <stop offset="100%" stop-color="#1a1f3a"/>
+      <stop offset="0%" stop-color="#F5F0E8"/>
+      <stop offset="100%" stop-color="#EDE6D8"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#7c5cff"/>
-      <stop offset="100%" stop-color="#00d4ff"/>
+      <stop offset="0%" stop-color="#8B5E3C"/>
+      <stop offset="100%" stop-color="#4a7c6b"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#7c5cff"/>
-      <stop offset="100%" stop-color="#00d4ff"/>
+      <stop offset="0%" stop-color="#8B5E3C"/>
+      <stop offset="100%" stop-color="#4a7c6b"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#8B5E3C" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#8B5E3C" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
-    </radialGradient>    <pattern id="bg-texture" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.5"/>
+      <stop offset="0%" stop-color="#4a7c6b" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#4a7c6b" stop-opacity="0"/>
+    </radialGradient>    <pattern id="bg-texture" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.9" fill="#1a1815" fill-opacity="0.06"/>
     </pattern>  </defs>
 
   <style type="text/css">
-    text { font-family: &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif; }
-    .mono { font-family: &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 16px; fill: #00d4ff; letter-spacing: 3px; font-weight: 600; }
-    .h1 { font-size: 60px; fill: #ffffff; font-weight: 700; }
-    .h2 { font-size: 44px; fill: #ffffff; font-weight: 700; }
-    .h3 { font-size: 30px; fill: #ffffff; font-weight: 600; }
-    .h4 { font-size: 22px; fill: #ffffff; font-weight: 600; }
-    .body { font-size: 18px; fill: #bcc4d8; }
-    .small { font-size: 14px; fill: #6b7392; }
-    .stat-huge { font-size: 110px; fill: #ffffff; font-weight: 800; }
-    .stat-unit { font-size: 28px; fill: #bcc4d8; font-weight: 500; }
+    text { font-family: &#39;Noto Sans SC&#39;, &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
+    .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .eyebrow { font-size: 14px; fill: #4a7c6b; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .body { font-size: 17px; fill: #5c5548; }
+    .small { font-size: 13px; fill: #9c9588; }
+    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .stat-unit { font-size: 26px; fill: #5c5548; font-weight: 500; }
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（在渐变之上、装饰光斑之下）-->
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层 -->
   <rect width="1280" height="720" fill="url(#bg-texture)"/>
-  <!-- 装饰光斑（不影响内容可读性） -->
+  <!-- 装饰光斑（极淡，不干扰阅读） -->
   <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
   <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
   <!-- layout 渲染区 -->
   <g transform="translate(56, 56)">
   <rect x="0" y="0" width="1168" height="578"
-        rx="20"
-        fill="#ffffff" fill-opacity="0.06"
-        stroke="#ffffff" stroke-opacity="0.12"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
   <svg x="40" y="40"
        width="1088" height="498"
        viewBox="0 0 1088 498">
-    <text x="1068" y="482" text-anchor="end" font-size="159" font-weight="900" fill="#7c5cff" opacity="0.07" letter-spacing="6" font-family="&#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, &#39;SF Pro Display&#39;, &#39;Inter&#39;, sans-serif">2026 FUTURE</text><text x="0" y="20" class="eyebrow">PRODUCT INTRO · 2026 Q2</text><text x="0" y="98" font-size="60" fill="#ffffff" font-weight="700">Dify 企业介绍</text><text x="0" y="170" font-size="60" fill="#ffffff" font-weight="700">下一代 AI 应用开发平台</text><g transform="translate(0, 192)">
-  <rect x="0" y="0" width="130" height="22" rx="11" fill="#7c5cff" fill-opacity="0.22" stroke="#7c5cff" stroke-opacity="0.55" stroke-width="1"/>
+    <text x="1068" y="482" text-anchor="end" font-size="159" font-weight="900" fill="#8B5E3C" opacity="0.07" letter-spacing="6" font-family="&#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif">2026 FUTURE</text><text x="0" y="18" class="eyebrow">PRODUCT INTRO · 2026 Q2</text><text x="0" y="92" font-size="56" fill="#1a1815" font-weight="700">Dify 企业介绍</text><text x="0" y="159" font-size="56" fill="#1a1815" font-weight="700">下一代 AI 应用开发平台</text><g transform="translate(0, 181)">
+  <rect x="0" y="0" width="130" height="22" rx="11" fill="#8B5E3C" fill-opacity="0.22" stroke="#8B5E3C" stroke-opacity="0.55" stroke-width="1"/>
   <text x="65.0" y="15" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff" letter-spacing="0.5">PRODUCTION-READY</text>
-</g><text x="0" y="254" font-size="30" fill="#bcc4d8" font-weight="400">把生成式 AI 的不确定，变成产品落地的确定</text><rect x="0" y="418" width="120" height="4" fill="url(#accent-grad)" rx="2"/><text x="0" y="460" font-size="12" fill="#6b7392" letter-spacing="2">PRESENTED BY</text>
-<text x="0" y="486" font-size="18" fill="#ffffff" font-weight="600">Dify Team</text><text x="362" y="460" font-size="12" fill="#6b7392" letter-spacing="2">DATE</text>
-<text x="362" y="486" font-size="18" fill="#ffffff" font-weight="600">2026 Q2</text><text x="724" y="460" font-size="12" fill="#6b7392" letter-spacing="2">AUDIENCE</text>
-<text x="724" y="486" font-size="18" fill="#ffffff" font-weight="600">企业客户 / 投资人</text>
+</g><text x="0" y="241" font-size="28" fill="#5c5548" font-weight="400">把生成式 AI 的不确定，变成产品落地的确定</text><rect x="0" y="418" width="120" height="4" fill="url(#accent-grad)" rx="2"/><text x="0" y="460" font-size="12" fill="#9c9588" letter-spacing="2">PRESENTED BY</text>
+<text x="0" y="486" font-size="18" fill="#1a1815" font-weight="600">Dify Team</text><text x="362" y="460" font-size="12" fill="#9c9588" letter-spacing="2">DATE</text>
+<text x="362" y="486" font-size="18" fill="#1a1815" font-weight="600">2026 Q2</text><text x="724" y="460" font-size="12" fill="#9c9588" letter-spacing="2">AUDIENCE</text>
+<text x="724" y="486" font-size="18" fill="#1a1815" font-weight="600">企业客户 / 投资人</text>
   </svg>
 </g>
 
