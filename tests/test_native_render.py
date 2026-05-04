@@ -92,3 +92,90 @@ class TestNativeDeckRender:
             assert result.stat().st_size > 1000
         finally:
             out.unlink(missing_ok=True)
+
+
+class TestNativeDeckIntegration:
+    """Integration tests that render full decks to exercise component code paths."""
+
+    def test_deck_with_card_compare(self):
+        """Exercise card-compare via a minimal deck render."""
+        layout = {
+            "theme": "bento-tech",
+            "meta": {"title": "test"},
+            "pages": [
+                {
+                    "page": 1,
+                    "layout": "two-col-symmetric",
+                    "cards": [
+                        {
+                            "slot": "left",
+                            "component": "card-compare",
+                            "data": {
+                                "headers": ["基础版", "专业版"],
+                                "recommend": 1,
+                                "rows": [
+                                    {"label": "价格", "values": ["免费", "999/月"]},
+                                    {"label": "并发", "values": ["100", "1000"], "highlight": True},
+                                ],
+                            },
+                        },
+                        {
+                            "slot": "right",
+                            "component": "card-stack",
+                            "data": {
+                                "label": "指标",
+                                "primary": {"value": "187", "unit": "ms", "suffix": "响应"},
+                                "secondary": [{"label": "99分位", "value": "420 ms"}],
+                                "progress": {"percent": 95, "label": "完成"},
+                            },
+                        },
+                    ],
+                }
+            ],
+        }
+        with tempfile.NamedTemporaryFile(suffix=".pptx", delete=False) as f:
+            out = Path(f.name)
+        try:
+            nr = NativeRenderer("bento-tech")
+            nr.render_deck(layout, out)
+            assert out.stat().st_size > 1000
+        finally:
+            out.unlink(missing_ok=True)
+
+    def test_deck_with_quote_and_text(self):
+        """Exercise card-quote and card-text via a minimal deck."""
+        layout = {
+            "theme": "bento-tech",
+            "meta": {"title": "test"},
+            "pages": [
+                {
+                    "page": 1,
+                    "layout": "two-col-symmetric",
+                    "cards": [
+                        {
+                            "slot": "left",
+                            "component": "card-quote",
+                            "data": {"quote": "少即是多。", "author": "Author", "role": "Role"},
+                        },
+                        {
+                            "slot": "right",
+                            "component": "card-text",
+                            "data": {
+                                "eyebrow": "OVERVIEW",
+                                "title": "标题",
+                                "badges": ["标签A", {"text": "警告", "variant": "warning"}],
+                                "paragraphs": ["第一段文字内容。", "第二段文字内容。"],
+                            },
+                        },
+                    ],
+                }
+            ],
+        }
+        with tempfile.NamedTemporaryFile(suffix=".pptx", delete=False) as f:
+            out = Path(f.name)
+        try:
+            nr = NativeRenderer("bento-tech")
+            nr.render_deck(layout, out)
+            assert out.stat().st_size > 1000
+        finally:
+            out.unlink(missing_ok=True)
