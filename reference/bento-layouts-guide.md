@@ -8,10 +8,11 @@
 
 | theme | 风格 | 适合 |
 |---|---|---|
-| `bento-tech`（默认） | 深色 + 渐变光斑 + 玻璃拟态卡片 | 科技/发布会/产品展示 |
-| `bento-light` | 浅色米白 + 点状纹理 + 干净白卡片 | 商务/咨询/正式报告 |
+| `bento-paper`（默认） | 暖纸杂志风 + 衬线标题 + 点状纹理 | 通用分享/产品发布/人文内容 |
+| `bento-tech` | 深色 + 渐变光斑 + 玻璃拟态卡片 | 科技/发布会/产品展示 |
+| `bento-light` | 浅色米白 + 网格纹理 + 干净白卡片 | 商务/咨询/正式报告 |
 
-整套 deck 统一用一个 theme。如果想在**单页**切换气氛（例如章节首页用深色），推荐把全 deck 设成 bento-light，章节首页切 bento-tech，但实际上目前 layout.json 只支持**单一全局 theme**，混用主题须手动运行两次渲染后合并 slides。
+整套 deck 统一用一个 theme。
 
 ---
 
@@ -36,7 +37,7 @@
 
 ```json
 {
-  "theme": "bento-tech",
+  "theme": "bento-paper",
   "meta": {
     "title": "Dify 企业介绍",
     "subtitle": "(可选)"
@@ -64,7 +65,7 @@
 
 字段说明：
 
-- `theme`：选用的主题包名（缺省 `bento-tech`）
+- `theme`：选用的主题包名（缺省 `bento-paper`）
 - `meta.title`：页脚显示的 deck 标题
 - `lint`：覆盖 lint 默认（公众号/严苛中文场景把 `no_cn_en_space` 开成 true）
 - `pages[].page`：1-based 页码

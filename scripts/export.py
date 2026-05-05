@@ -83,7 +83,7 @@ def to_pptx_svg(ws: Path) -> dict:
         )
         _inject_svg_blip(slide, pic, svg_path, slide_idx=idx)
 
-    out_path = ws / "deck.pptx"
+    out_path = ws / "deck-svg.pptx"
     prs.save(str(out_path))
     return {"output": str(out_path)}
 

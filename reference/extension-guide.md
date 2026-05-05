@@ -348,7 +348,7 @@ python3 $SKILL/scripts/lint_cn.py <ws>/layout.json
 python3 -c "
 from scripts.native_render import render_pptx
 from pathlib import Path
-render_pptx(Path('<ws>'), theme_name='bento-tech', out_path=Path('/tmp/test.pptx'))
+render_pptx(Path('<ws>'), theme_name='bento-paper', out_path=Path('/tmp/test.pptx'))
 print('OK')
 "
 
