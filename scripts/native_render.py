@@ -68,6 +68,12 @@ class NativeRenderer:
             raise SystemExit(f"[native_render] theme not found: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
 
+    def _first_font(self, key: str) -> str:
+        """Extract first font family from a CSS font stack (manifest value)."""
+        stack = self.theme["fonts"].get(key, "sans-serif")
+        first = stack.split(",")[0].strip().strip("'\"")
+        return first
+
     @property
     def _is_light(self) -> bool:
         """Detect light themes so we can pick contrasting text colors on accent fills."""
@@ -162,7 +168,7 @@ class NativeRenderer:
             20,
             font_size=small_size,
             color=self.theme["colors"]["text_muted"],
-            font_name=self.theme["fonts"]["mono"],
+            font_name=self._first_font("mono"),
             align="right",
         )
 
@@ -250,7 +256,7 @@ class NativeRenderer:
             run.font.bold = bold
             run.font.italic = italic
             run.font.color.rgb = _hex(color)
-            run.font.name = font_name or self.theme["fonts"]["sans"]
+            run.font.name = font_name or self._first_font("sans")
         if align == "right":
             p.alignment = PP_ALIGN.RIGHT
         elif align == "center":
@@ -946,7 +952,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
-                font_name=self.theme["fonts"]["display"],
+                font_name=self._first_font("display"),
                 v_anchor="middle",
             )
             if data.get("author") or data.get("role"):
@@ -983,7 +989,7 @@ class NativeRenderer:
                         else:
                             run.font.size = Pt(_px_to_pt(14))
                             run.font.color.rgb = _hex(self.theme["colors"]["text_muted"])
-                        run.font.name = self.theme["fonts"]["sans"]
+                        run.font.name = self._first_font("sans")
         else:
             # 大卡模式：quote 居中（PowerPoint 自动换行 + 垂直居中）
             available_h = H - (110 if data.get("author") else 30)
@@ -997,7 +1003,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 italic=True,
-                font_name=self.theme["fonts"]["display"],
+                font_name=self._first_font("display"),
                 v_anchor="middle",
             )
             if data.get("author"):
@@ -1093,7 +1099,7 @@ class NativeRenderer:
                 if run is not None:
                     run.font.size = Pt(_px_to_pt(ts["body"]))
                     run.font.color.rgb = _hex(self.theme["colors"]["text_secondary"])
-                    run.font.name = self.theme["fonts"]["sans"]
+                    run.font.name = self._first_font("sans")
 
     # ---------- Component: card-image ----------
 
