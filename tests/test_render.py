@@ -193,4 +193,4 @@ class TestBentoPaper:
         assert "Noto Serif SC" in svg
         assert "IBM Plex Mono" in svg
         assert "#F5F0E8" in svg
-        assert "#8B5E3C" in svg
+        assert "#B8654A" in svg

@@ -160,7 +160,7 @@ def render_all(ws: Path, theme: str | None = None) -> dict:
 
     lint_check(layout)
 
-    theme_name = theme or layout.get("theme", "bento-tech")
+    theme_name = theme or layout.get("theme", "bento-paper")
     manifest, env = load_theme(theme_name)
 
     pages = layout.get("pages", [])
@@ -190,7 +190,7 @@ def render_page(ws: Path, page_num: int, theme: str | None = None) -> dict:
     """渲染单页（page_num 是 1-based）。"""
     layout = json.loads((ws / "layout.json").read_text(encoding="utf-8"))
     lint_check(layout)
-    theme_name = theme or layout.get("theme", "bento-tech")
+    theme_name = theme or layout.get("theme", "bento-paper")
     manifest, env = load_theme(theme_name)
     pages = layout.get("pages", [])
     target = next((p for p in pages if p.get("page") == page_num), None)

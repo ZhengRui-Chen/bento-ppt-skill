@@ -8,19 +8,19 @@
       <stop offset="100%" stop-color="#EDE6D8"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8B5E3C"/>
-      <stop offset="100%" stop-color="#4a7c6b"/>
+      <stop offset="0%" stop-color="#B8654A"/>
+      <stop offset="100%" stop-color="#D4956B"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#8B5E3C"/>
-      <stop offset="100%" stop-color="#4a7c6b"/>
+      <stop offset="0%" stop-color="#B8654A"/>
+      <stop offset="100%" stop-color="#D4956B"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#8B5E3C" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#8B5E3C" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#B8654A" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#B8654A" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#4a7c6b" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#4a7c6b" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#D4956B" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#D4956B" stop-opacity="0"/>
     </radialGradient>    <pattern id="bg-texture" width="24" height="24" patternUnits="userSpaceOnUse">
       <circle cx="12" cy="12" r="0.9" fill="#1a1815" fill-opacity="0.06"/>
     </pattern>  </defs>
@@ -28,7 +28,7 @@
   <style type="text/css">
     text { font-family: &#39;Noto Sans SC&#39;, &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
     .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 14px; fill: #4a7c6b; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .eyebrow { font-size: 14px; fill: #D4956B; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
     .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
     .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
     .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
@@ -85,7 +85,7 @@
        width="292" height="200"
        viewBox="0 0 292 200">
     <text x="0" y="18" class="eyebrow">运行指标</text>
-<text x="0" y="84" font-size="48" fill="#1a1815" font-weight="800">187</text><text x="86" y="84" font-size="14" fill="#4a7c6b" font-weight="600">ms</text><text x="114" y="80" font-size="17" fill="#5c5548">API 平均响应</text><text x="0" y="100" font-size="12" fill="#9c9588" letter-spacing="1">99 分位</text>
+<text x="0" y="84" font-size="48" fill="#1a1815" font-weight="800">187</text><text x="86" y="84" font-size="14" fill="#D4956B" font-weight="600">ms</text><text x="114" y="80" font-size="17" fill="#5c5548">API 平均响应</text><text x="0" y="100" font-size="12" fill="#9c9588" letter-spacing="1">99 分位</text>
 <text x="0" y="118" font-size="18" fill="#1a1815" font-weight="700">420 ms</text><text x="146" y="100" font-size="12" fill="#9c9588" letter-spacing="1">错误率</text>
 <text x="146" y="118" font-size="18" fill="#1a1815" font-weight="700">0.03%</text><rect x="0" y="140" width="292" height="6" rx="3" fill="#FFFFFF" fill-opacity="0.10"/>
 <rect x="0" y="140" width="289" height="6" rx="3" fill="url(#accent-grad)"/><text x="0" y="168" font-size="13" fill="#5c5548">SLA 99% 达标</text>

@@ -48,7 +48,7 @@ class NativeRenderer:
     所有 shape 使用绝对 EMU 坐标（无嵌套坐标系）。
     """
 
-    def __init__(self, theme_name: str = "bento-tech"):
+    def __init__(self, theme_name: str = "bento-paper"):
         self.theme_name = theme_name
         self.theme = self._load_manifest(theme_name)
         self.prs = Presentation()
@@ -284,7 +284,7 @@ class NativeRenderer:
             else:
                 txt = b.get("text", "")
                 var = b.get("variant", "accent")
-            w_est = sum(12 if "\u4e00" <= ch <= "\u9fff" else 7 for ch in txt) + 18
+            w_est = sum(12 if "\u4e00" <= ch <= "\u9fff" else 8 for ch in txt) + 24
             if var == "success":
                 bg = self.theme["colors"]["accent_success"]
                 fg = "#ffffff"
@@ -302,7 +302,7 @@ class NativeRenderer:
                 self._x(x_cursor),
                 self._y(svg_y),
                 self._x(w_est),
-                self._y(22),
+                self._y(24),
             )
             self._set_solid_fill(sh, bg, opacity=0.22)
             self._set_line_alpha(sh, bg, opacity=0.55, width_pt=0.5)
@@ -317,13 +317,13 @@ class NativeRenderer:
                 svg_y + 3,
                 w_est,
                 18,
-                font_size=11,
+                font_size=12,
                 color=fg,
                 bold=True,
                 align="center",
-                letter_spacing=50,
+                letter_spacing=100,
             )
-            x_cursor += w_est + 8
+            x_cursor += w_est + 10
 
     # ---------- 共用工具：fill alpha ----------
 
@@ -1574,7 +1574,7 @@ class NativeRenderer:
 def render_pptx(ws: Path, theme_name: str | None = None, out_path: Path | None = None) -> Path:
     """工作区入口：读 layout.json，渲染到 deck.pptx。"""
     layout = json.loads((ws / "layout.json").read_text(encoding="utf-8"))
-    theme = theme_name or layout.get("theme", "bento-tech")
+    theme = theme_name or layout.get("theme", "bento-paper")
     out = Path(out_path) if out_path else (ws / "deck.pptx")
     NativeRenderer(theme).render_deck(layout, out)
     return out

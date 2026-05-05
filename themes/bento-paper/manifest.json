@@ -32,11 +32,11 @@
     "text_primary": "#1a1815",
     "text_secondary": "#5c5548",
     "text_muted": "#9c9588",
-    "accent_primary": "#8B5E3C",
-    "accent_secondary": "#4a7c6b",
-    "accent_tertiary": "#c44d34",
-    "accent_success": "#4a7c59",
-    "accent_warning": "#c47d00"
+    "accent_primary": "#B8654A",
+    "accent_secondary": "#D4956B",
+    "accent_tertiary": "#C44D34",
+    "accent_success": "#7A8B5E",
+    "accent_warning": "#D4952A"
   },
   "spacing": {
     "page_padding": 56,
