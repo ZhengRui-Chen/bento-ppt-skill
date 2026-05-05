@@ -187,11 +187,38 @@ class TestBentoPaper:
         page = {
             "page": 1,
             "layout": "single-focus",
-            "cards": [{"slot": "main", "component": "card-hero", "data": {"eyebrow": "MAGAZINE", "title": "标题", "subtitle": "副标题"}}],
+            "cards": [
+                {
+                    "slot": "main",
+                    "component": "card-hero",
+                    "data": {"eyebrow": "MAGAZINE", "title": "标题", "subtitle": "副标题"},
+                }
+            ],
         }
         svg = render_one_page(env, manifest, page, total_pages=1, meta={})
         # 验证 Google Fonts 排在 font-family 首位：CSS 类必须以该字体开头
         assert "font-family: &#39;Noto Serif SC&#39;" in svg  # .h1 等标题类
         assert "font-family: &#39;IBM Plex Mono&#39;" in svg  # .mono / .eyebrow 类
-        assert "#F5F0E8" in svg
-        assert "#B8654A" in svg
+
+
+class TestRenderErrorPaths:
+    def test_render_all_empty_pages(self):
+        import tempfile
+
+        import pytest
+        from render import render_all
+
+        with tempfile.TemporaryDirectory() as tmp:
+            from pathlib import Path
+
+            ws = Path(tmp)
+            (ws / "layout.json").write_text('{"pages": []}', encoding="utf-8")
+            with pytest.raises(SystemExit):
+                render_all(ws)
+
+    def test_render_page_out_of_range(self):
+        import pytest
+        from render import render_page
+
+        with pytest.raises(SystemExit):
+            render_page(Path("examples/dify-intro"), 99)

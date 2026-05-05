@@ -133,8 +133,10 @@ class NativeRenderer:
         overflow = Emu(91440)
         bg = slide.shapes.add_shape(
             MSO_SHAPE.RECTANGLE,
-            -overflow, -overflow,
-            Emu(int(sw)) + overflow * 2, Emu(int(shh)) + overflow * 2,
+            -overflow,
+            -overflow,
+            Emu(int(sw)) + overflow * 2,
+            Emu(int(shh)) + overflow * 2,
         )
         bg.line.fill.background()
         gf = etree.SubElement(bg._element.spPr, f"{{{A_NS}}}gradFill")

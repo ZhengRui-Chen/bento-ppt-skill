@@ -13,7 +13,7 @@ A Claude Code skill that turns a topic or document into a 16:9 SVG slide deck in
 - **7 阶段流水线**：needs（反问） → research → outline（金字塔原理） → planning → fetch → design → review → export
 - **6 种 Bento 布局** + **9 种卡片组件**：single-focus / two-col-symmetric / two-col-asymmetric / three-col / major-minor / hero-top / mixed-grid 任选；卡内可放 card-hero / card-stat / **card-stack**（多数据叠加）/ card-list（highlight 焦点项）/ card-quote / card-text / card-image / **card-compare**（多列对比表）/ chart-bar
 - **跨组件装饰元素**：胶囊 badges / 三栏 metadata / 半透明装饰大字 / **ghost_text 背景装饰字** / 网格背景纹理
-- **双主题**：`bento-tech`（深色科技风）/ `bento-light`（浅色商务风），主题继承机制让新主题只需一个 manifest.json
+- **三主题**：`bento-paper`（暖纸杂志风，默认）/ `bento-tech`（深色科技风）/ `bento-light`（浅色商务风），主题继承机制让新主题只需一个 manifest.json
 - **底层 SVG**（viewBox `0 0 1280 720`），双 PPTX 导出路径：
   - **Native**（默认）：`scripts/native_render.py` 用 python-pptx 直接画原生 shape，**100% 可编辑**（单击文字直接改、无需"转换为形状"）。视觉商务平面（无渐变 / 光斑）
   - **SVG**（备选 `--format pptx-svg`）：通过 `asvg:svgBlip` OOXML 注入到 pptx，PowerPoint 2019+/Office 365 显示完美矢量但默认是 picture 对象
@@ -155,7 +155,8 @@ ppt-agent/
 │       ├── nanobanana.py          # Gemini Image (stub)
 │       └── unsplash.py            # Unsplash (stub)
 ├── themes/
-│   ├── bento-tech/                # 深色科技风（默认）：渐变光斑 + 玻璃拟态卡片
+│   ├── bento-paper/               # 暖纸杂志风（默认）：衬线标题 + 点状纹理
+│   ├── bento-tech/                # 深色科技风：渐变光斑 + 玻璃拟态卡片
 │   │   ├── manifest.json          # 设计 token + layout 槽位元数据
 │   │   ├── slide-base.svg.j2      # 1280×720 容器（背景 / defs / ghost_text / 页脚）
 │   │   ├── layouts/_base.svg.j2   # 数据驱动通用 layout
