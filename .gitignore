@@ -20,6 +20,10 @@ ppt-decks/
 *.tmp
 *.log
 
+# 生成产物（clone 后可重新导出）
+examples/dify-intro/deck-svg.pptx
+examples/dify-intro/deck-standalone.html
+
 # Coverage
 .coverage
 coverage_annotations/
