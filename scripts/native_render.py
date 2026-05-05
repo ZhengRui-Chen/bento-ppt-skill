@@ -302,7 +302,7 @@ class NativeRenderer:
                 self._x(x_cursor),
                 self._y(svg_y),
                 self._x(w_est),
-                self._y(22),
+                self._y(24),
             )
             self._set_solid_fill(sh, bg, opacity=0.22)
             self._set_line_alpha(sh, bg, opacity=0.55, width_pt=0.5)
@@ -323,7 +323,7 @@ class NativeRenderer:
                 align="center",
                 letter_spacing=100,
             )
-            x_cursor += w_est + 8
+            x_cursor += w_est + 10
 
     # ---------- 共用工具：fill alpha ----------
 
