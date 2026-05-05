@@ -124,12 +124,12 @@ ppt new "<topic>"
 确认 `layout.json` 内容质量后（中文标点、字数控制、必须信息齐全），运行：
 
 ```bash
-ppt scaffold <ws>                        # 渲染所有页（默认主题 bento-tech）
+ppt scaffold <ws>                        # 渲染所有页（默认主题 bento-paper）
 ppt render <ws> --page 3                 # 重渲第 3 页
-ppt render <ws> --theme bento-light      # 切换为浅色主题重渲
+ppt render <ws> --theme bento-tech       # 切换为深色主题重渲
 ```
 
-可用主题：`bento-tech`（深色科技风，默认）/ `bento-light`（浅色商务风）。也可在 `layout.json` 顶层设 `"theme": "bento-light"` 固定主题。
+可用主题：`bento-paper`（暖纸杂志风，默认）/ `bento-tech`（深色科技风）/ `bento-light`（浅色商务风）。也可在 `layout.json` 顶层设 `"theme": "bento-light"` 固定主题。
 
 渲染前会自动跑 `lint_cn.py` 检查中文版式。命中阻断会要求重写——**这不是警告，是错误**。
 
@@ -139,7 +139,7 @@ ppt render <ws> --theme bento-light      # 切换为浅色主题重渲
 ppt shoot <ws>
 ```
 
-会用 playwright headless chromium 把每页 SVG 渲染成 PNG（放到 `<ws>/shots/`），并生成 `<ws>/deck.html` 多页翻页预览（左右键翻页 + 缩略图栏）。
+会用 Chrome/Chromium headless 把每页 SVG 渲染成 PNG（放到 `<ws>/shots/`），并生成 `<ws>/deck.html` 多页翻页预览（左右键翻页 + 缩略图栏）。
 
 然后 **Read 截图**，按下面清单逐页检查：
 
@@ -228,4 +228,4 @@ mkdir themes/<your-style>
 - 演讲者备注、动画 / 过渡：未实现
 - 数据图表（chart-bar）只是占位，复杂图表请在 layout.json 里描述清楚后人工补
 - Linux 端 PowerPoint 打开 SVG 中文字体可能 fallback 到方块字，建议在 macOS/Windows 端打开
-- 一次性页数建议 ≤ 30 页（playwright 截图慢）
+- 一次性页数建议 ≤ 30 页（chrome headless 截图慢）
