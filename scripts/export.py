@@ -35,12 +35,86 @@ ASVG_NS = "http://schemas.microsoft.com/office/drawing/2016/SVG/main"
 SVG_EXT_URI = "{96DAC541-7B7A-43D3-8B79-37D633B846F1}"
 
 
+def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
+    """将字体文件嵌入 PPTX（OOXML post-processing）。fonts = {font_name: ttf_path}。"""
+    import zipfile
+    from io import BytesIO
+
+    P_NS = "http://schemas.openxmlformats.org/presentationml/2006/main"
+    R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    FONT_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font"
+
+    buf = BytesIO()
+    with zipfile.ZipFile(pptx_path, "r") as zf, zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as out:
+        names = zf.namelist()
+        skip = {"ppt/presentation.xml", "ppt/_rels/presentation.xml.rels"}
+        for name in names:
+            if name not in skip:
+                out.writestr(name, zf.read(name))
+
+        pres_xml = etree.fromstring(zf.read("ppt/presentation.xml"))
+        rels_xml = etree.fromstring(zf.read("ppt/_rels/presentation.xml.rels"))
+
+        efl = pres_xml.find(f"{{{P_NS}}}embeddedFontLst")
+        if efl is None:
+            efl = etree.SubElement(pres_xml, f"{{{P_NS}}}embeddedFontLst")
+
+            # Count existing rIds
+            existing_rids = {r.get("Id", "") for r in rels_xml}
+
+            next_rid = 1
+            while f"rId_font_{next_rid}" in existing_rids:
+                next_rid += 1
+
+            for font_name, font_path in fonts.items():
+                if not font_path.exists():
+                    continue
+                rid = f"rId_font_{next_rid}"
+                font_data = font_path.read_bytes()
+                font_entry = f"ppt/fonts/font{next_rid}.ttf"
+                out.writestr(font_entry, font_data)
+
+                # Add relationship
+                rel = etree.SubElement(rels_xml, f"{{{R_NS}}}Relationship")
+                rel.set("Id", rid)
+                rel.set("Type", FONT_REL)
+                rel.set("Target", f"fonts/font{next_rid}.ttf")
+
+                # Add embeddedFont entry
+                ef = etree.SubElement(efl, f"{{{P_NS}}}embeddedFont")
+                fn = etree.SubElement(ef, f"{{{P_NS}}}font")
+                fn.set("typeface", font_name)
+                reg = etree.SubElement(ef, f"{{{P_NS}}}regular")
+                reg.set(f"{{{R_NS}}}id", rid)
+
+                next_rid += 1
+
+            # Update zip entries
+            out.writestr("ppt/presentation.xml", etree.tostring(pres_xml, xml_declaration=True, encoding="UTF-8", standalone=True))
+            out.writestr("ppt/_rels/presentation.xml.rels", etree.tostring(rels_xml, xml_declaration=True, encoding="UTF-8", standalone=True))
+
+    # Replace original
+    pptx_path.write_bytes(buf.getvalue())
+
+
 def to_pptx(ws: Path) -> dict:
     """默认 PPTX 路径：用 NativeRenderer 直接生成原生 shape，100% 可编辑。"""
     sys.path.insert(0, str(Path(__file__).parent))
     from native_render import render_pptx
 
     out_path = render_pptx(ws)
+
+    # Embed fonts if available
+    font_map = {
+        "Noto Serif SC": Path("/tmp/NotoSerifSC.ttf"),
+        "Noto Sans SC": Path("/tmp/NotoSansSC.ttf"),
+        "IBM Plex Mono": Path("/tmp/IBMPlexMono.ttf"),
+    }
+    available = {k: v for k, v in font_map.items() if v.exists()}
+    if available:
+        _embed_fonts(out_path, available)
+        print(f"  [embed] {len(available)} fonts embedded: {', '.join(available)}")
+
     return {"output": str(out_path)}
 
 
