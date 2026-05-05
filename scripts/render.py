@@ -11,7 +11,7 @@
 
 layout.json schema（核心字段）：
 {
-  "theme": "bento-tech",
+  "theme": "bento-paper",
   "meta": { "title": "Dify 企业介绍" },
   "pages": [
     {
