@@ -171,7 +171,7 @@ class TestBentoPaper:
         manifest, _ = load_theme("bento-paper")
         assert manifest["name"] == "bento-paper"
         assert manifest["effects"]["bg_texture"] == "dots"
-        assert "Noto Serif SC" in manifest["fonts"]["display"]
+        assert "Songti SC" in manifest["fonts"]["display"]
 
     def test_render_example(self):
         ws = Path("examples/dify-intro")
@@ -190,7 +190,7 @@ class TestBentoPaper:
             "cards": [{"slot": "main", "component": "card-hero", "data": {"eyebrow": "MAGAZINE", "title": "标题", "subtitle": "副标题"}}],
         }
         svg = render_one_page(env, manifest, page, total_pages=1, meta={})
-        assert "Noto Serif SC" in svg
-        assert "IBM Plex Mono" in svg
+        assert "Songti SC" in svg
+        assert "Menlo" in svg
         assert "#F5F0E8" in svg
         assert "#B8654A" in svg
