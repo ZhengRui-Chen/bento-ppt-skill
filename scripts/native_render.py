@@ -506,7 +506,7 @@ class NativeRenderer:
                     bold=True,
                 )
             else:
-                # 窄卡单位换行，紧贴 value 下方、左对齐
+                # 窄卡单位换行；y+=4 防止与 sub_value/装饰条重叠
                 self._add_textbox(
                     slide,
                     unit,
