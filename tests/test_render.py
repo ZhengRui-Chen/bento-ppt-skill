@@ -190,8 +190,8 @@ class TestBentoPaper:
             "cards": [{"slot": "main", "component": "card-hero", "data": {"eyebrow": "MAGAZINE", "title": "标题", "subtitle": "副标题"}}],
         }
         svg = render_one_page(env, manifest, page, total_pages=1, meta={})
-        # 验证 Google Fonts 排在 font-family 首位（SVG 中单引号转义为 &#39;）
-        assert "&#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;" in svg
-        assert "&#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;" in svg
+        # 验证 Google Fonts 排在 font-family 首位：CSS 类必须以该字体开头
+        assert "font-family: &#39;Noto Serif SC&#39;" in svg  # .h1 等标题类
+        assert "font-family: &#39;IBM Plex Mono&#39;" in svg  # .mono / .eyebrow 类
         assert "#F5F0E8" in svg
         assert "#B8654A" in svg
