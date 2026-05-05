@@ -39,10 +39,9 @@ ppt export   ~/ppt-decks/<date>-dify-企业介绍-demo/ --format pptx
 | 7 | mixed-grid-demo | mixed-grid | 柱状图 + 数字 + 图占位 + 文字 |
 | 8 | end | single-focus | 末页 thank you |
 
-## 已知视觉问题（V1 限制，TODO V2 修）
+## V1 → V2 已修复
 
-- 第 5 页 major-minor：小卡里的 stat-huge 110px 字号被截断（"<200" 显示为 "<20"）
-- 第 5 页 quote："工程化"被截到第二行外
-- 第 7 页 card-text："提升到 78" 被截
-
-修复思路见 `reference/theme-authoring.md` 的"字号自适应"节。
+- ✅ 第 5 页 stat 截断：窄卡 `word_wrap=True` + unit 换行 y 偏移
+- ✅ 第 5 页 quote 断行：每行容量 ×1.1 余量防 CJK 词组拆分
+- ✅ 第 7 页 card-text 溢出：文本区 64px 保底高度
+- ✅ 渐变背景 + 字体嵌入 + 3 主题

@@ -9,9 +9,9 @@ provider 之间解耦：加一个新的就是新一个 .py 文件，无需改其
 scripts/providers/
 ├── __init__.py        # auto-discovery，自动 import 同目录下所有 .py
 ├── base.py            # ImageProvider 抽象 + register / find_provider
-├── url_download.py    # 内置：处理 src=URL（不需 API key）
-├── nanobanana.py      # stub：Gemini 3 Image 生图
-├── unsplash.py        # stub：Unsplash 搜图
+├── url_download.py    # 内置：处理 src=URL（stdlib，不需 API key）
+├── nanobanana.py      # Gemini Imagen 生图（需 GEMINI_API_KEY + google-generativeai）
+├── unsplash.py        # Unsplash 搜图（需 UNSPLASH_ACCESS_KEY，stdlib urllib）
 └── README.md          # 本文档
 ```
 
