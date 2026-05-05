@@ -127,9 +127,14 @@ class NativeRenderer:
     def _add_background(self, slide) -> None:
         """全屏底层矩形作为背景（不依赖 slide.background，那个被 master 继承覆盖）。
         放在所有 shape 之前画，确保 z-order 在最底。"""
+        # 矩形略大于 slide 尺寸防止边缘白边（PowerPoint 自行裁剪溢出）
+        sw, shh = self.prs.slide_width, self.prs.slide_height
+        assert sw is not None and shh is not None
+        overflow = Emu(91440)
         bg = slide.shapes.add_shape(
-            MSO_SHAPE.RECTANGLE, Emu(0), Emu(0),
-            self.prs.slide_width, self.prs.slide_height,
+            MSO_SHAPE.RECTANGLE,
+            -overflow, -overflow,
+            Emu(int(sw)) + overflow * 2, Emu(int(shh)) + overflow * 2,
         )
         bg.line.fill.background()
         gf = etree.SubElement(bg._element.spPr, f"{{{A_NS}}}gradFill")
