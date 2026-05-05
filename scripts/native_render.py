@@ -122,17 +122,21 @@ class NativeRenderer:
         """全屏底层矩形作为背景（不依赖 slide.background，那个被 master 继承覆盖）。
         放在所有 shape 之前画，确保 z-order 在最底。"""
         bg = slide.shapes.add_shape(
-            MSO_SHAPE.RECTANGLE,
-            Emu(0),
-            Emu(0),
-            self.prs.slide_width,
-            self.prs.slide_height,
+            MSO_SHAPE.RECTANGLE, Emu(0), Emu(0),
+            self.prs.slide_width, self.prs.slide_height,
         )
-        bg.fill.solid()
-        bg.fill.fore_color.rgb = _hex(self.theme["colors"]["bg_start"])
         bg.line.fill.background()
-        # 锁住，防止用户误选误移（PowerPoint 端右键能解锁）
-        # python-pptx 不直接支持 lockAspectRatio + selection lock，跳过
+        sp_pr = bg._element.spPr
+        gf = etree.SubElement(sp_pr, f"{{{A_NS}}}gradFill")
+        gsl = etree.SubElement(gf, f"{{{A_NS}}}gsLst")
+        for pos, clr in [("0", self.theme["colors"]["bg_start"]), ("100000", self.theme["colors"]["bg_end"])]:
+            gs = etree.SubElement(gsl, f"{{{A_NS}}}gs")
+            gs.set("pos", pos)
+            sc = etree.SubElement(gs, f"{{{A_NS}}}srgbClr")
+            sc.set("val", clr.lstrip("#"))
+        ln = etree.SubElement(gf, f"{{{A_NS}}}lin")
+        ln.set("ang", "5400000")
+        ln.set("scaled", "1")
 
     def _add_footer(self, slide, meta: dict, page: dict, total: int) -> None:
         title = meta.get("title", "")
