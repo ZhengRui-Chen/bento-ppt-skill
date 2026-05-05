@@ -73,8 +73,8 @@
 | name | kinds | 启用条件 |
 |---|---|---|
 | `url_download` | url | 默认启用，无需配置 |
-| `nanobanana` | generate | env `GEMINI_API_KEY` + 实现 fetch（当前 stub）|
-| `unsplash` | search | env `UNSPLASH_ACCESS_KEY` + 实现 fetch（当前 stub）|
+| `nanobanana` | generate | env `GEMINI_API_KEY`（需 `pip install google-generativeai`）|
+| `unsplash` | search | env `UNSPLASH_ACCESS_KEY`（stdlib `urllib`，无额外依赖）|
 
 加新 provider 见 [scripts/providers/README.md](../scripts/providers/README.md)。
 
