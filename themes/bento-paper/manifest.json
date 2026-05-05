@@ -7,9 +7,9 @@
     "height": 720
   },
   "fonts": {
-    "sans": "'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif",
-    "mono": "'Menlo', 'SF Mono', 'IBM Plex Mono', 'Courier', monospace",
-    "display": "'Songti SC', 'Noto Serif SC', 'STKaiti', 'Times New Roman', serif"
+    "sans": "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+    "mono": "'IBM Plex Mono', 'SF Mono', 'JetBrains Mono', Menlo, monospace",
+    "display": "'Noto Serif SC', 'Playfair Display', 'Songti SC', 'Times New Roman', serif"
   },
   "type_scale": {
     "eyebrow": 14,
