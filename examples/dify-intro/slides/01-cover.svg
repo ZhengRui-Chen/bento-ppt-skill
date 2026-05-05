@@ -26,16 +26,16 @@
     </pattern>  </defs>
 
   <style type="text/css">
-    text { font-family: &#39;Noto Sans SC&#39;, &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
-    .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 14px; fill: #D4956B; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
-    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
-    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
-    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    text { font-family: &#39;PingFang SC&#39;, &#39;Noto Sans SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
+    .mono { font-family: &#39;Menlo&#39;, &#39;SF Mono&#39;, &#39;IBM Plex Mono&#39;, &#39;Courier&#39;, monospace; }
+    .eyebrow { font-size: 14px; fill: #D4956B; letter-spacing: 3px; font-weight: 600; font-family: &#39;Menlo&#39;, &#39;SF Mono&#39;, &#39;IBM Plex Mono&#39;, &#39;Courier&#39;, monospace; }
+    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
     .body { font-size: 17px; fill: #5c5548; }
     .small { font-size: 13px; fill: #9c9588; }
-    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif; }
+    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
     .stat-unit { font-size: 26px; fill: #5c5548; font-weight: 500; }
   </style>
 
@@ -55,7 +55,7 @@
   <svg x="40" y="40"
        width="1088" height="498"
        viewBox="0 0 1088 498">
-    <text x="1068" y="482" text-anchor="end" font-size="159" font-weight="900" fill="#B8654A" opacity="0.07" letter-spacing="6" font-family="&#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Times New Roman&#39;, serif">2026 FUTURE</text><text x="0" y="18" class="eyebrow">PRODUCT INTRO · 2026 Q2</text><text x="0" y="92" font-size="56" fill="#1a1815" font-weight="700">Dify 企业介绍</text><text x="0" y="159" font-size="56" fill="#1a1815" font-weight="700">下一代 AI 应用开发平台</text><g transform="translate(0, 181)">
+    <text x="1068" y="482" text-anchor="end" font-size="159" font-weight="900" fill="#B8654A" opacity="0.07" letter-spacing="6" font-family="&#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif">2026 FUTURE</text><text x="0" y="18" class="eyebrow">PRODUCT INTRO · 2026 Q2</text><text x="0" y="92" font-size="56" fill="#1a1815" font-weight="700">Dify 企业介绍</text><text x="0" y="159" font-size="56" fill="#1a1815" font-weight="700">下一代 AI 应用开发平台</text><g transform="translate(0, 181)">
   <rect x="0" y="0" width="152" height="24" rx="12" fill="#B8654A" fill-opacity="0.22" stroke="#B8654A" stroke-opacity="0.55" stroke-width="1"/>
   <text x="76.0" y="16" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" letter-spacing="1">PRODUCTION-READY</text>
 </g><text x="0" y="241" font-size="28" fill="#5c5548" font-weight="400">把生成式 AI 的不确定，变成产品落地的确定</text><rect x="0" y="418" width="120" height="4" fill="url(#accent-grad)" rx="2"/><text x="0" y="460" font-size="12" fill="#9c9588" letter-spacing="2">PRESENTED BY</text>
