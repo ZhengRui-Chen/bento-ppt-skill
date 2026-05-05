@@ -23,7 +23,7 @@
 
 ### Improved
 - Tests: 42 → 62, coverage 54% → 58%
-- Ruff rules: E9+F → I+W+B+C4+SIM+RUF
+- Ruff rules: expanded from E9+F to E9+F+I+W+B+C4+SIM+RUF
 - Pre-commit hooks (ruff, mypy, compileall, import-check, lint-cn)
 - CLAUDE.md, AGENTS.md, .editorconfig, CHANGELOG.md
 - Provider implementations: nanobanana (Gemini Imagen), unsplash (search)
