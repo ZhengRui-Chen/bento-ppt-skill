@@ -90,8 +90,14 @@ def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
                 next_rid += 1
 
             # Update zip entries
-            out.writestr("ppt/presentation.xml", etree.tostring(pres_xml, xml_declaration=True, encoding="UTF-8", standalone=True))
-            out.writestr("ppt/_rels/presentation.xml.rels", etree.tostring(rels_xml, xml_declaration=True, encoding="UTF-8", standalone=True))
+            out.writestr(
+                "ppt/presentation.xml",
+                etree.tostring(pres_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
+            )
+            out.writestr(
+                "ppt/_rels/presentation.xml.rels",
+                etree.tostring(rels_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
+            )
 
     # Replace original
     pptx_path.write_bytes(buf.getvalue())
