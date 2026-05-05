@@ -518,6 +518,7 @@ class NativeRenderer:
                     color=self.theme["colors"]["text_secondary"],
                     bold=True,
                 )
+                y += 4
 
         if data.get("sub_value"):
             sub_size = int(huge * 0.24)
