@@ -162,7 +162,7 @@ class NativeRenderer:
             20,
             font_size=small_size,
             color=self.theme["colors"]["text_muted"],
-            font_name="SF Mono",
+            font_name=self.theme["fonts"]["mono"],
             align="right",
         )
 
@@ -250,7 +250,7 @@ class NativeRenderer:
             run.font.bold = bold
             run.font.italic = italic
             run.font.color.rgb = _hex(color)
-            run.font.name = font_name or "PingFang SC"
+            run.font.name = font_name or self.theme["fonts"]["sans"]
         if align == "right":
             p.alignment = PP_ALIGN.RIGHT
         elif align == "center":
@@ -488,7 +488,6 @@ class NativeRenderer:
         unit_w_est = (len(unit) * unit_size * 0.6) if unit else 0
         if unit:
             if vw + 8 + unit_w_est <= W:
-                # 同行
                 self._add_textbox(
                     slide,
                     unit,
@@ -501,8 +500,7 @@ class NativeRenderer:
                     bold=True,
                 )
             else:
-                # 换行到下方
-                y += unit_size + 4
+                # 窄卡单位换行，紧贴 value 下方、左对齐
                 self._add_textbox(
                     slide,
                     unit,
@@ -591,7 +589,7 @@ class NativeRenderer:
             sec_gap, sec_label_gap, sec_value_size = 22, 22, 22
         else:
             huge = 48
-            sec_gap, sec_label_gap, sec_value_size = 16, 18, 18
+            sec_gap, sec_label_gap, sec_value_size = 20, 20, 18
         unit_size = int(huge * 0.30)
 
         p = data.get("primary") or {}
@@ -948,6 +946,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
+                font_name=self.theme["fonts"]["display"],
                 v_anchor="middle",
             )
             if data.get("author") or data.get("role"):
@@ -984,7 +983,7 @@ class NativeRenderer:
                         else:
                             run.font.size = Pt(_px_to_pt(14))
                             run.font.color.rgb = _hex(self.theme["colors"]["text_muted"])
-                        run.font.name = "PingFang SC"
+                        run.font.name = self.theme["fonts"]["sans"]
         else:
             # 大卡模式：quote 居中（PowerPoint 自动换行 + 垂直居中）
             available_h = H - (110 if data.get("author") else 30)
@@ -998,6 +997,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 italic=True,
+                font_name=self.theme["fonts"]["display"],
                 v_anchor="middle",
             )
             if data.get("author"):
@@ -1093,7 +1093,7 @@ class NativeRenderer:
                 if run is not None:
                     run.font.size = Pt(_px_to_pt(ts["body"]))
                     run.font.color.rgb = _hex(self.theme["colors"]["text_secondary"])
-                    run.font.name = "PingFang SC"
+                    run.font.name = self.theme["fonts"]["sans"]
 
     # ---------- Component: card-image ----------
 
