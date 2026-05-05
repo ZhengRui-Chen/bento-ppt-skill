@@ -26,12 +26,12 @@
 {%- set ns_b = namespace(w=0) -%}
 {%- for ch in text -%}
 {%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns_b.w = ns_b.w + 12 -%}
-{%- else -%}{%- set ns_b.w = ns_b.w + 7 -%}{%- endif -%}
+{%- else -%}{%- set ns_b.w = ns_b.w + 8 -%}{%- endif -%}
 {%- endfor -%}
-{%- set tw = ns_b.w + 18 -%}
+{%- set tw = ns_b.w + 24 -%}
 <g transform="translate({{ x }}, {{ y }})">
-  <rect x="0" y="0" width="{{ tw }}" height="22" rx="11" fill="{{ bg }}" fill-opacity="{{ bg_op }}" stroke="{{ bg }}" stroke-opacity="{{ stroke_op }}" stroke-width="1"/>
-  <text x="{{ tw / 2 }}" y="15" text-anchor="middle" font-size="11" font-weight="600" fill="{{ fg }}" letter-spacing="0.5">{{ text }}</text>
+  <rect x="0" y="0" width="{{ tw }}" height="24" rx="12" fill="{{ bg }}" fill-opacity="{{ bg_op }}" stroke="{{ bg }}" stroke-opacity="{{ stroke_op }}" stroke-width="1"/>
+  <text x="{{ tw / 2 }}" y="16" text-anchor="middle" font-size="12" font-weight="600" fill="{{ fg }}" letter-spacing="1">{{ text }}</text>
 </g>
 {%- endmacro %}
 
@@ -52,8 +52,8 @@
 {%- set ns_w = namespace(w=0) -%}
 {%- for ch in txt -%}
 {%- if '\u4e00' <= ch <= '\u9fff' -%}{%- set ns_w.w = ns_w.w + 12 -%}
-{%- else -%}{%- set ns_w.w = ns_w.w + 7 -%}{%- endif -%}
+{%- else -%}{%- set ns_w.w = ns_w.w + 8 -%}{%- endif -%}
 {%- endfor -%}
-{%- set ns_x.x = ns_x.x + ns_w.w + 18 + 8 -%}
+{%- set ns_x.x = ns_x.x + ns_w.w + 24 + 10 -%}
 {%- endfor -%}
 {%- endmacro %}
