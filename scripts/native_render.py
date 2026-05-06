@@ -1474,6 +1474,7 @@ class NativeRenderer:
                 font_size=dt_size,
                 color=self.theme["colors"]["accent_primary"],
                 bold=True,
+                font_name=self._first_font("display"),
                 align="right",
                 transparency=0.93,
                 letter_spacing=600,
