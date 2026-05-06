@@ -196,8 +196,8 @@ class TestBentoPaper:
             ],
         }
         svg = render_one_page(env, manifest, page, total_pages=1, meta={})
-        # 验证 Google Fonts 排在 font-family 首位：CSS 类必须以该字体开头
-        assert "font-family: &#39;Noto Serif SC&#39;" in svg  # .h1 等标题类
+        # 验证标题用衬线 (Serif) 字体、eyebrow 用等宽 (Mono) 字体
+        assert "font-family: &#39;Songti SC&#39;" in svg  # .h1 等标题类，系统衬线体
         assert "font-family: &#39;IBM Plex Mono&#39;" in svg  # .mono / .eyebrow 类
 
 

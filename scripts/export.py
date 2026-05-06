@@ -134,13 +134,18 @@ def to_pptx(ws: Path) -> dict:
 
     out_path = render_pptx(ws)
 
-    # Embed fonts if available
-    font_map = {
-        "Noto Serif SC": Path("/tmp/NotoSerifSC.ttf"),
-        "Noto Sans SC": Path("/tmp/NotoSansSC.ttf"),
-        "IBM Plex Mono": Path("/tmp/IBMPlexMono.ttf"),
-    }
-    available = {k: v for k, v in font_map.items() if v.exists()}
+    # Embed fonts if available（仅嵌 IBM Plex Mono；CJK 字体太大，靠系统字体栈）
+    font_map = {"IBM Plex Mono": Path("/tmp/IBMPlexMono.ttf")}
+    available = {}
+    for name, path in font_map.items():
+        if not path.exists():
+            continue
+        header = path.read_bytes()[:4]
+        # 验证 TTF/OTF sfnt 签名: TrueType=0x00010000, OpenType='OTTO'
+        if header == b"\x00\x01\x00\x00" or header == b"OTTO":
+            available[name] = path
+        else:
+            print(f"  [warn] {path.name} 不是有效字体文件，跳过嵌入")
     if available:
         _embed_fonts(out_path, available)
         print(f"  [embed] {len(available)} fonts embedded: {', '.join(available)}")
