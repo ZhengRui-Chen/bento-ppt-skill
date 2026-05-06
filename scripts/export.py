@@ -44,16 +44,19 @@ def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
     R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
     FONT_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font"
 
+    CT_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
+
     buf = BytesIO()
     with zipfile.ZipFile(pptx_path, "r") as zf, zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as out:
         names = zf.namelist()
-        skip = {"ppt/presentation.xml", "ppt/_rels/presentation.xml.rels"}
+        skip = {"ppt/presentation.xml", "ppt/_rels/presentation.xml.rels", "[Content_Types].xml"}
         for name in names:
             if name not in skip:
                 out.writestr(name, zf.read(name))
 
         pres_xml = etree.fromstring(zf.read("ppt/presentation.xml"))
         rels_xml = etree.fromstring(zf.read("ppt/_rels/presentation.xml.rels"))
+        ct_xml = etree.fromstring(zf.read("[Content_Types].xml"))
 
         efl = pres_xml.find(f"{{{P_NS}}}embeddedFontLst")
         if efl is None:
@@ -89,10 +92,21 @@ def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
 
                 next_rid += 1
 
+            # 注册 .ttf 到 [Content_Types].xml（缺失会导致 PowerPoint 提示修复）
+            has_ttf = any(d.get("Extension") == "ttf" for d in ct_xml.findall(f"{{{CT_NS}}}Default"))
+            if not has_ttf:
+                ttf_default = etree.SubElement(ct_xml, f"{{{CT_NS}}}Default")
+                ttf_default.set("Extension", "ttf")
+                ttf_default.set("ContentType", "application/x-font-ttf")
+
             # Update zip entries
             out.writestr(
                 "ppt/presentation.xml",
                 etree.tostring(pres_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
+            )
+            out.writestr(
+                "[Content_Types].xml",
+                etree.tostring(ct_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
             )
             out.writestr(
                 "ppt/_rels/presentation.xml.rels",
