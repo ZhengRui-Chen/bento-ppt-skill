@@ -141,8 +141,8 @@ def to_pptx(ws: Path) -> dict:
         if not path.exists():
             continue
         header = path.read_bytes()[:4]
-        # 验证 TTF/OTF magic bytes，排除 HTML 等无效内容
-        if header[:1] == b"\x00" or header == b"OTTO":
+        # 验证 TTF/OTF sfnt 签名: TrueType=0x00010000, OpenType='OTTO'
+        if header == b"\x00\x01\x00\x00" or header == b"OTTO":
             available[name] = path
         else:
             print(f"  [warn] {path.name} 不是有效字体文件，跳过嵌入")
