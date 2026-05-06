@@ -54,7 +54,7 @@
 {# 横幅：quote 垂直居中，author/role 在右侧顶端竖排 #}
 {%- set start_y = ((H - total_h) / 2 + q_size) | int -%}
 {%- for line in lines -%}
-<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="600">{{ line }}</text>
+<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="600" font-family="{{ theme.fonts.display }}">{{ line }}</text>
 {%- endfor -%}
 {%- if d.author or d.role -%}
 {%- set ax = W - author_block_w + 16 -%}
@@ -72,7 +72,7 @@
 {%- if d.author -%}{%- set start_y = start_y - 40 -%}{%- endif -%}
 {%- if start_y < q_size + 20 -%}{%- set start_y = q_size + 20 -%}{%- endif -%}
 {%- for line in lines -%}
-<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="500" font-style="italic">{{ line }}</text>
+<text x="32" y="{{ start_y + loop.index0 * line_h }}" font-size="{{ q_size }}" fill="{{ theme.colors.text_primary }}" font-weight="500" font-style="italic" font-family="{{ theme.fonts.display }}">{{ line }}</text>
 {%- endfor -%}
 {%- if d.author -%}
 <rect x="32" y="{{ H - 90 }}" width="48" height="3" fill="url(#accent-grad)" rx="2"/>

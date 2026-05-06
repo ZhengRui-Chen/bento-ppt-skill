@@ -201,6 +201,52 @@ class TestBentoPaper:
         assert "font-family: &#39;IBM Plex Mono&#39;" in svg  # .mono / .eyebrow 类
 
 
+class TestBentoInk:
+    def test_load_theme(self):
+        manifest, _ = load_theme("bento-ink")
+        assert manifest["name"] == "bento-ink"
+        assert manifest["effects"]["bg_texture"] == "grain"
+        assert "c44536" in manifest["colors"]["accent_primary"]  # cinnabar red
+
+    def test_render_example(self):
+        ws = Path("examples/dify-intro")
+        result = render_all(ws, theme="bento-ink")
+        assert result["rendered"] == 8
+        assert result["theme"] == "bento-ink"
+
+    def test_ink_colors_are_monochrome(self):
+        """Verify ink theme uses near-black text on warm paper."""
+        manifest, _ = load_theme("bento-ink")
+        bg = manifest["colors"]["bg_start"].lstrip("#")
+        assert bg.startswith("f") or bg.startswith("F")  # light paper
+        text = manifest["colors"]["text_primary"].lstrip("#")
+        assert text.startswith("1")  # near-black ink
+        # accent should be cinnabar red, not brown
+        accent = manifest["colors"]["accent_primary"]
+        assert accent == "#c44536"
+
+    def test_slide_base_has_grain_filter(self):
+        """Verify bento-ink SVG template includes feTurbulence grain filter."""
+        manifest, env = load_theme("bento-ink")
+        from render import render_one_page
+
+        page = {
+            "page": 1,
+            "layout": "single-focus",
+            "cards": [
+                {
+                    "slot": "main",
+                    "component": "card-hero",
+                    "data": {"eyebrow": "INK", "title": "标题", "subtitle": "副标题"},
+                }
+            ],
+        }
+        svg = render_one_page(env, manifest, page, total_pages=1, meta={})
+        assert "feTurbulence" in svg
+        assert "grain-filter" in svg
+        assert "c44536" in svg  # accent color in eyebrow
+
+
 class TestRenderErrorPaths:
     def test_render_all_empty_pages(self):
         import tempfile

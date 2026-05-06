@@ -68,16 +68,71 @@ class NativeRenderer:
             raise SystemExit(f"[native_render] theme not found: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def _first_font(self, key: str) -> str:
-        """Extract first font family from a CSS font stack (manifest value)."""
-        stack = self.theme["fonts"].get(key, "sans-serif")
-        first = stack.split(",")[0].strip().strip("'\"")
-        return first
-
     @property
     def _is_light(self) -> bool:
         """Detect light themes so we can pick contrasting text colors on accent fills."""
         return self.theme["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
+
+    @staticmethod
+    def _theme_font_lat(category: str) -> str:
+        """OOXML theme Latin font reference: display→+mj-lt, body/mono→+mn-lt."""
+        return "+mj-lt" if category == "display" else "+mn-lt"
+
+    @staticmethod
+    def _theme_font_ea(category: str) -> str:
+        """OOXML theme East Asian font reference: display→+mj-ea, body/mono→+mn-ea."""
+        return "+mj-ea" if category == "display" else "+mn-ea"
+
+    def _apply_theme_font(self, run, category: str) -> None:
+        """Set both Latin and East Asian theme font references on a run."""
+        run.font.name = self._theme_font_lat(category)
+        rPr = run._r.get_or_add_rPr()
+        for existing in rPr.findall(f"{{{A_NS}}}ea"):
+            rPr.remove(existing)
+        etree.SubElement(rPr, f"{{{A_NS}}}ea").set("typeface", self._theme_font_ea(category))
+
+    def _inject_font_scheme(self) -> None:
+        """Modify theme font scheme in memory BEFORE pptx is saved.
+
+        Only touches a:latin typeface in majorFont/minorFont;
+        preserves all a:font entries (script-specific fonts) unchanged.
+        Uses python-pptx's internal part blob API — no zipfile roundtrip.
+        """
+        from pptx.opc.constants import RELATIONSHIP_TYPE as RT
+
+        slide_master = self.prs.slide_masters[0]
+        theme_part = None
+        for rel in slide_master.part.rels.values():
+            if rel.reltype == RT.THEME:
+                theme_part = rel.target_part
+                break
+        if theme_part is None:
+            return
+
+        theme_elem = etree.fromstring(theme_part.blob)
+        theme_els = theme_elem.find(f"{{{A_NS}}}themeElements")
+        if theme_els is None:
+            return
+        font_scheme = theme_els.find(f"{{{A_NS}}}fontScheme")
+        if font_scheme is None:
+            return
+
+        TARGETS = {
+            f"{{{A_NS}}}majorFont": {f"{{{A_NS}}}latin": "Georgia"},
+            f"{{{A_NS}}}minorFont": {f"{{{A_NS}}}latin": "Arial"},
+        }
+        for parent_tag, updates in TARGETS.items():
+            parent = font_scheme.find(parent_tag)
+            if parent is None:
+                continue
+            for child_tag, new_typeface in updates.items():
+                child = parent.find(child_tag)
+                if child is not None:
+                    child.set("typeface", new_typeface)
+            if parent.find(f"{{{A_NS}}}ea") is None:
+                etree.SubElement(parent, f"{{{A_NS}}}ea")
+
+        theme_part._blob = etree.tostring(theme_elem, xml_declaration=True, encoding="UTF-8", standalone=True)
 
     # ---------- 坐标转换 ----------
 
@@ -94,6 +149,7 @@ class NativeRenderer:
         meta = layout.get("meta", {})
         for page in pages:
             self._render_slide(page, total=len(pages), meta=meta)
+        self._inject_font_scheme()  # modify theme in memory before save
         out_path = Path(out_path)
         self.prs.save(str(out_path))
         return out_path
@@ -181,7 +237,7 @@ class NativeRenderer:
             20,
             font_size=small_size,
             color=self.theme["colors"]["text_muted"],
-            font_name=self._first_font("mono"),
+            font_category="sans",  # mono → minor (body) font
             align="right",
         )
 
@@ -232,7 +288,7 @@ class NativeRenderer:
         bold: bool = False,
         italic: bool = False,
         align: str = "left",
-        font_name: str | None = None,
+        font_category: str = "sans",
         transparency: float = 0.0,
         letter_spacing: int = 0,
         word_wrap: bool = True,
@@ -242,6 +298,7 @@ class NativeRenderer:
         svg_y 是 textbox **顶部** y（非 baseline）；调用方负责把 SVG baseline 转 top。
         word_wrap=False 时数字/单行内容不会被 PowerPoint 自动换行（防溢出乱位置）。
         v_anchor='middle' 让文字在 textbox 内垂直居中（适合 quote 这种 wrap 后高度不定的场景）。
+        font_category: "display"→serif heading, "sans"→body, "mono"→body.
         """
         tb = slide.shapes.add_textbox(
             self._x(svg_x),
@@ -268,16 +325,17 @@ class NativeRenderer:
             run.font.size = Pt(_px_to_pt(font_size))
             run.font.bold = bold
             run.font.italic = italic
-            run.font.color.rgb = _hex(color)
-            run.font.name = font_name or self._first_font("sans")
+            run.font.color.rgb = _hex(color)  # adds <a:solidFill> first
+            # OOXML rPr child order: fill/latin/ea. solidFill must precede latin/ea.
+            if transparency > 0 or letter_spacing > 0:
+                self._apply_rpr_extras(run, color, transparency, letter_spacing)
+            self._apply_theme_font(run, font_category)  # latin/ea AFTER solidFill
         if align == "right":
             p.alignment = PP_ALIGN.RIGHT
         elif align == "center":
             p.alignment = PP_ALIGN.CENTER
         else:
             p.alignment = PP_ALIGN.LEFT
-        if (transparency > 0 or letter_spacing > 0) and run is not None:
-            self._apply_rpr_extras(run, color, transparency, letter_spacing)
         return tb
 
     def _apply_rpr_extras(self, run, color: str, transparency: float, letter_spacing: int) -> None:
@@ -966,7 +1024,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 bold=True,
-                font_name=self._first_font("display"),
+                font_category="display",
                 v_anchor="middle",
             )
             if data.get("author") or data.get("role"):
@@ -1003,7 +1061,7 @@ class NativeRenderer:
                         else:
                             run.font.size = Pt(_px_to_pt(14))
                             run.font.color.rgb = _hex(self.theme["colors"]["text_muted"])
-                        run.font.name = self._first_font("sans")
+                        self._apply_theme_font(run, "sans")
         else:
             # 大卡模式：quote 居中（PowerPoint 自动换行 + 垂直居中）
             available_h = H - (110 if data.get("author") else 30)
@@ -1017,7 +1075,7 @@ class NativeRenderer:
                 font_size=q_size,
                 color=self.theme["colors"]["text_primary"],
                 italic=True,
-                font_name=self._first_font("display"),
+                font_category="display",
                 v_anchor="middle",
             )
             if data.get("author"):
@@ -1113,7 +1171,7 @@ class NativeRenderer:
                 if run is not None:
                     run.font.size = Pt(_px_to_pt(ts["body"]))
                     run.font.color.rgb = _hex(self.theme["colors"]["text_secondary"])
-                    run.font.name = self._first_font("sans")
+                    self._apply_theme_font(run, "sans")
 
     # ---------- Component: card-image ----------
 
@@ -1462,8 +1520,9 @@ class NativeRenderer:
             top_pad = max(0, (H - est) // 2)
 
         # 装饰大字 deco_text（仅 H>=320，半透明大字放右下，先画在底层）
+        # PPTX 无法像 SVG 那样 clip 溢出，故用略小字号 + 适度字距确保不超卡片
         if data.get("deco_text") and H >= 320:
-            dt_size = int(H * 0.32)
+            dt_size = int(H * 0.30)
             self._add_textbox(
                 slide,
                 data["deco_text"],
@@ -1474,10 +1533,11 @@ class NativeRenderer:
                 font_size=dt_size,
                 color=self.theme["colors"]["accent_primary"],
                 bold=True,
-                font_name=self._first_font("display"),
+                font_category="sans",  # Arial for ghost watermark (lighter than Georgia serif)
                 align="right",
                 transparency=0.93,
-                letter_spacing=600,
+                letter_spacing=300,
+                word_wrap=False,
             )
 
         y = top_pad
@@ -1519,6 +1579,7 @@ class NativeRenderer:
                     font_size=h_size,
                     color=self.theme["colors"]["text_primary"],
                     bold=True,
+                    font_category="display",
                 )
                 y += line_h - h_size
 

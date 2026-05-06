@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 {{ theme.viewBox.width }} {{ theme.viewBox.height }}"
+     width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="{{ theme.colors.bg_start }}"/>
+      <stop offset="100%" stop-color="{{ theme.colors.bg_end }}"/>
+    </linearGradient>
+    <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="{{ theme.colors.accent_primary }}"/>
+      <stop offset="100%" stop-color="{{ theme.colors.accent_secondary }}"/>
+    </linearGradient>
+    <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="{{ theme.colors.accent_primary }}"/>
+      <stop offset="100%" stop-color="{{ theme.colors.accent_secondary }}"/>
+    </linearGradient>
+    {%- set spot_op = (theme.effects.bg_spot_opacity if theme.effects else 0.4) | default(0.4) -%}
+    <radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="{{ theme.colors.accent_primary }}" stop-opacity="{{ spot_op }}"/>
+      <stop offset="100%" stop-color="{{ theme.colors.accent_primary }}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="{{ theme.colors.accent_secondary }}" stop-opacity="{{ (spot_op * 0.75) | round(2) }}"/>
+      <stop offset="100%" stop-color="{{ theme.colors.accent_secondary }}" stop-opacity="0"/>
+    </radialGradient>
+    {%- set bg_tex = (theme.effects.bg_texture if theme.effects else 'none') | default('none') -%}
+    {%- set tex_op = (theme.effects.bg_texture_opacity if theme.effects else 0.05) | default(0.05) -%}
+    {%- set tex_sz = (theme.effects.bg_texture_size if theme.effects else 48) | default(48) -%}
+    {%- set tex_clr = (theme.effects.bg_texture_color if theme.effects else '#ffffff') | default('#ffffff') -%}
+    {%- if bg_tex == 'grain' %}
+    <filter id="grain-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    {%- elif bg_tex == 'grid' %}
+    <pattern id="bg-texture" width="{{ tex_sz }}" height="{{ tex_sz }}" patternUnits="userSpaceOnUse">
+      <path d="M {{ tex_sz }} 0 L 0 0 0 {{ tex_sz }}" fill="none" stroke="{{ tex_clr }}" stroke-opacity="{{ tex_op }}" stroke-width="0.5"/>
+    </pattern>
+    {%- elif bg_tex == 'dots' %}
+    <pattern id="bg-texture" width="{{ tex_sz }}" height="{{ tex_sz }}" patternUnits="userSpaceOnUse">
+      <circle cx="{{ (tex_sz / 2) | int }}" cy="{{ (tex_sz / 2) | int }}" r="0.9" fill="{{ tex_clr }}" fill-opacity="{{ tex_op * 2 }}"/>
+    </pattern>
+    {%- endif %}
+  </defs>
+
+  <style type="text/css">
+    text { font-family: {{ theme.fonts.sans }}; }
+    .mono { font-family: {{ theme.fonts.mono }}; }
+    .eyebrow { font-size: {{ theme.type_scale.eyebrow }}px; fill: {{ theme.colors.accent_primary }}; letter-spacing: 4px; font-weight: 600; font-family: {{ theme.fonts.mono }}; }
+    .h1 { font-size: {{ theme.type_scale.h1 }}px; fill: {{ theme.colors.text_primary }}; font-weight: 700; font-family: {{ theme.fonts.display }}; line-height: 1.15; }
+    .h2 { font-size: {{ theme.type_scale.h2 }}px; fill: {{ theme.colors.text_primary }}; font-weight: 700; font-family: {{ theme.fonts.display }}; line-height: 1.2; }
+    .h3 { font-size: {{ theme.type_scale.h3 }}px; fill: {{ theme.colors.text_primary }}; font-weight: 600; font-family: {{ theme.fonts.display }}; line-height: 1.25; }
+    .h4 { font-size: {{ theme.type_scale.h4 }}px; fill: {{ theme.colors.text_primary }}; font-weight: 600; font-family: {{ theme.fonts.display }}; }
+    .body { font-size: {{ theme.type_scale.body }}px; fill: {{ theme.colors.text_secondary }}; line-height: 1.55; }
+    .small { font-size: {{ theme.type_scale.small }}px; fill: {{ theme.colors.text_muted }}; }
+    .stat-huge { font-size: {{ theme.type_scale.stat_huge }}px; fill: {{ theme.colors.text_primary }}; font-weight: 800; font-family: {{ theme.fonts.display }}; }
+    .stat-unit { font-size: {{ theme.type_scale.stat_unit }}px; fill: {{ theme.colors.text_secondary }}; font-weight: 500; }
+  </style>
+
+  <!-- 背景渐变 -->
+  <rect width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}" fill="url(#bg-grad)"/>
+  {%- if bg_tex in ('grid', 'dots') %}
+  <!-- 纹理层（grid/dots） -->
+  <rect width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}" fill="url(#bg-texture)"/>
+  {%- elif bg_tex == 'grain' %}
+  <!-- 纹理层（纸纹噪点） -->
+  <rect width="{{ theme.viewBox.width }}" height="{{ theme.viewBox.height }}" filter="url(#grain-filter)" opacity="{{ tex_op }}" pointer-events="none"/>
+  {%- endif %}
+
+  <!-- 装饰光斑（极克制，仅右上角小光斑） -->
+  <ellipse cx="1180" cy="60" rx="200" ry="160" fill="url(#spot-1)"/>
+
+  {%- if page.ghost_text %}
+  <!-- Ghost text：巨型半透明背景装饰字 -->
+  <text x="{{ theme.viewBox.width // 2 }}" y="{{ (theme.viewBox.height * 0.68) | int }}"
+        font-size="300" font-weight="800" text-anchor="middle"
+        fill="{{ theme.colors.text_primary }}" opacity="0.03"
+        font-family="{{ theme.fonts.display }}">{{ page.ghost_text }}</text>
+  {%- endif %}
+
+  <!-- layout 渲染区 -->
+  {{ content | safe }}
+
+  <!-- 页脚：极细线 + 文字 -->
+  <line x1="{{ theme.spacing.page_padding }}" y1="{{ theme.viewBox.height - 22 }}" x2="{{ theme.viewBox.width - theme.spacing.page_padding }}" y2="{{ theme.viewBox.height - 22 }}" stroke="{{ theme.colors.text_primary }}" stroke-opacity="0.06" stroke-width="0.5"/>
+  <text x="{{ theme.spacing.page_padding }}" y="{{ theme.viewBox.height - 8 }}" class="small">{{ meta.title | default('') }}</text>
+  <text x="{{ theme.viewBox.width - theme.spacing.page_padding }}" y="{{ theme.viewBox.height - 8 }}" class="small mono" text-anchor="end">{{ '%02d' | format(page.page) }} / {{ '%02d' | format(total_pages) }}</text>
+</svg>

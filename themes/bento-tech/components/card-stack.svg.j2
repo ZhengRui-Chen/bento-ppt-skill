@@ -106,7 +106,7 @@
 {%- endif -%}
 
 {%- if p.value -%}
-<text x="0" y="{{ primary_y }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800">{{ v_str }}</text>
+<text x="0" y="{{ primary_y }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800" font-family="{{ theme.fonts.display }}">{{ v_str }}</text>
 {%- if p.unit -%}
 <text x="{{ ns.vw + 8 }}" y="{{ primary_y }}" font-size="{{ unit_size }}" fill="{{ theme.colors.accent_secondary }}" font-weight="600">{{ p.unit }}</text>
 {%- endif -%}

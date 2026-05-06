@@ -4,73 +4,74 @@
      width="1280" height="720">
   <defs>
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F5F0E8"/>
-      <stop offset="100%" stop-color="#EDE6D8"/>
+      <stop offset="0%" stop-color="#f4f1ea"/>
+      <stop offset="100%" stop-color="#ece8df"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#B8654A"/>
-      <stop offset="100%" stop-color="#D4956B"/>
+      <stop offset="0%" stop-color="#c44536"/>
+      <stop offset="100%" stop-color="#8b5742"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#B8654A"/>
-      <stop offset="100%" stop-color="#D4956B"/>
+      <stop offset="0%" stop-color="#c44536"/>
+      <stop offset="100%" stop-color="#8b5742"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#B8654A" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#B8654A" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#c44536" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#c44536" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#D4956B" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#D4956B" stop-opacity="0"/>
-    </radialGradient>    <pattern id="bg-texture" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="12" cy="12" r="0.9" fill="#1a1815" fill-opacity="0.06"/>
-    </pattern>  </defs>
+      <stop offset="0%" stop-color="#8b5742" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#8b5742" stop-opacity="0"/>
+    </radialGradient>    <filter id="grain-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>  </defs>
 
   <style type="text/css">
-    text { font-family: &#39;Noto Sans SC&#39;, &#39;PingFang SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
+    text { font-family: &#39;PingFang SC&#39;, &#39;Noto Sans SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
     .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 14px; fill: #D4956B; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Songti SC&#39;, &#39;Times New Roman&#39;, serif; }
-    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Songti SC&#39;, &#39;Times New Roman&#39;, serif; }
-    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Songti SC&#39;, &#39;Times New Roman&#39;, serif; }
-    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Songti SC&#39;, &#39;Times New Roman&#39;, serif; }
-    .body { font-size: 17px; fill: #5c5548; }
-    .small { font-size: 13px; fill: #9c9588; }
-    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Noto Serif SC&#39;, &#39;Playfair Display&#39;, &#39;Songti SC&#39;, &#39;Times New Roman&#39;, serif; }
-    .stat-unit { font-size: 26px; fill: #5c5548; font-weight: 500; }
+    .eyebrow { font-size: 13px; fill: #c44536; letter-spacing: 4px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .h1 { font-size: 54px; fill: #111110; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.15; }
+    .h2 { font-size: 40px; fill: #111110; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.2; }
+    .h3 { font-size: 26px; fill: #111110; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.25; }
+    .h4 { font-size: 19px; fill: #111110; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .body { font-size: 16px; fill: #4a4845; line-height: 1.55; }
+    .small { font-size: 12px; fill: #8a8882; }
+    .stat-huge { font-size: 96px; fill: #111110; font-weight: 800; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .stat-unit { font-size: 24px; fill: #4a4845; font-weight: 500; }
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层 -->
-  <rect width="1280" height="720" fill="url(#bg-texture)"/>
-  <!-- 装饰光斑（极淡，不干扰阅读） -->
-  <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
-  <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（纸纹噪点） -->
+  <rect width="1280" height="720" filter="url(#grain-filter)" opacity="0.04" pointer-events="none"/>
+  <!-- 装饰光斑（极克制，仅右上角小光斑） -->
+  <ellipse cx="1180" cy="60" rx="200" ry="160" fill="url(#spot-1)"/>
   <!-- layout 渲染区 -->
   <g transform="translate(56, 56)">
   <rect x="0" y="0" width="574" height="578"
-        rx="16"
-        fill="#FFFFFF" fill-opacity="0.82"
-        stroke="#1a1815" stroke-opacity="0.07"
+        rx="12"
+        fill="#FFFFFF" fill-opacity="0.9"
+        stroke="#111110" stroke-opacity="0.05"
         stroke-width="1"/>
-  <svg x="40" y="40"
-       width="494" height="498"
-       viewBox="0 0 494 498">
-    <text x="0" y="18" class="eyebrow">全球开发者</text><text x="0" y="146" font-size="100" fill="#1a1815" font-weight="800">180</text><text x="173" y="146" font-size="28" fill="#5c5548" font-weight="500">万+</text><text x="0" y="184" font-size="22" fill="#7A8B5E" font-weight="600">↑ 180% YoY</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" font-size="13" fill="#5c5548">覆盖 130+ 个国家与地区</text>
+  <svg x="44" y="44"
+       width="486" height="490"
+       viewBox="0 0 486 490">
+    <text x="0" y="17" class="eyebrow">全球开发者</text><text x="0" y="141" font-size="96" fill="#111110" font-weight="800" font-family="&#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif">180</text><text x="164" y="141" font-size="26" fill="#4a4845" font-weight="500">万+</text><text x="0" y="179" font-size="22" fill="#4a6b5d" font-weight="600">↑ 180% YoY</text><rect x="0" y="426" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="458" font-size="12" fill="#4a4845">覆盖 130+ 个国家与地区</text>
   </svg>
 </g><g transform="translate(650, 56)">
   <rect x="0" y="0" width="574" height="578"
-        rx="16"
-        fill="#FFFFFF" fill-opacity="0.82"
-        stroke="#1a1815" stroke-opacity="0.07"
+        rx="12"
+        fill="#FFFFFF" fill-opacity="0.9"
+        stroke="#111110" stroke-opacity="0.05"
         stroke-width="1"/>
-  <svg x="40" y="40"
-       width="494" height="498"
-       viewBox="0 0 494 498">
-    <text x="0" y="18" class="eyebrow">企业客户</text><text x="0" y="146" font-size="100" fill="#1a1815" font-weight="800">12000</text><text x="283" y="146" font-size="28" fill="#5c5548" font-weight="500">+</text><text x="0" y="184" font-size="22" fill="#7A8B5E" font-weight="600">↑ Fortune 500 中的 23 家</text><rect x="0" y="434" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="466" font-size="13" fill="#5c5548">金融、零售、教育、政务皆有落地</text>
+  <svg x="44" y="44"
+       width="486" height="490"
+       viewBox="0 0 486 490">
+    <text x="0" y="17" class="eyebrow">企业客户</text><text x="0" y="141" font-size="96" fill="#111110" font-weight="800" font-family="&#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif">12000</text><text x="268" y="141" font-size="26" fill="#4a4845" font-weight="500">+</text><text x="0" y="179" font-size="22" fill="#4a6b5d" font-weight="600">↑ Fortune 500 中的 23 家</text><rect x="0" y="426" width="60" height="3" fill="url(#accent-grad)" rx="2"/><text x="0" y="458" font-size="12" fill="#4a4845">金融、零售、教育、政务皆有落地</text>
   </svg>
 </g>
 
-  <!-- 页脚 -->
-  <text x="56" y="702" class="small">Dify 企业介绍</text>
-  <text x="1224" y="702" class="small mono" text-anchor="end">02 / 08</text>
+  <!-- 页脚：极细线 + 文字 -->
+  <line x1="56" y1="698" x2="1224" y2="698" stroke="#111110" stroke-opacity="0.06" stroke-width="0.5"/>
+  <text x="56" y="712" class="small">Dify 企业介绍</text>
+  <text x="1224" y="712" class="small mono" text-anchor="end">02 / 08</text>
 </svg>

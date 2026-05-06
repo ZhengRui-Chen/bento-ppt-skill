@@ -32,7 +32,7 @@
 {%- endif -%}
 
 {%- set y.p = y.p + 28 + huge -%}
-<text x="0" y="{{ y.p }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800">{{ v_str }}</text>
+<text x="0" y="{{ y.p }}" font-size="{{ huge }}" fill="{{ theme.colors.text_primary }}" font-weight="800" font-family="{{ theme.fonts.display }}">{{ v_str }}</text>
 
 {%- if d.unit -%}
 {%- set unit_w_est = ((d.unit | length) * (unit_size * 0.6)) | int -%}

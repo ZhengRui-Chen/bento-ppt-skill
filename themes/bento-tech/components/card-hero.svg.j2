@@ -37,7 +37,7 @@
 {%- endif -%}
 {%- for line in lines -%}
 {%- set ns.y = ns.y + h_size -%}
-<text x="0" y="{{ ns.y }}" font-size="{{ h_size }}" fill="{{ theme.colors.text_primary }}" font-weight="700">{{ line }}</text>
+<text x="0" y="{{ ns.y }}" font-size="{{ h_size }}" fill="{{ theme.colors.text_primary }}" font-weight="700" font-family="{{ theme.fonts.display }}">{{ line }}</text>
 {%- if not loop.last -%}{%- set ns.y = ns.y + (line_h - h_size) -%}{%- endif -%}
 {%- endfor -%}
 {%- endif -%}
