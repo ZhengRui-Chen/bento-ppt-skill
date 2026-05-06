@@ -139,7 +139,13 @@ class NativeRenderer:
             Emu(int(shh)) + overflow * 2,
         )
         bg.line.fill.background()
-        gf = etree.SubElement(bg._element.spPr, f"{{{A_NS}}}gradFill")
+        # gradFill 必须在 ln 之前（OOXML spPr 子元素顺序）
+        ln = bg._element.spPr.find(f"{{{A_NS}}}ln")
+        gf = etree.Element(f"{{{A_NS}}}gradFill")
+        if ln is not None:
+            ln.addprevious(gf)
+        else:
+            bg._element.spPr.append(gf)
         gsl = etree.SubElement(gf, f"{{{A_NS}}}gsLst")
         for pos, clr in [("0", self.theme["colors"]["bg_start"]), ("100000", self.theme["colors"]["bg_end"])]:
             gs = etree.SubElement(gsl, f"{{{A_NS}}}gs")
