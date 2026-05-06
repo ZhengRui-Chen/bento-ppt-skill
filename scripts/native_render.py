@@ -9,9 +9,9 @@ SVG 路径仍然用于 HTML 预览 / shoot 截图 / PDF。
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
+from _paths import SKILL_DIR
 from lxml import etree
 from pptx import Presentation
 from pptx.dml.color import RGBColor
@@ -19,9 +19,6 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN
 from pptx.util import Emu, Inches, Pt
 
-SKILL_DIR = Path(os.environ.get("CLAUDE_SKILL_DIR", str(Path.home() / ".claude/skills/ppt-agent"))).resolve()
-if not SKILL_DIR.exists():
-    SKILL_DIR = Path(__file__).resolve().parent.parent  # fallback: dev clone
 SLIDE_W_INCH = 13.333
 SLIDE_H_INCH = 7.5
 VIEWPORT_W = 1280
@@ -66,12 +63,25 @@ class NativeRenderer:
         path = SKILL_DIR / "themes" / name / "manifest.json"
         if not path.exists():
             raise SystemExit(f"[native_render] theme not found: {path}")
-        return json.loads(path.read_text(encoding="utf-8"))
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        # Fallback to bento-tech for layouts if derived theme omits them
+        if "layouts" not in manifest and name != "bento-tech":
+            base = SKILL_DIR / "themes" / "bento-tech" / "manifest.json"
+            if base.exists():
+                manifest["layouts"] = json.loads(base.read_text(encoding="utf-8")).get("layouts", {})
+        return manifest
 
     @property
     def _is_light(self) -> bool:
-        """Detect light themes so we can pick contrasting text colors on accent fills."""
-        return self.theme["colors"]["bg_start"].lstrip("#").startswith(("F", "f"))
+        """Detect light themes via relative luminance (WCAG). >0.5 = light."""
+        h = self.theme["colors"]["bg_start"].lstrip("#")
+        r, g, b = (int(h[i : i + 2], 16) / 255.0 for i in range(0, 6, 2))
+
+        def _linearize(c: float) -> float:
+            return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+        lum = 0.2126 * _linearize(r) + 0.7152 * _linearize(g) + 0.0722 * _linearize(b)
+        return lum > 0.5
 
     @staticmethod
     def _theme_font_lat(category: str) -> str:
@@ -515,6 +525,8 @@ class NativeRenderer:
     # ---------- Component: card-stat ----------
 
     def _render_card_stat(self, slide, inner: dict, data: dict) -> None:
+        # data: { label, value, unit?, sub_value?, change?, change_dir?, desc? }
+        # SVG: card-stat.svg.j2
         H, W = inner["h"], inner["w"]
         # 字号自适应
         if W < 240:
@@ -656,6 +668,8 @@ class NativeRenderer:
     # ---------- Component: card-stack ----------
 
     def _render_card_stack(self, slide, inner: dict, data: dict) -> None:
+        # data: { primary: {value, unit?, suffix?}, secondary: [{label, value}], progress: {percent, label?} }
+        # SVG: card-stack.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         # 三档自适应
@@ -837,6 +851,8 @@ class NativeRenderer:
     # ---------- Component: card-list ----------
 
     def _render_card_list(self, slide, inner: dict, data: dict) -> None:
+        # data: { eyebrow?, title?, items: [string | {title, desc?, highlight?}], accent? }
+        # SVG: card-list.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         items_in = data.get("items") or []
@@ -991,6 +1007,8 @@ class NativeRenderer:
     # ---------- Component: card-quote ----------
 
     def _render_card_quote(self, slide, inner: dict, data: dict) -> None:
+        # data: { quote, author?, role? } — small cards (H<280) use banner mode
+        # SVG: card-quote.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         is_banner = H < 280
@@ -1113,6 +1131,8 @@ class NativeRenderer:
     # ---------- Component: card-text ----------
 
     def _render_card_text(self, slide, inner: dict, data: dict) -> None:
+        # data: { eyebrow?, title?, badges?, paragraphs: [string] }
+        # SVG: card-text.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         y = 0
@@ -1176,6 +1196,8 @@ class NativeRenderer:
     # ---------- Component: card-image ----------
 
     def _render_card_image(self, slide, inner: dict, data: dict) -> None:
+        # data: { title?, src?, alt?, caption? } — src: local file path or URL
+        # SVG: card-image.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         y_top = 0
@@ -1251,6 +1273,8 @@ class NativeRenderer:
     # ---------- Component: chart-bar ----------
 
     def _render_chart_bar(self, slide, inner: dict, data: dict) -> None:
+        # data: { eyebrow?, title?, groups: [{label, value, max}] } — horizontal bar chart
+        # SVG: chart-bar.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         items = data.get("items") or []
@@ -1340,6 +1364,8 @@ class NativeRenderer:
     # ---------- Component: card-compare ----------
 
     def _render_card_compare(self, slide, inner: dict, data: dict) -> None:
+        # data: { eyebrow?, title?, headers: [string], recommend?: int, rows: [{label, values, highlight?}] }
+        # SVG: card-compare.svg.j2
         H, W = inner["h"], inner["w"]
         ts = self.theme["type_scale"]
         c = self.theme["colors"]
@@ -1490,6 +1516,8 @@ class NativeRenderer:
                 )
 
     def _render_card_hero(self, slide, inner: dict, data: dict) -> None:
+        # data: { eyebrow?, title?, subtitle?, badges?, footer?, meta_columns?, deco_text? }
+        # SVG: card-hero.svg.j2
         H, W = inner["h"], inner["w"]
         # 字号自适应（同 SVG 模板逻辑）
         ts = self.theme["type_scale"]

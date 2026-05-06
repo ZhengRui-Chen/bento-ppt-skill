@@ -15,10 +15,14 @@ from __future__ import annotations
 
 import argparse
 import os
-import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Make sibling scripts importable (one-time setup, not repeated per command)
+sys.path.insert(0, str(Path(__file__).parent))
+
+from _paths import slugify
 
 LAYOUT_MARKER = ".layout"
 DEFAULT_ROOT = Path.home() / "ppt-decks"
@@ -38,12 +42,6 @@ def ensure_root() -> Path:
         print(f"[init] 已创建 deck 工作区根目录: {root}")
         print("       今后所有 deck 工作区都会在这里。如需更改路径，设环境变量 PPT_DECKS_DIR。")
     return root
-
-
-def slugify(name: str) -> str:
-    s = re.sub(r"[\s/\\:*?\"<>|]+", "-", name.strip())
-    s = re.sub(r"-+", "-", s).strip("-")
-    return s or "untitled"
 
 
 def is_workspace(path: Path) -> bool:
@@ -142,7 +140,6 @@ def cmd_new(topic: str) -> dict:
 
 def _import_render():
     """延迟导入，避免没装 jinja2 时跑 new 也失败。"""
-    sys.path.insert(0, str(Path(__file__).parent))
     import render  # type: ignore
 
     return render
@@ -175,7 +172,6 @@ def cmd_render(ws: Path, page: int | None = None, theme: str | None = None) -> d
 
 
 def cmd_shoot(ws: Path) -> dict:
-    sys.path.insert(0, str(Path(__file__).parent))
     import shoot  # type: ignore
 
     return shoot.shoot_all(ws)
@@ -185,7 +181,6 @@ def cmd_shoot(ws: Path) -> dict:
 
 
 def cmd_fetch(ws: Path) -> dict:
-    sys.path.insert(0, str(Path(__file__).parent))
     import fetch  # type: ignore
 
     return fetch.fetch_all(ws)
@@ -195,7 +190,6 @@ def cmd_fetch(ws: Path) -> dict:
 
 
 def cmd_export(ws: Path, fmt: str) -> dict:
-    sys.path.insert(0, str(Path(__file__).parent))
     import export  # type: ignore
 
     if fmt == "pptx":

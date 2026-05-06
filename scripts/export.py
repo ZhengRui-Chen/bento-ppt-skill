@@ -35,107 +35,14 @@ ASVG_NS = "http://schemas.microsoft.com/office/drawing/2016/SVG/main"
 SVG_EXT_URI = "{96DAC541-7B7A-43D3-8B79-37D633B846F1}"
 
 
-def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
-    """将字体文件嵌入 PPTX（OOXML post-processing）。fonts = {font_name: ttf_path}。"""
-    import zipfile
-    from io import BytesIO
-
-    P_NS = "http://schemas.openxmlformats.org/presentationml/2006/main"
-    R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-    FONT_REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font"
-
-    CT_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
-
-    buf = BytesIO()
-    with zipfile.ZipFile(pptx_path, "r") as zf, zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as out:
-        names = zf.namelist()
-        skip = {"ppt/presentation.xml", "ppt/_rels/presentation.xml.rels", "[Content_Types].xml"}
-        for name in names:
-            if name not in skip:
-                out.writestr(name, zf.read(name))
-
-        pres_xml = etree.fromstring(zf.read("ppt/presentation.xml"))
-        rels_xml = etree.fromstring(zf.read("ppt/_rels/presentation.xml.rels"))
-        ct_xml = etree.fromstring(zf.read("[Content_Types].xml"))
-
-        efl = pres_xml.find(f"{{{P_NS}}}embeddedFontLst")
-        if efl is None:
-            # OOXML 要求 embeddedFontLst 在 defaultTextStyle/extLst 之前
-            insert_after = None
-            for child in pres_xml:
-                if child.tag in (f"{{{P_NS}}}defaultTextStyle", f"{{{P_NS}}}extLst"):
-                    insert_after = child
-                    break
-            efl = etree.Element(f"{{{P_NS}}}embeddedFontLst")
-            if insert_after is not None:
-                insert_after.addprevious(efl)
-            else:
-                pres_xml.append(efl)
-
-            # Count existing rIds
-            existing_rids = {r.get("Id", "") for r in rels_xml}
-
-            next_rid = 1
-            while f"rId_font_{next_rid}" in existing_rids:
-                next_rid += 1
-
-            for font_name, font_path in fonts.items():
-                if not font_path.exists():
-                    continue
-                rid = f"rId_font_{next_rid}"
-                font_data = font_path.read_bytes()
-                font_entry = f"ppt/fonts/font{next_rid}.ttf"
-                out.writestr(font_entry, font_data)
-
-                # Add relationship
-                rel = etree.SubElement(rels_xml, f"{{{R_NS}}}Relationship")
-                rel.set("Id", rid)
-                rel.set("Type", FONT_REL)
-                rel.set("Target", f"fonts/font{next_rid}.ttf")
-
-                # Add embeddedFont entry
-                ef = etree.SubElement(efl, f"{{{P_NS}}}embeddedFont")
-                fn = etree.SubElement(ef, f"{{{P_NS}}}font")
-                fn.set("typeface", font_name)
-                reg = etree.SubElement(ef, f"{{{P_NS}}}regular")
-                reg.set(f"{{{R_NS}}}id", rid)
-
-                next_rid += 1
-
-            # 注册 .ttf 到 [Content_Types].xml（缺失会导致 PowerPoint 提示修复）
-            has_ttf = any(d.get("Extension") == "ttf" for d in ct_xml.findall(f"{{{CT_NS}}}Default"))
-            if not has_ttf:
-                ttf_default = etree.SubElement(ct_xml, f"{{{CT_NS}}}Default")
-                ttf_default.set("Extension", "ttf")
-                ttf_default.set("ContentType", "application/x-font-ttf")
-
-            # Update zip entries
-            out.writestr(
-                "ppt/presentation.xml",
-                etree.tostring(pres_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
-            )
-            out.writestr(
-                "[Content_Types].xml",
-                etree.tostring(ct_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
-            )
-            out.writestr(
-                "ppt/_rels/presentation.xml.rels",
-                etree.tostring(rels_xml, xml_declaration=True, encoding="UTF-8", standalone=True),
-            )
-
-    # Replace original
-    pptx_path.write_bytes(buf.getvalue())
-
-
 def to_pptx(ws: Path) -> dict:
     """默认 PPTX 路径：用 NativeRenderer 直接生成原生 shape，100% 可编辑。"""
     sys.path.insert(0, str(Path(__file__).parent))
+    # Lazy import — makes export.py importable without native_render deps.
+    # Keep here (not module-level): native_render must never import from export.
     from native_render import render_pptx
 
     out_path = render_pptx(ws)
-
-    # 字体嵌入已移除：OOXML 要求嵌入字体做 GUID XOR 混淆，
-    # 且 Keynote 不支持 OOXML 内嵌字体。字体栈已包含系统降级。
 
     return {"output": str(out_path)}
 
