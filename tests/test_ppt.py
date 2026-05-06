@@ -9,7 +9,7 @@ from ppt import is_workspace, require_workspace, slugify
 
 class TestSlugify:
     def test_basic(self):
-        assert slugify("Dify 企业介绍") == "Dify-企业介绍"
+        assert slugify("Dify 企业介绍") == "dify-企业介绍"
 
     def test_special_chars(self):
         result = slugify("foo/bar:baz*test")

@@ -30,8 +30,6 @@ layout.json schema（核心字段）：
 from __future__ import annotations
 
 import json
-import os
-import re
 import sys
 from pathlib import Path
 
@@ -39,15 +37,7 @@ from jinja2 import Environment, FileSystemLoader
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-SKILL_DIR = Path(os.environ.get("CLAUDE_SKILL_DIR", str(Path.home() / ".claude/skills/ppt-agent"))).resolve()
-if not SKILL_DIR.exists():
-    SKILL_DIR = Path(__file__).resolve().parent.parent  # fallback: dev clone
-
-
-def slugify(name: str) -> str:
-    s = re.sub(r"[\s/\\:*?\"<>|]+", "-", name.strip())
-    s = re.sub(r"-+", "-", s).strip("-")
-    return (s or "untitled").lower()
+from _paths import SKILL_DIR, slugify
 
 
 def load_theme(theme_name: str):

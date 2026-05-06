@@ -4,118 +4,117 @@
      width="1280" height="720">
   <defs>
     <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f4f1ea"/>
-      <stop offset="100%" stop-color="#ece8df"/>
+      <stop offset="0%" stop-color="#F5F0E8"/>
+      <stop offset="100%" stop-color="#EDE6D8"/>
     </linearGradient>
     <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#c44536"/>
-      <stop offset="100%" stop-color="#8b5742"/>
+      <stop offset="0%" stop-color="#B8654A"/>
+      <stop offset="100%" stop-color="#D4956B"/>
     </linearGradient>
     <linearGradient id="accent-grad-v" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#c44536"/>
-      <stop offset="100%" stop-color="#8b5742"/>
+      <stop offset="0%" stop-color="#B8654A"/>
+      <stop offset="100%" stop-color="#D4956B"/>
     </linearGradient><radialGradient id="spot-1" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#c44536" stop-opacity="0.04"/>
-      <stop offset="100%" stop-color="#c44536" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#B8654A" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#B8654A" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="spot-2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#8b5742" stop-opacity="0.03"/>
-      <stop offset="100%" stop-color="#8b5742" stop-opacity="0"/>
-    </radialGradient>    <filter id="grain-filter">
-      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="3" stitchTiles="stitch"/>
-      <feColorMatrix type="saturate" values="0"/>
-    </filter>  </defs>
+      <stop offset="0%" stop-color="#D4956B" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#D4956B" stop-opacity="0"/>
+    </radialGradient>    <pattern id="bg-texture" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.9" fill="#1a1815" fill-opacity="0.06"/>
+    </pattern>  </defs>
 
   <style type="text/css">
     text { font-family: &#39;PingFang SC&#39;, &#39;Noto Sans SC&#39;, &#39;Microsoft YaHei&#39;, sans-serif; }
     .mono { font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .eyebrow { font-size: 13px; fill: #c44536; letter-spacing: 4px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
-    .h1 { font-size: 54px; fill: #111110; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.15; }
-    .h2 { font-size: 40px; fill: #111110; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.2; }
-    .h3 { font-size: 26px; fill: #111110; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; line-height: 1.25; }
-    .h4 { font-size: 19px; fill: #111110; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
-    .body { font-size: 16px; fill: #4a4845; line-height: 1.55; }
-    .small { font-size: 12px; fill: #8a8882; }
-    .stat-huge { font-size: 96px; fill: #111110; font-weight: 800; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
-    .stat-unit { font-size: 24px; fill: #4a4845; font-weight: 500; }
+    .eyebrow { font-size: 14px; fill: #D4956B; letter-spacing: 3px; font-weight: 600; font-family: &#39;IBM Plex Mono&#39;, &#39;SF Mono&#39;, &#39;JetBrains Mono&#39;, Menlo, monospace; }
+    .h1 { font-size: 56px; fill: #1a1815; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h2 { font-size: 42px; fill: #1a1815; font-weight: 700; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h3 { font-size: 28px; fill: #1a1815; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .h4 { font-size: 20px; fill: #1a1815; font-weight: 600; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .body { font-size: 17px; fill: #5c5548; }
+    .small { font-size: 13px; fill: #9c9588; }
+    .stat-huge { font-size: 100px; fill: #1a1815; font-weight: 800; font-family: &#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif; }
+    .stat-unit { font-size: 26px; fill: #5c5548; font-weight: 500; }
   </style>
 
   <!-- 背景渐变 -->
-  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层（纸纹噪点） -->
-  <rect width="1280" height="720" filter="url(#grain-filter)" opacity="0.04" pointer-events="none"/>
-  <!-- 装饰光斑（极克制，仅右上角小光斑） -->
-  <ellipse cx="1180" cy="60" rx="200" ry="160" fill="url(#spot-1)"/>
+  <rect width="1280" height="720" fill="url(#bg-grad)"/>  <!-- 纹理层 -->
+  <rect width="1280" height="720" fill="url(#bg-texture)"/>
+  <!-- 装饰光斑（极淡，不干扰阅读） -->
+  <ellipse cx="1180" cy="80" rx="280" ry="220" fill="url(#spot-1)"/>
+  <ellipse cx="120" cy="640" rx="280" ry="200" fill="url(#spot-2)"/>
   <!-- layout 渲染区 -->
   <g transform="translate(56, 56)">
   <rect x="0" y="0" width="776" height="280"
-        rx="12"
-        fill="#FFFFFF" fill-opacity="0.9"
-        stroke="#111110" stroke-opacity="0.05"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
-  <svg x="44" y="44"
-       width="688" height="192"
-       viewBox="0 0 688 192">
+  <svg x="40" y="40"
+       width="696" height="200"
+       viewBox="0 0 696 200">
     <text x="0" y="22" class="eyebrow">模型调用量月环比</text><g transform="translate(0, 56)">
-  <text x="0" y="16.0" class="body" font-weight="500">GPT-4</text>
-  <rect x="180" y="0" width="344" height="20" rx="6"
+  <text x="0" y="17.0" class="body" font-weight="500">GPT-4</text>
+  <rect x="180" y="0" width="352" height="22" rx="6"
         fill="#FFFFFF" fill-opacity="0.06"/>
-  <rect x="180" y="0" width="344" height="20" rx="6" fill="url(#accent-grad)"/>
-  <text x="536" y="16.0" class="h4" fill="#111110">42 <tspan font-size="14" fill="#8a8882">亿</tspan></text>
-</g><g transform="translate(0, 94)">
-  <text x="0" y="16.0" class="body" font-weight="500">Claude</text>
-  <rect x="180" y="0" width="344" height="20" rx="6"
+  <rect x="180" y="0" width="352" height="22" rx="6" fill="url(#accent-grad)"/>
+  <text x="544" y="17.0" class="h4" fill="#1a1815">42 <tspan font-size="14" fill="#9c9588">亿</tspan></text>
+</g><g transform="translate(0, 96)">
+  <text x="0" y="17.0" class="body" font-weight="500">Claude</text>
+  <rect x="180" y="0" width="352" height="22" rx="6"
         fill="#FFFFFF" fill-opacity="0.06"/>
-  <rect x="180" y="0" width="253" height="20" rx="6" fill="url(#accent-grad)"/>
-  <text x="445" y="16.0" class="h4" fill="#111110">31 <tspan font-size="14" fill="#8a8882">亿</tspan></text>
-</g><g transform="translate(0, 132)">
-  <text x="0" y="16.0" class="body" font-weight="500">Gemini</text>
-  <rect x="180" y="0" width="344" height="20" rx="6"
+  <rect x="180" y="0" width="259" height="22" rx="6" fill="url(#accent-grad)"/>
+  <text x="451" y="17.0" class="h4" fill="#1a1815">31 <tspan font-size="14" fill="#9c9588">亿</tspan></text>
+</g><g transform="translate(0, 136)">
+  <text x="0" y="17.0" class="body" font-weight="500">Gemini</text>
+  <rect x="180" y="0" width="352" height="22" rx="6"
         fill="#FFFFFF" fill-opacity="0.06"/>
-  <rect x="180" y="0" width="147" height="20" rx="6" fill="url(#accent-grad)"/>
-  <text x="339" y="16.0" class="h4" fill="#111110">18 <tspan font-size="14" fill="#8a8882">亿</tspan></text>
+  <rect x="180" y="0" width="150" height="22" rx="6" fill="url(#accent-grad)"/>
+  <text x="342" y="17.0" class="h4" fill="#1a1815">18 <tspan font-size="14" fill="#9c9588">亿</tspan></text>
 </g>
   </svg>
 </g><g transform="translate(852, 56)">
   <rect x="0" y="0" width="372" height="280"
-        rx="12"
-        fill="#FFFFFF" fill-opacity="0.9"
-        stroke="#111110" stroke-opacity="0.05"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
-  <svg x="44" y="44"
-       width="284" height="192"
-       viewBox="0 0 284 192">
-    <text x="0" y="17" class="eyebrow">运行指标</text>
-<text x="0" y="80" font-size="48" fill="#111110" font-weight="800" font-family="&#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif">187</text><text x="86" y="80" font-size="14" fill="#8b5742" font-weight="600">ms</text><text x="114" y="76" font-size="16" fill="#4a4845">API 平均响应</text><text x="0" y="96" font-size="12" fill="#8a8882" letter-spacing="1">99 分位</text>
-<text x="0" y="114" font-size="18" fill="#111110" font-weight="700">420 ms</text><text x="142" y="96" font-size="12" fill="#8a8882" letter-spacing="1">错误率</text>
-<text x="142" y="114" font-size="18" fill="#111110" font-weight="700">0.03%</text><rect x="0" y="132" width="284" height="6" rx="3" fill="#FFFFFF" fill-opacity="0.10"/>
-<rect x="0" y="132" width="281" height="6" rx="3" fill="url(#accent-grad)"/><text x="0" y="160" font-size="12" fill="#4a4845">SLA 99% 达标</text>
+  <svg x="40" y="40"
+       width="292" height="200"
+       viewBox="0 0 292 200">
+    <text x="0" y="18" class="eyebrow">运行指标</text>
+<text x="0" y="84" font-size="48" fill="#1a1815" font-weight="800" font-family="&#39;Songti SC&#39;, &#39;Noto Serif SC&#39;, &#39;STKaiti&#39;, &#39;Times New Roman&#39;, serif">187</text><text x="86" y="84" font-size="14" fill="#D4956B" font-weight="600">ms</text><text x="114" y="80" font-size="17" fill="#5c5548">API 平均响应</text><text x="0" y="100" font-size="12" fill="#9c9588" letter-spacing="1">99 分位</text>
+<text x="0" y="118" font-size="18" fill="#1a1815" font-weight="700">420 ms</text><text x="146" y="100" font-size="12" fill="#9c9588" letter-spacing="1">错误率</text>
+<text x="146" y="118" font-size="18" fill="#1a1815" font-weight="700">0.03%</text><rect x="0" y="140" width="292" height="6" rx="3" fill="#FFFFFF" fill-opacity="0.10"/>
+<rect x="0" y="140" width="289" height="6" rx="3" fill="url(#accent-grad)"/><text x="0" y="168" font-size="13" fill="#5c5548">SLA 99% 达标</text>
   </svg>
 </g><g transform="translate(56, 356)">
   <rect x="0" y="0" width="372" height="278"
-        rx="12"
-        fill="#FFFFFF" fill-opacity="0.9"
-        stroke="#111110" stroke-opacity="0.05"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
-  <svg x="44" y="44"
-       width="284" height="190"
-       viewBox="0 0 284 190">
-    <text x="0" y="20" class="eyebrow">界面预览</text><image href="/private/tmp/ppt-test/2026-04-25-Dify-企业介绍/assets/b0f2e749292c.png" x="0" y="40" width="284" height="130" preserveAspectRatio="xMidYMid slice"/>
+  <svg x="40" y="40"
+       width="292" height="198"
+       viewBox="0 0 292 198">
+    <text x="0" y="20" class="eyebrow">界面预览</text><image href="/private/tmp/ppt-test/2026-04-25-Dify-企业介绍/assets/b0f2e749292c.png" x="0" y="40" width="292" height="138" preserveAspectRatio="xMidYMid slice"/>
   </svg>
 </g><g transform="translate(452, 356)">
   <rect x="0" y="0" width="772" height="278"
-        rx="12"
-        fill="#FFFFFF" fill-opacity="0.9"
-        stroke="#111110" stroke-opacity="0.05"
+        rx="16"
+        fill="#FFFFFF" fill-opacity="0.82"
+        stroke="#1a1815" stroke-opacity="0.07"
         stroke-width="1"/>
-  <svg x="44" y="44"
-       width="684" height="190"
-       viewBox="0 0 684 190">
-    <text x="0" y="34" class="h3">落地案例</text><text x="0" y="75" font-size="16" fill="#4a4845">某头部券商：用 Dify 把 17 个内部系统的接口能力封装成 Agent 工具，把客户经理日均处理</text><text x="0" y="100" font-size="16" fill="#4a4845">工单数从 23 提升到 78。</text><text x="0" y="135" font-size="16" fill="#4a4845">某省级政务平台：基于 Dify 知识库构建公文助手，问答准确率从 62% 提升到 91%。</text>
+  <svg x="40" y="40"
+       width="692" height="198"
+       viewBox="0 0 692 198">
+    <text x="0" y="36" class="h3">落地案例</text><text x="0" y="79" font-size="17" fill="#5c5548">某头部券商：用 Dify 把 17 个内部系统的接口能力封装成 Agent 工具，把客户经理日均处理</text><text x="0" y="106" font-size="17" fill="#5c5548">工单数从 23 提升到 78。</text><text x="0" y="143" font-size="17" fill="#5c5548">某省级政务平台：基于 Dify 知识库构建公文助手，问答准确率从 62% 提升到 91%。</text>
   </svg>
 </g>
 
-  <!-- 页脚：极细线 + 文字 -->
-  <line x1="56" y1="698" x2="1224" y2="698" stroke="#111110" stroke-opacity="0.06" stroke-width="0.5"/>
-  <text x="56" y="712" class="small">Dify 企业介绍</text>
-  <text x="1224" y="712" class="small mono" text-anchor="end">07 / 08</text>
+  <!-- 页脚 -->
+  <text x="56" y="702" class="small">Dify 企业介绍</text>
+  <text x="1224" y="702" class="small mono" text-anchor="end">07 / 08</text>
 </svg>
