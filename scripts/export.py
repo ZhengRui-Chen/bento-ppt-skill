@@ -60,7 +60,17 @@ def _embed_fonts(pptx_path: Path, fonts: dict[str, Path]) -> None:
 
         efl = pres_xml.find(f"{{{P_NS}}}embeddedFontLst")
         if efl is None:
-            efl = etree.SubElement(pres_xml, f"{{{P_NS}}}embeddedFontLst")
+            # OOXML 要求 embeddedFontLst 在 defaultTextStyle/extLst 之前
+            insert_after = None
+            for child in pres_xml:
+                if child.tag in (f"{{{P_NS}}}defaultTextStyle", f"{{{P_NS}}}extLst"):
+                    insert_after = child
+                    break
+            efl = etree.Element(f"{{{P_NS}}}embeddedFontLst")
+            if insert_after is not None:
+                insert_after.addprevious(efl)
+            else:
+                pres_xml.append(efl)
 
             # Count existing rIds
             existing_rids = {r.get("Id", "") for r in rels_xml}
